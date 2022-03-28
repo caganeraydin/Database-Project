@@ -12,3 +12,7 @@ create table project_schema.patient
 alter table project_schema.patient
     owner to postgres;
 
+alter table project_schema.patient
+    add constraint chart_no_fk
+        foreign key (chart_no) references project_schema.patient_chart;
+
