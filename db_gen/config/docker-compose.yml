@@ -1,0 +1,13 @@
+version: '3'
+services:
+  database:
+    image: "postgres:14.1" # use version 14.1 (Latest)
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: project_database
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../src/generation:/docker-entrypoint-initdb.d
