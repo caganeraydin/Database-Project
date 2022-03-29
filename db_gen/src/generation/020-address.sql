@@ -5,9 +5,9 @@ create table project_schema.address
             primary key,
     house_number  integer not null,
     street_number integer not null,
-    city          char,
-    province      char,
-    postal_code   char    not null
+    city          varchar,
+    province      varchar,
+    postal_code   varchar    not null
 );
 
 comment on table project_schema.address is 'Table containing the addresses of all users';

@@ -6,7 +6,7 @@ create table project_schema.patient
         constraint user_id_fk
             references project_schema.user,
     chart_no       integer unique not null,
-    insurance_type char    not null
+    insurance_type varchar    not null
 );
 
 alter table project_schema.patient

@@ -5,7 +5,7 @@ create table project_schema.admin
             primary key
         constraint user_id_fk
             references project_schema.user,
-    privileges char
+    privileges varchar
 );
 
 alter table project_schema.admin

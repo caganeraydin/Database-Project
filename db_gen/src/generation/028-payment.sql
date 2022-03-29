@@ -6,7 +6,7 @@ create table project_schema.payment
     invoice_id       integer not null
         constraint invoice_id_fk
             references project_schema.invoice,
-    payment_type     char    not null,
+    payment_type     varchar    not null,
     patient_amount   integer not null,
     insurance_amount integer not null
 );

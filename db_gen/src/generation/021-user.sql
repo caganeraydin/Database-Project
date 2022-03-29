@@ -3,15 +3,15 @@ create table project_schema."user"
     user_id           integer not null
         constraint user_pk
             primary key,
-    first_name        char    not null,
-    middle_name       char,
-    last_name         char    not null,
-    gender            char    not null,
-    insurance_company char    not null,
+    first_name        varchar    not null,
+    middle_name       varchar,
+    last_name         varchar    not null,
+    gender            varchar    not null,
+    insurance_company varchar    not null,
     ssn               integer not null,
-    email             char    not null,
+    email             varchar    not null,
     date_of_birth     date    not null,
-    telephone         char    not null,
+    telephone         varchar    not null,
     age               integer not null
 );
 
