@@ -1,7 +1,7 @@
 INSERT INTO project_schema."user"
 VALUES (2, 'eda', 'su', 'bicer', 'woman',
         'gov_of_canada', 666666, 'edaefault@mail.com', DATE '1980-05-01', '621-316-5466',
-        15, 'eda123');
+        32, 'eda123');
 
 INSERT INTO project_schema.address
 VALUES (DEFAULT, 66, 66, 'ottawa', 'ontario',

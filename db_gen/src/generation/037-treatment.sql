@@ -9,11 +9,12 @@ create table project_schema.treatment
     chart_no         int not null
         constraint chart_no_fk
             references project_schema.patient_chart,
-    appointment_type char,
-    treatment_type   char,
-    medication       char(100),
-    symptoms         varchar(100),
-    comments         varchar(100)
+    appointment_type varchar,
+    treatment_type   varchar,
+    medication       varchar,
+    symptoms         varchar,
+    tooth            varchar,
+    comments         varchar
 );
 
 create unique index treatment_treatment_id_uindex

@@ -8,9 +8,9 @@ create table project_schema.appointment_procedure
             references project_schema.appointment,
     date                date,
     procedure_code      varchar(10),
-    procedure_type      varchar(10),
-    description         varchar(100),
-    tooth_involved      bit,
+    procedure_type      varchar,
+    description         varchar,
+    tooth_involved      int,
     amount_of_procedure int
 );
 

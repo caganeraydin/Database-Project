@@ -14,8 +14,8 @@ create table project_schema.appointment
             references project_schema.dentist,
     start_time       time,
     end_time         time,
-    appointment_type char,
-    status           char,
+    appointment_type varchar,
+    status           varchar,
     room_assigned    varchar(10)
 );
 

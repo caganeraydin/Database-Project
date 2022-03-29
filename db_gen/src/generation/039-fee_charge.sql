@@ -9,7 +9,7 @@ create table project_schema.fee_charge
     procedure_no int not null
         constraint procedure_no_fk
             references project_schema.appointment_procedure,
-    fee_code     char,
+    fee_code     varchar,
     fee_amount   int
 );
 

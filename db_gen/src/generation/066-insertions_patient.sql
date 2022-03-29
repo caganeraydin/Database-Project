@@ -1,7 +1,7 @@
 INSERT INTO project_schema."user"
-VALUES (1, 'Paul', NULL, 'O_Connor', 'male', 'uOttawa',
-        123456, 'PO@mail.com', DATE '2022-05-01', '123-456-7890',
-        30, 'patient');
+VALUES (1, 'Paul', NULL, 'O_Connor', 'man', 'Intact-Insurance',
+        123456, 'PO@mail.com', DATE '2009-05-01', '123-456-7890',
+        13, 'patient');
 
 INSERT INTO project_schema.address
 VALUES (DEFAULT, 1, 1000, 'Gatineau', 'Quebec',
@@ -9,7 +9,7 @@ VALUES (DEFAULT, 1, 1000, 'Gatineau', 'Quebec',
 
 
 INSERT INTO project_schema.user_address
-VALUES (1, 3); -- NEED TO FIND BETTER WAY OF GETTING
+VALUES (1, 10); -- NEED TO FIND BETTER WAY OF GETTING
                  -- LATEST ID VALUE DDED
 
 INSERT INTO project_schema.patient_chart

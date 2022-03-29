@@ -5,7 +5,7 @@ create table project_schema.dentist
             primary key
         constraint employee_id_fk
             references project_schema.employee,
-    diploma     char
+    diploma     varchar
 );
 
 create unique index dentist_employee_id_uindex
