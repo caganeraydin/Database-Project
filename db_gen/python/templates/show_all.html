@@ -27,12 +27,12 @@
 
          <tbody>
             {% for u in Users %}
-               <tr>
-                  <td>{{ u.first_name }}</td>
-                  <td>{{ u.last_name }}</td>
-                  <td>{{ u.age}}</td>
-                  <td>{{ u.ssn}}</td>
-               </tr>
+               <div class='user'>
+                     <h3>#{{ u[0] }} - {{ u[1] }} BY {{ u[2] }}</h3>
+                     <i><p>({{ u[3] }} pages)</p></i>
+                     <p class='review'>{{ u[4] }}</p>
+                     <i><p>Added {{ u[5] }}</p></i>
+               </div>
             {% endfor %}
          </tbody>
       </table>

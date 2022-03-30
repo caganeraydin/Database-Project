@@ -1,3 +1,4 @@
+import psycopg2
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 
@@ -5,6 +6,13 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/project_database'
 
 db = SQLAlchemy(app)
+
+def get_db_connection():
+    conn = psycopg2.connect(host='localhost',
+                            database='project_database',
+                            user='postgres',
+                            password='postgres')
+    return conn
 
 class user(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
@@ -41,10 +49,24 @@ class user(db.Model):
 
 @app.route('/')
 def show_all():
-   return render_template('show_all.html', Users = user.query.all() )
 
-me = user('123','abc',None,'def','male','sunlife','123456789','gmail@hotmail.com','2020-03-29','888-999-7766','2','pasword')
-db.session.add(me)
-db.session.commit()
-db.create_all()
+    conn = get_db_connection()
+    print(conn)
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM project_schema."user";')
+    # cur.execute('INSERT INTO project_schema.user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, date_of_birth, telephone, age, password)'
+    #         'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+    #         (145,'kut','K.','sad','mail','some company',489489489,'email@smtn.this','1965-08-09','987-876-7665',55,'Aeatclassic!'))
+    users = cur.fetchall()
+    print(users)
+    # conn.commit()
+    cur.close()
+    conn.close()
+
+    return render_template('show_all.html', Users=users)
+
+# me = user('123','abc',None,'def','male','sunlife','123456789','gmail@hotmail.com','2020-03-29','888-999-7766','2','pasword')
+# db.session.add(me)
+# db.session.commit()
+# db.create_all()
 app.run()
