@@ -5,6 +5,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from psycopg2 import Error
 
+from python.getters import get_all_users
 from python.inserters import insert_user
 
 app = Flask(__name__)
@@ -60,9 +61,10 @@ def show_all():
 
     # insert_user(1439,'kut','K.','sad','mail','some company',489489489,'email@smtn.this','1965-08-09','987-876-7665',55,'Aeatclassic!')
     cur = conn.cursor()
+
     # try:
     #     cur = conn.cursor()
-    #     with open(get_abs_filepath_from_module(__file__, 'queries/get_all_users.sql'), 'r') as file:
+    #     with open(get_abs_filepath_from_module(__file__, 'queries/insert_user.sql'), 'r') as file:
     #         cur.execute(file.read(),
     #                        (145,'kut','K.','sad','mail','some company',489489489,'email@smtn.this','1965-08-09','987-876-7665',55,'Aeatclassic!'))
     #         conn.commit()
@@ -71,11 +73,12 @@ def show_all():
     #     raise Error('ERROR') from error
     # print(conn)
     # cur = conn.cursor()
-    cur.execute('SELECT * FROM project_schema."user";')
+    # cur.execute('SELECT * FROM project_schema."user";')
     # # cur.execute('INSERT INTO project_schema.user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, date_of_birth, telephone, age, password)'
     # #         'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
     # #         (145,'kut','K.','sad','mail','some company',489489489,'email@smtn.this','1965-08-09','987-876-7665',55,'Aeatclassic!'))
-    users = cur.fetchall()
+    # users = cur.fetchall()
+    users = get_all_users()
     # print(users)
     #  conn.commit()
     cur.close()
