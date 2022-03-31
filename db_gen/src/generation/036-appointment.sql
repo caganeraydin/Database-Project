@@ -16,7 +16,8 @@ create table project_schema.appointment
     end_time         time,
     appointment_type varchar,
     status           varchar,
-    room_assigned    varchar(10)
+    room_assigned    varchar(10),
+    date_of_appointment date
 );
 
 create unique index appointment_appointment_id_uindex
