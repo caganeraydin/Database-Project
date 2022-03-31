@@ -5,7 +5,7 @@ create table project_schema.invoice
             primary key,
     user_id          varchar not null
         constraint user_id_fk
-            references project_schema.patient,
+            references project_schema.patient ON DELETE CASCADE ON UPDATE CASCADE,
     date_of_issue    date    not null,
     telephone        varchar    not null,
     email            varchar    not null,

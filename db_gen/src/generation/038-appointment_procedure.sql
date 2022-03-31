@@ -5,7 +5,7 @@ create table project_schema.appointment_procedure
             primary key,
     appointment_id      int
         constraint appointment_id_fk
-            references project_schema.appointment,
+            references project_schema.appointment ON DELETE CASCADE ON UPDATE CASCADE,
     procedure_code      varchar(10),
     procedure_type      varchar,
     description         varchar,
