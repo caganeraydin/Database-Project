@@ -20,7 +20,21 @@ def insert_user(user_id: int, first_name: str, middle_name: str, last_name: str,
             conn.commit()
 
     except Exception as error:
-        raise Error('ERROR') from error
+        raise Error('ERROR: cant insert user') from error
+
+
+def insert_address (house_number: int, street_number: int, city: str, province: str, postal_code:str):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_address.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (
+                            house_number, street_number, city, province, postal_code))
+            conn.commit()
+
+    except Exception as error:
+        raise Error('ERROR: cant insert user') from error
+
 
 
 def insert_appointment_procedure(procedure_type: str, appointment_id: int, tooth_involved: int, procedure_no: int):
@@ -37,6 +51,6 @@ def insert_appointment_procedure(procedure_type: str, appointment_id: int, tooth
                 conn.commit()
 
         except Exception as error:
-            raise Error('ERROR') from error
+            raise Error('ERROR: Cant insert appointment procedure') from error
     else:
         raise Error('No Such Procedure Exists') from Exception

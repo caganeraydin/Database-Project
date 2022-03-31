@@ -15,4 +15,15 @@ def get_all_users():
             return cur.fetchall()
 
     except Exception as error:
-        raise Error('ERROR') from error
+        raise Error('ERROR while fetching all users') from error
+
+
+def get_last_address_id():
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_latest_address_id.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()[0][0]
+    except Exception as error:
+        raise Error('ERROR while fetching last address id') from error

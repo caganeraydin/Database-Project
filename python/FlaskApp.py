@@ -6,8 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 from psycopg2 import Error
 
 from python.deletions import delete_user
-from python.getters import get_all_users
-from python.inserters import insert_user, insert_appointment_procedure
+from python.getters import get_all_users, get_last_address_id
+from python.inserters import insert_user, insert_appointment_procedure, insert_address
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/project_database'
@@ -62,6 +62,7 @@ def show_all():
 
     # insert_user(1439,'kut','K.','sad','mail','some company',489489489,'email@smtn.this','1965-08-09','987-876-7665',55,'Aeatclassic!')
     cur = conn.cursor()
+    #print(get_last_address_id())
 
     # try:
     #     cur = conn.cursor()
@@ -79,9 +80,10 @@ def show_all():
     # #         'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
     # #         (145,'kut','K.','sad','mail','some company',489489489,'email@smtn.this','1965-08-09','987-876-7665',55,'Aeatclassic!'))
     # users = cur.fetchall()
-    delete_user('666', 'default@mail.com')
+    #delete_user('666', 'default@mail.com')
 
-    insert_appointment_procedure('Root Canal',1, 4, 6)
+    #insert_appointment_procedure('Root Canal',1, 4, 6)
+    #insert_address(2, 2,'gat','qc','adf')
     users = get_all_users()
 
     # print(users)
