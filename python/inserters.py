@@ -50,6 +50,19 @@ def insert_user_address_latest(user_id: str):
         raise Error('ERROR: cant insert user_address with most recent address') from error
 
 
+def insert_user_address(user_id: str, address_id: int):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_user_address.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (
+                            user_id, address_id))
+            conn.commit()
+
+    except Exception as error:
+        raise Error('ERROR: cant insert user_address with specific address') from error
+
+
 def insert_appointment_procedure(procedure_type: str, appointment_id: int, tooth_involved: int, procedure_no: int):
     if procedure_type in procedure_dict:
         try:
