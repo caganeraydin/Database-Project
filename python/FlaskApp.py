@@ -8,7 +8,7 @@ from psycopg2 import Error
 from python.deletions import delete_user
 from python.getters import get_all_users, get_last_address_id
 from python.inserters import insert_user, insert_appointment_procedure, insert_address, insert_user_address_latest, \
-    insert_patient, insert_patient_chart
+    insert_patient, insert_patient_chart, insert_branch, insert_branch_address, insert_invoice
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/project_database'
@@ -61,11 +61,14 @@ def show_all():
 
     conn = get_db_connection()
     #insert_patient('2', None, 'CAA')
-    insert_patient_chart(20)
-    delete_user('edaefault@mail.com')
+    #insert_patient_chart(20)
+   # delete_user('edaefault@mail.com')
+    #insert_branch(1234, 1, '123')
+    #insert_branch_address(1, 1)
 
     #insert_user('1439','kut','K.','sad','mail','some company',489489489,'email@smtn.this','1965-08-09','987-876-7665',55,'Aeatclassic!')
     cur = conn.cursor()
+    insert_invoice(123, '1', '2002-10-10', '12', '12', 1,1,1,1)
     #print(get_last_address_id())
     #insert_user_address_latest('1439')
 

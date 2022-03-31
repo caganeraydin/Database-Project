@@ -87,6 +87,44 @@ def insert_user_address(user_id: str, address_id: int):
         raise Error('ERROR: cant insert user_address with specific address') from error
 
 
+def insert_branch(branch_id: int, clinic_enterprise_id: int, manager_id: str):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_branch.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (branch_id, clinic_enterprise_id, manager_id))
+            conn.commit()
+
+    except Exception as error:
+        raise Error('ERROR: cant insert branch') from error
+
+
+def insert_branch_address(address_id: int, branch_id: int):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_branch_address.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (address_id, branch_id))
+            conn.commit()
+
+    except Exception as error:
+        raise Error('ERROR: cant insert branch') from error
+
+
+def insert_invoice(invoice_id: int, patient_id: str, date: str, telephone: str, email: str, insurance_charge: int,
+                   patient_charge: int, discount: int, penalty: int):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_invoice.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (invoice_id, patient_id, date, telephone, email, insurance_charge,
+                         patient_charge, discount, penalty))
+            conn.commit()
+
+    except Exception as error:
+        raise Error('ERROR: cant insert branch') from error
+
+
 def insert_appointment_procedure(procedure_type: str, appointment_id: int, tooth_involved: int, procedure_no: int):
     if procedure_type in procedure_dict:
         try:
