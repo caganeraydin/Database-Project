@@ -5,7 +5,7 @@ create table project_schema.patient
             primary key
         constraint user_id_fk
             references project_schema.user ON DELETE CASCADE ON UPDATE CASCADE,
-    chart_no       integer unique not null,
+    chart_no       integer unique,
     insurance_type varchar    not null
 );
 

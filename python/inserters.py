@@ -50,6 +50,30 @@ def insert_user_address_latest(user_id: str):
         raise Error('ERROR: cant insert user_address with most recent address') from error
 
 
+def insert_patient(user_id: str, chart_no: int, insurance_type: str):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_patient.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (
+                            user_id, chart_no, insurance_type))
+            conn.commit()
+
+    except Exception as error:
+        raise Error('ERROR: cant insert patient') from error
+
+
+def insert_patient_chart(chart_no: int):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_patient_chart.sql'), 'r') as file:
+            cur.execute(file.read(), (chart_no,))
+            conn.commit()
+
+    except Exception as error:
+        raise Error('ERROR: cant insert patient chart') from error
+
+
 def insert_user_address(user_id: str, address_id: int):
     try:
         cur = conn.cursor()
