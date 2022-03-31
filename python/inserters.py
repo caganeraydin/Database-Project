@@ -108,7 +108,7 @@ def insert_branch_address(address_id: int, branch_id: int):
             conn.commit()
 
     except Exception as error:
-        raise Error('ERROR: cant insert branch') from error
+        raise Error('ERROR: cant insert branch_address') from error
 
 
 def insert_invoice(invoice_id: int, patient_id: str, date: str, telephone: str, email: str, insurance_charge: int,
@@ -122,7 +122,31 @@ def insert_invoice(invoice_id: int, patient_id: str, date: str, telephone: str, 
             conn.commit()
 
     except Exception as error:
-        raise Error('ERROR: cant insert branch') from error
+        raise Error('ERROR: cant insert invoice') from error
+
+
+def insert_payment(payment_id: int, invoice_id: int, payment_type: str, patient_amount: int, insurance_amount: int):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_payment.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (payment_id, invoice_id, payment_type, patient_amount, insurance_amount))
+            conn.commit()
+
+    except Exception as error:
+        raise Error('ERROR: cant insert invoice') from error
+
+
+def insert_insurance_claim(insurance_claim_id: int, payment_id: int, amount_accepted: int):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_insurance_claim.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (insurance_claim_id, payment_id, amount_accepted))
+            conn.commit()
+
+    except Exception as error:
+        raise Error('ERROR: cant insert insurance claim') from error
 
 
 def insert_appointment_procedure(procedure_type: str, appointment_id: int, tooth_involved: int, procedure_no: int):
