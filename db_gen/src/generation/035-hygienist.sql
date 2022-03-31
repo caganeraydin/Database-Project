@@ -1,6 +1,6 @@
 create table project_schema.hygienist
 (
-    employee_id   int not null
+    employee_id   varchar not null
         constraint hygienist_pk
             primary key
         constraint employee_id_fk

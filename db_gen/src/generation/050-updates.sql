@@ -1,5 +1,5 @@
 alter table project_schema.branch
-    add manager_id int;
+    add manager_id varchar;
 
 alter table project_schema.branch
     add constraint manager_id_fk

@@ -3,7 +3,7 @@ create table project_schema.treatment
     treatment_id     int not null
         constraint treatment_pk
             primary key,
-    dentist_id       int not null
+    dentist_id       varchar not null
         constraint dentist_id_fk
             references project_schema.dentist,
     chart_no         int not null

@@ -1,6 +1,6 @@
 create table project_schema.user_address
 (
-    user_id    integer not null
+    user_id    varchar not null
         constraint user_address_pk
             primary key
         constraint user_id_pk

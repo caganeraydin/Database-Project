@@ -6,10 +6,10 @@ create table project_schema.appointment
     invoice_id       int not null
         constraint invoice_id_fk
             references project_schema.invoice,
-    patient_id       int not null
+    patient_id       varchar not null
         constraint patient_id_fk
             references project_schema.patient,
-    dentist_id       int not null
+    dentist_id       varchar not null
         constraint dentist_id_fk
             references project_schema.dentist,
     start_time       time,

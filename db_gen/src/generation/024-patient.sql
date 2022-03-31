@@ -1,6 +1,6 @@
 create table project_schema.patient
 (
-    user_id        integer not null
+    user_id        varchar not null
         constraint party_pk
             primary key
         constraint user_id_fk
