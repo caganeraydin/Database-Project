@@ -1,0 +1,1 @@
+DELETE FROM project_schema.treatment WHERE treatment_id = %s

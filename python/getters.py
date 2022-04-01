@@ -195,3 +195,15 @@ def get_insurance_claim(insurance_claim_id: int):
 
     except Exception as error:
         raise Error('ERROR while fetching payment') from error
+
+
+def get_treatment(treatment_id: int):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_treatment.sql'), 'r') as file:
+            cur.execute(file.read(), (treatment_id,))
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching treatment') from error
