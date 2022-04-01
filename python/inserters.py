@@ -8,7 +8,7 @@ from utils import get_abs_filepath_from_module
 conn = get_db_connection()
 
 
-def insert_user(user_id: int, first_name: str, middle_name: str, last_name: str, gender: str, insurance_company: str,
+def insert_user(user_id: str, first_name: str, middle_name: str, last_name: str, gender: str, insurance_company: str,
                 ssn: int, email: str, date_of_birth: str, telephone: str, age: int, password: str):
     try:
         cur = conn.cursor()

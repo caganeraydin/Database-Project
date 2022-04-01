@@ -17,3 +17,16 @@ def update_treatment(treatment_id: int, dentist_id: str, chart_no: int, appointm
             conn.commit()
     except Exception as error:
         raise Error('ERROR: cant update treatment') from error
+
+
+def update_user(user_id: str, first_name: str, middle_name: str, last_name: str, gender: str, insurance_company: str,
+                ssn: int, email: str, date_of_birth: str, telephone: str, age: int, password: str):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/update/update_user.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (first_name, middle_name, last_name, gender, insurance_company, ssn,
+                         email, date_of_birth, telephone, age, password, user_id))
+            conn.commit()
+    except Exception as error:
+        raise Error('ERROR: cant update user') from error
