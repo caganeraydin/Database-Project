@@ -1,0 +1,1 @@
+DELETE FROM project_schema.hygienist WHERE employee_id = %s

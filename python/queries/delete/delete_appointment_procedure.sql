@@ -1,0 +1,1 @@
+DELETE FROM project_schema.appointment_procedure WHERE procedure_no = %s

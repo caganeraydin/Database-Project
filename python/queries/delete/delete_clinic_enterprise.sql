@@ -1,0 +1,1 @@
+DELETE FROM project_schema.clinic_enterprise WHERE clinic_enterprise_id = %s

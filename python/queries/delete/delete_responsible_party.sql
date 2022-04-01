@@ -1,0 +1,1 @@
+DELETE FROM project_schema.responsible_party WHERE user_id = %s
