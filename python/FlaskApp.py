@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from psycopg2 import Error
 
 from python.deletions import delete_user
-from python.getters import get_all_users, get_last_address_id
+from python.getters import get_all_users, get_last_address_id, get_all_addresses, get_user_with_id, get_user_with_email
 from python.inserters import insert_user, insert_appointment_procedure, insert_address, insert_user_address_latest, \
     insert_patient, insert_patient_chart, insert_branch, insert_branch_address, insert_invoice, insert_payment, \
     insert_insurance_claim, insert_appointment, insert_fee_charge, insert_receptionist, insert_dentist, \
@@ -111,6 +111,7 @@ def show_all():
 
     # print(users)
     #  conn.commit()
+    print(get_user_with_email('default@mail.com'))
     cur.close()
     conn.close()
 

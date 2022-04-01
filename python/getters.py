@@ -18,6 +18,42 @@ def get_all_users():
         raise Error('ERROR while fetching all users') from error
 
 
+def get_user_with_id(user_id: str):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_user.sql'), 'r') as file:
+            cur.execute(file.read(), (user_id,))
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching user') from error
+
+
+def get_user_with_email(email: str):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_user_with_email.sql'), 'r') as file:
+            cur.execute(file.read(), (email,))
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching user with email') from error
+
+
+def get_all_addresses():
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_all_addresses.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching all addresses') from error
+
+
 def get_last_address_id():
     try:
         cur = conn.cursor()
