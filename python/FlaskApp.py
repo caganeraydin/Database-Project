@@ -9,7 +9,8 @@ from python.deletions import delete_user
 from python.getters import get_all_users, get_last_address_id
 from python.inserters import insert_user, insert_appointment_procedure, insert_address, insert_user_address_latest, \
     insert_patient, insert_patient_chart, insert_branch, insert_branch_address, insert_invoice, insert_payment, \
-    insert_insurance_claim
+    insert_insurance_claim, insert_appointment, insert_fee_charge, insert_receptionist, insert_dentist, \
+    insert_hygienist, insert_treatment, insert_review, insert_clinic_enterprise
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/project_database'
@@ -63,17 +64,29 @@ def show_all():
     conn = get_db_connection()
     #insert_patient('2', None, 'CAA')
     #insert_patient_chart(20)
-   # delete_user('edaefault@mail.com')
+    #delete_user('edaefault@mail.com')
     #insert_branch(1234, 1, '123')
     #insert_branch_address(1, 1)
-
-    #insert_user('1439','kut','K.','sad','mail','some company',489489489,'email@smtn.this','1965-08-09','987-876-7665',55,'Aeatclassic!')
-    cur = conn.cursor()
+    #insert_appointment(123,1,'1','101','13:00','13:30','tooth_removal','tbd','C121','2020-10-10')
+    #insert_fee_charge(3, 1, 1,'23', 50)
+    #insert_receptionist('123', '12')
+    #insert_dentist('123', '12')
+    #insert_hygienist('123', '12')
     #insert_invoice(123, '1', '2002-10-10', '12', '12', 1,1,1,1)
     #insert_payment(13,123,'lol', 10, 10)
     #insert_insurance_claim(4,3,10)
-    #print(get_last_address_id())
     #insert_user_address_latest('1439')
+    #insert_user('1439','kut','K.','sad','mail','some company',489489489,'email@smtn.this','1965-08-09','987-876-7665',55,'Aeatclassic!')
+    #insert_appointment_procedure('Root Canal',1, 4, 6)
+    #insert_address(2, 2,'gat','qc','adf')
+    #insert_treatment('101',122,'test','test','test','test','test','test')
+    #insert_review('1', 1, 1,1,1, 1)
+    insert_clinic_enterprise('2020-12-12')
+
+
+
+    #print(get_last_address_id())
+
 
     # try:
     #     cur = conn.cursor()
@@ -93,8 +106,7 @@ def show_all():
     # users = cur.fetchall()
     #delete_user('666', 'default@mail.com')
 
-    #insert_appointment_procedure('Root Canal',1, 4, 6)
-    #insert_address(2, 2,'gat','qc','adf')
+    cur = conn.cursor()
     users = get_all_users()
 
     # print(users)

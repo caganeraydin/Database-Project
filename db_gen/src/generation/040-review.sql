@@ -1,6 +1,6 @@
 create table project_schema.review
 (
-    review_id       int not null
+    review_id       serial not null
         constraint review_pk
             primary key,
     patient_id      varchar not null

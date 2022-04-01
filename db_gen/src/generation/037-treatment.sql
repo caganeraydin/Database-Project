@@ -1,6 +1,6 @@
 create table project_schema.treatment
 (
-    treatment_id     int not null
+    treatment_id     serial not null
         constraint treatment_pk
             primary key,
     dentist_id       varchar not null
