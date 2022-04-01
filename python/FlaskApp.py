@@ -6,7 +6,9 @@ from flask_sqlalchemy import SQLAlchemy
 from psycopg2 import Error
 
 from python.deletions import delete_user
-from python.getters import get_all_users, get_last_address_id, get_all_addresses, get_user_with_id, get_user_with_email
+from python.getters import get_all_users, get_last_address_id, get_all_addresses, get_user_with_id, get_user_with_email, \
+    get_patient, get_employee, get_responsible_party, get_admin, get_insurance_claim, get_payment, get_invoice, \
+    get_hygienist, get_receptionist, get_dentist
 from python.inserters import insert_user, insert_appointment_procedure, insert_address, insert_user_address_latest, \
     insert_patient, insert_patient_chart, insert_branch, insert_branch_address, insert_invoice, insert_payment, \
     insert_insurance_claim, insert_appointment, insert_fee_charge, insert_receptionist, insert_dentist, \
@@ -81,7 +83,7 @@ def show_all():
     #insert_address(2, 2,'gat','qc','adf')
     #insert_treatment('101',122,'test','test','test','test','test','test')
     #insert_review('1', 1, 1,1,1, 1)
-    insert_clinic_enterprise('2020-12-12')
+    #insert_clinic_enterprise('2020-12-12')
 
 
 
@@ -111,7 +113,7 @@ def show_all():
 
     # print(users)
     #  conn.commit()
-    print(get_user_with_email('default@mail.com'))
+    print(get_employee('101'))
     cur.close()
     conn.close()
 
