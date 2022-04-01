@@ -1,0 +1,1 @@
+DELETE FROM project_schema.admin WHERE user_id = %s

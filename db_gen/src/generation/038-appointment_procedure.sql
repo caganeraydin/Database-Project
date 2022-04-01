@@ -3,10 +3,9 @@ create table project_schema.appointment_procedure
     procedure_no        int not null
         constraint appointment_procedure_pk
             primary key,
-    appointment_id      int not null
+    appointment_id      int
         constraint appointment_id_fk
-            references project_schema.appointment,
-    date                date,
+            references project_schema.appointment ON DELETE CASCADE ON UPDATE CASCADE,
     procedure_code      varchar(10),
     procedure_type      varchar,
     description         varchar,

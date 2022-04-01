@@ -1,0 +1,1 @@
+SELECT * FROM project_schema.receptionist WHERE employee_id = %s;

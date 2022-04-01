@@ -1,14 +1,14 @@
 create table project_schema.treatment
 (
-    treatment_id     int not null
+    treatment_id     serial not null
         constraint treatment_pk
             primary key,
     dentist_id       varchar not null
         constraint dentist_id_fk
-            references project_schema.dentist,
+            references project_schema.dentist ON DELETE CASCADE ON UPDATE CASCADE,
     chart_no         int not null
         constraint chart_no_fk
-            references project_schema.patient_chart,
+            references project_schema.patient_chart ON DELETE CASCADE ON UPDATE CASCADE,
     appointment_type varchar,
     treatment_type   varchar,
     medication       varchar,

@@ -1,0 +1,1 @@
+SELECT address_id FROM project_schema.address ORDER BY address_id DESC LIMIT 1

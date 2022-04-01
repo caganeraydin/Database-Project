@@ -9,7 +9,7 @@ create table project_schema."user"
     gender            varchar    not null,
     insurance_company varchar    not null,
     ssn               integer not null,
-    email             varchar    not null,
+    email             varchar    not null unique,
     date_of_birth     date    not null,
     telephone         varchar    not null,
     age               integer not null

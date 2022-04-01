@@ -5,7 +5,7 @@ create table project_schema.insurance_claim
             primary key,
     payment_id         integer not null
         constraint payment_id_fk
-            references project_schema.payment,
+            references project_schema.payment ON DELETE CASCADE ON UPDATE CASCADE,
     amount_accepted    integer not null
 );
 

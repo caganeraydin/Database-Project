@@ -5,7 +5,7 @@ create table project_schema.payment
             primary key,
     invoice_id       integer not null
         constraint invoice_id_fk
-            references project_schema.invoice,
+            references project_schema.invoice ON DELETE CASCADE ON UPDATE CASCADE,
     payment_type     varchar    not null,
     patient_amount   integer not null,
     insurance_amount integer not null

@@ -1,0 +1,1 @@
+DELETE FROM project_schema.patient_chart WHERE chart_no = %s

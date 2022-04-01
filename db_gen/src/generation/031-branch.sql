@@ -5,7 +5,7 @@ create table project_schema.branch
             primary key,
     clinic_enterprise_id int
         constraint clinic_enterprise_id_fk
-            references project_schema.clinic_enterprise
+            references project_schema.clinic_enterprise ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 create unique index branch_branch_id_uindex

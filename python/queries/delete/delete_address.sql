@@ -1,0 +1,1 @@
+DELETE FROM project_schema.address WHERE address_id = %s

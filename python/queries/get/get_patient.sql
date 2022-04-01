@@ -1,0 +1,1 @@
+SELECT * FROM project_schema.patient WHERE user_id = %s;

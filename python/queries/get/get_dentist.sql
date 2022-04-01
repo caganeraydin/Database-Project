@@ -1,0 +1,1 @@
+SELECT * FROM project_schema.dentist WHERE employee_id = %s;

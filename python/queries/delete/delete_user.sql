@@ -1,0 +1,1 @@
+DELETE FROM project_schema."user" WHERE email = %s

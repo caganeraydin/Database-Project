@@ -12,5 +12,5 @@ VALUES ('666', 1); -- NEED TO FIND BETTER WAY OF GETTING
                  -- LATEST ID VALUE ADDED
 
 INSERT INTO project_schema.clinic_enterprise
-VALUES (1, date '1999-02-04');
+VALUES (default, date '1999-02-04');
 

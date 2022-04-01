@@ -1,0 +1,1 @@
+SELECT * FROM project_schema.user WHERE user_id = %s;

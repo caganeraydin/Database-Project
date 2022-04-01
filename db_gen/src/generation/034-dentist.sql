@@ -4,7 +4,7 @@ create table project_schema.dentist
         constraint dentist_pk
             primary key
         constraint employee_id_fk
-            references project_schema.employee,
+            references project_schema.employee ON DELETE CASCADE ON UPDATE CASCADE,
     diploma     varchar
 );
 

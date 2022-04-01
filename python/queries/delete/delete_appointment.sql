@@ -1,0 +1,1 @@
+DELETE FROM project_schema.appointment WHERE appointment_id = %s
