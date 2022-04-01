@@ -6,7 +6,7 @@ from python.utils import get_abs_filepath_from_module
 conn = get_db_connection()
 
 
-def update_treatment(treatment_id: int, dentist_id: str, chart_no: int, appointment_type: str,
+def updateTreatment(treatment_id: int, dentist_id: str, chart_no: int, appointment_type: str,
                      treatment_type: str, medication: str, symptoms: str, tooth: str, comments: str):
     try:
         cur = conn.cursor()

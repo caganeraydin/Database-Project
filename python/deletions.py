@@ -17,7 +17,7 @@ def delete_user(email: str):
         raise Error('ERROR while deleting user with email') from error
 
 
-def delete_treatment(treatment_id: int):
+def deleteTreatment(treatment_id: int):
     try:
         cur = conn.cursor()
         with open(get_abs_filepath_from_module(__file__, 'queries/delete/delete_treatment.sql'), 'r') as file:
