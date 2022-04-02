@@ -8,7 +8,7 @@ from psycopg2 import Error
 from python.deletions import delete_user,deleteTreatment
 from python.getters import get_all_users, get_last_address_id, get_all_addresses, get_user_with_id, get_user_with_email, \
     get_patient, get_employee, get_responsible_party, get_admin, get_insurance_claim, get_payment, get_invoice, \
-    get_hygienist, get_receptionist, get_dentist, get_treatment
+    get_hygienist, get_receptionist, get_dentist, get_treatment, get_all_treatments
 from python.inserters import insert_user, insert_appointment_procedure, insert_address, insert_user_address_latest, \
     insert_patient, insert_patient_chart, insert_branch, insert_branch_address, insert_invoice, insert_payment, \
     insert_insurance_claim, insert_appointment, insert_fee_charge, insert_receptionist, insert_dentist, \
@@ -16,112 +16,63 @@ from python.inserters import insert_user, insert_appointment_procedure, insert_a
 from python.updaters import updateTreatment
 
 app = Flask(__name__)
+app.secret_key = "Secret Key"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/project_database'
 
 db = SQLAlchemy(app)
 
-def get_db_connection():
-    conn = psycopg2.connect(host='localhost',
-                            database='project_database',
-                            user='postgres',
-                            password='postgres')
-    return conn
-
-class user(db.Model):
-    user_id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String())
-    middle_name = db.Column(db.String())
-    last_name = db.Column(db.String())
-    gender = db.Column(db.String())
-    insurance_company = db.Column(db.String())
-    ssn = db.Column(db.Integer)
-    email = db.Column(db.String())
-    date_of_birth = db.Column(db.String())
-    telephone = db.Column(db.String())
-    age = db.Column(db.Integer)
-    password = db.Column(db.String())
-
-
-    def __init__(self, user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, date_of_birth, telephone, age, password):
-
-        self.user_id = user_id
-        self.first_name = first_name
-        self.middle_name = middle_name
-        self.last_name = last_name
-        self.gender = gender
-        self.insurance_company = insurance_company
-        self.ssn = ssn
-        self.email = email
-        self.date_of_birth = date_of_birth
-        self.telephone = telephone
-        self.age = age
-        self.password = password
-
-class Treatment(db.Model):
-    treatment_id = db.Column(db.Integer, primary_key = True)
-    dentist_id = db.Column(db.String(100))
-    chart_no = db.Column(db.Integer)
-    appointment_type = db.Column(db.String(100))
-    treatment_type = db.Column(db.String(100))
-    medication = db.Column(db.String(100))
-    symptoms = db.Column(db.String(100))
-    tooth = db.Column(db.String(100))
-    comments = db.Column(db.String(100))
-
-    def __init__(self, treatment_id, dentist_id, chart_no,appointment_type,treatment_type,medication, symptoms, tooth, comments):
-
-        self.treatment_id = treatment_id
-        self.dentist_id = dentist_id
-        self.chart_no = chart_no
-        self.appointment_type = appointment_type
-        self.treatment_type = treatment_type
-        self.medication = medication
-        self.symptoms = symptoms
-        self.tooth = tooth
-        self.comments = comments
-
 #Treatments
 @app.route('/')
 def get_treatments():
-    all_treatment = Treatment.query.all()
-
-    return render_template("treatment.html", treatments = all_treatment)
+    all_treatment = get_all_treatments()
+    return render_template("treatment.html", Treatments = all_treatment)
 
 #this route is for inserting a new treatment to postgres database via html
 @app.route('/insert_treatment', methods = ['POST'])
 def insert_treatment():
 
-    if request.method == 'POST':
+    # if request.method == 'POST':
 
-        treatment_id = request.form['treatment_id']
-        dentist_id = request.form['dentist_id']
-        chart_no = request.form['chart_no']
-        appointment_type = request.form['appointment_type']
-        treatment_type = request.form['treatment_type']
-        medication = request.form['medication']
-        symptoms = request.form['symptoms']
-        tooth = request.form['tooth']
-        comments = request.form['comments']
+    treatment_id = request.form['treatment_id']
+    dentist_id = request.form['dentist_id']
+    chart_no = request.form['chart_no']
+    appointment_type = request.form['appointment_type']
+    treatment_type = request.form['treatment_type']
+    medication = request.form['medication']
+    symptoms = request.form['symptoms']
+    tooth = request.form['tooth']
+    comments = request.form['comments']
 
-        # treatment = Treatment(treatment_id, dentist_id, chart_no, appointment_type, treatment_type, medication, symptoms, tooth, comments)
-        #
-        #
-        # db.session.add(treatment)
-        # db.session.commit()
-        insertTreatment(dentist_id, chart_no, appointment_type, treatment_type, medication, symptoms, tooth, comments)
+    print(treatment_id)
+    print(dentist_id)
+    print(chart_no)
+    print(appointment_type)
+    print(treatment_type)
+    print(medication)
+    print(symptoms)
+    print(tooth)
+    print(comments)
 
-        flash("Treatment Inserted Successfully")
+    # treatment = Treatment(treatment_id, dentist_id, chart_no, appointment_type, treatment_type, medication, symptoms, tooth, comments)
+    #
+    #
+    # db.session.add(treatment)
+    # db.session.commit()
+    insertTreatment(dentist_id, chart_no, appointment_type, treatment_type, medication, symptoms, tooth, comments)
 
-        return redirect(url_for('get_treatments'))
+    flash("Treatment Inserted Successfully")
+
+    return redirect(url_for('get_treatments'))
 
 
 #this is our update route to modify an already existing treatment
-@app.route('/update_treatment/<treatment_id>/', methods = ['GET', 'POST'])
-def update_treatment(treatment_id):
+@app.route('/update_treatment', methods = ['GET', 'POST'])
+def update_treatment():
 
     if request.method == 'POST':
         # treatment = Treatment.query.get(treatment_id)
 
+        treatment_id = request.form['treatment_id']
         dentist_id =request.form['dentist_id']
         chart_no = request.form['chart_no']
         appointment_type = request.form['appointment_type']
@@ -141,7 +92,7 @@ def update_treatment(treatment_id):
 #This route is for deleting a treatment
 @app.route('/delete_treatment/<treatment_id>/', methods = ['GET', 'POST'])
 def delete_treatment(treatment_id):
-    treatment = Treatment.query.get(treatment_id)
+    # treatment = Treatment.query.get(treatment_id)
 
     # db.session.delete(treatment)
     # db.session.commit()
@@ -153,64 +104,7 @@ def delete_treatment(treatment_id):
 
 @app.route('/')
 def show_all():
-
-    conn = get_db_connection()
-    #insert_patient('2', None, 'CAA')
-    #insert_patient_chart(20)
-    #delete_user('edaefault@mail.com')
-    #insert_branch(1234, 1, '123')
-    #insert_branch_address(1, 1)
-    #insert_appointment(123,1,'1','101','13:00','13:30','tooth_removal','tbd','C121','2020-10-10')
-    #insert_fee_charge(3, 1, 1,'23', 50)
-    #insert_receptionist('123', '12')
-    #insert_dentist('123', '12')
-    #insert_hygienist('123', '12')
-    #insert_invoice(123, '1', '2002-10-10', '12', '12', 1,1,1,1)
-    #insert_payment(13,123,'lol', 10, 10)
-    #insert_insurance_claim(4,3,10)
-    #insert_user_address_latest('1439')
-    #insert_user('1439','kut','K.','sad','mail','some company',489489489,'email@smtn.this','1965-08-09','987-876-7665',55,'Aeatclassic!')
-    #insert_appointment_procedure('Root Canal',1, 4, 6)
-    #insert_address(2, 2,'gat','qc','adf')
-    #insert_treatment('101',122,'test','test','test','test','test','test')
-    #insert_review('1', 1, 1,1,1, 1)
-    #insert_clinic_enterprise('2020-12-12')
-
-
-
-    #print(get_last_address_id())
-
-
-    # try:
-    #     cur = conn.cursor()
-    #     with open(get_abs_filepath_from_module(__file__, 'queries/insert_user.sql'), 'r') as file:
-    #         cur.execute(file.read(),
-    #                        (145,'kut','K.','sad','mail','some company',489489489,'email@smtn.this','1965-08-09','987-876-7665',55,'Aeatclassic!'))
-    #         conn.commit()
-    #
-    # except Exception as error:
-    #     raise Error('ERROR') from error
-    # print(conn)
-    # cur = conn.cursor()
-    # cur.execute('SELECT * FROM project_schema."user";')
-    # # cur.execute('INSERT INTO project_schema.user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, date_of_birth, telephone, age, password)'
-    # #         'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
-    # #         (145,'kut','K.','sad','mail','some company',489489489,'email@smtn.this','1965-08-09','987-876-7665',55,'Aeatclassic!'))
-    # users = cur.fetchall()
-    #delete_user('666', 'default@mail.com')
-
-    cur = conn.cursor()
     users = get_all_users()
-
-    # print(users)
-    #  conn.commit()
-    # print(get_treatment(1))
-    # delete_treatment(1)
-    # print(get_treatment(1))
-    update_treatment(1, '101', 122, 'test','test', 'test', 'test', 'test', 'test')
-    cur.close()
-    conn.close()
-
     return render_template('show_all.html', Users=users)
 
 # me = user('123','abc',None,'def','male','sunlife','123456789','gmail@hotmail.com','2020-03-29','888-999-7766','2','pasword')

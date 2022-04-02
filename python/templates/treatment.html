@@ -44,30 +44,29 @@
       <table class="table table-hover sortable">
 
           <tr>
-             <th>treatment_id</th>th>
-            <th>dentist_id</th>
-            <th>chart_no</th>
-            <th>appointment_type</th>
-            <th>treatment_type</th>
-             <th>medication</th>
-             <th>symptoms</th>
-            <th>tooth</th>
-             <th>comments</th>
-
+              <th scope="col">Treatment Id</th>
+              <th scope="col">Dentist Id</th>
+              <th scope="col">Chart No</th>
+              <th scope="col">Appointment Type</th>
+              <th scope="col">Treatment Type</th>
+              <th scope="col">Medication</th>
+              <th scope="col">Symptoms</th>
+              <th scope="col">Tooth</th>
+              <th scope="col">Comments</th>
           </tr>
 
 
-         {% for row in treatments %}
+         {% for row in Treatments %}
           <tr>
-            <td>{{row.treatment_id}}</td>
-            <td>{{row.dentist_id}}</td>
-            <td>{{row.chart_no}}</td>
-            <td>{{row.appointment_type}}</td>
-            <td>{{row.treatment_type}}</td>
-            <td>{{row.medication}}</td>
-             <td>{{row.symptoms}}</td>
-             <td>{{row.tooth}}</td>
-             <td>{{row.comments}}</td>
+            <td scope="col">{{row[0]}}</td>
+            <td scope="col">{{row[1]}}</td>
+            <td scope="col">{{row[2]}}</td>
+            <td scope="col">{{row[3]}}</td>
+            <td scope="col">{{row[4]}}</td>
+            <td scope="col">{{row[5]}}</td>
+             <td scope="col">{{row[6]}}</td>
+             <td scope="col">{{row[7]}}</td>
+             <td scope="col">{{row[8]}}</td>
 
               <td>
                   <a href="/update_treatment/{{row.treatment_id}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.treatment_id}}">Edit</a>
@@ -85,6 +84,10 @@
                     </div>
                     <div class="modal-body">
                       <form action="{{url_for('update_treatment')}}" method="POST">
+                        <div class="form-group">
+                          <label>Treatment Id:</label>
+                          <input type="text" class="form-control" name="treatment_id" value="{{row.treatment_id}}">
+                        </div>
                         <div class="form-group">
                           <label>Dentist Id:</label>
                           <input type="text" class="form-control" name="dentist_id" value="{{row.dentist_id}}">
@@ -128,7 +131,7 @@
                   </div>
                 </div>
               </div>
-              {% endfor %}
+          {% endfor %}
 
       </table>
       </div>
@@ -171,7 +174,6 @@
                 </div>
                  <div class="form-group">
                   <label>Comments:</label>
-                  <input type="text" class="form-control" name="comments" required="1">
                   <input type="text" class="form-control" name="comments" required="1">
                 </div>
                 <div class="form-group">
