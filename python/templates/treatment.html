@@ -69,56 +69,52 @@
              <td scope="col">{{row[8]}}</td>
 
               <td>
-                  <a href="/update_treatment/{{row.treatment_id}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.treatment_id}}">Edit</a>
-                  <a href="/delete_treatment/{{row.treatment_id}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure You Want To Delete ?')">Delete</a>
+                  <a href="/update_treatment/{{row[0]}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row[0]}}">Edit</a>
+                  <a href="/delete_treatment/{{row[0]}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure You Want To Delete ?')">Delete</a>
 
               </td>
             </tr>
 
               <!-- Modal Edit Treatment-->
-              <div id="modaledit{{row.treatment_id}}" class="modal fade" role="dialog">
+              <div id="modaledit{{row[0]}}" class="modal fade" role="dialog">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h4 class="modal-title">Edit Information</h4>
                     </div>
                     <div class="modal-body">
-                      <form action="{{url_for('update_treatment')}}" method="POST">
-                        <div class="form-group">
-                          <label>Treatment Id:</label>
-                          <input type="text" class="form-control" name="treatment_id" value="{{row.treatment_id}}">
-                        </div>
+                      <form action="{{url_for('update_treatment', treatment_id = row[0])}}" method="POST">
                         <div class="form-group">
                           <label>Dentist Id:</label>
-                          <input type="text" class="form-control" name="dentist_id" value="{{row.dentist_id}}">
+                          <input type="text" class="form-control" name="dentist_id" value="{{row[1]}}">
                         </div>
                         <div class="form-group">
                           <label>Chart No:</label>
-                          <input type="text" class="form-control" name="chart_no" value="{{row.chart_no}}">
+                          <input type="text" class="form-control" name="chart_no" value="{{row[2]}}">
                         </div>
                         <div class="form-group">
                           <label>Appointment Type:</label>
-                          <input type="text" class="form-control" name="appointment_type" value="{{row.appointment_type}}">
+                          <input type="text" class="form-control" name="appointment_type" value="{{row[3]}}">
                         </div>
                         <div class="form-group">
                           <label>Treatment Type:</label>
-                          <input type="text" class="form-control" name="treatment_type" value="{{row.treatment_type}}">
+                          <input type="text" class="form-control" name="treatment_type" value="{{row[4]}}">
                         </div>
                         <div class="form-group">
                           <label>Medication:</label>
-                          <input type="text" class="form-control" name="medication" value="{{row.medication}}">
+                          <input type="text" class="form-control" name="medication" value="{{row[5]}}">
                         </div>
                          <div class="form-group">
                           <label>Symptoms:</label>
-                          <input type="text" class="form-control" name="symptoms" value="{{row.symptoms}}">
+                          <input type="text" class="form-control" name="symptoms" value="{{row[6]}}">
                         </div>
                          <div class="form-group">
                           <label>Tooth:</label>
-                          <input type="text" class="form-control" name="tooth" value="{{row.tooth}}">
+                          <input type="text" class="form-control" name="tooth" value="{{row[7]}}">
                         </div>
                          <div class="form-group">
                           <label>Comments:</label>
-                          <input type="text" class="form-control" name="comments" value="{{row.comments}}">
+                          <input type="text" class="form-control" name="comments" value="{{row[8]}}">
                         </div>
                         <div class="form-group">
                           <button class="btn btn-primary" type="submit">Update</button>
