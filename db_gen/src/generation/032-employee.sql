@@ -5,7 +5,7 @@ create table project_schema.employee
             primary key
         constraint user_id_fk
             references project_schema."user" ON DELETE CASCADE ON UPDATE CASCADE,
-    branch_id           int not null
+    branch_id           int
         constraint branch_id_fk
             references project_schema.branch ON DELETE CASCADE ON UPDATE CASCADE,
     employee_type       varchar(20),

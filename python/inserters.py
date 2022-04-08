@@ -62,6 +62,16 @@ def insert_patient(user_id: str, chart_no: int, insurance_type: str):
     except Exception as error:
         raise Error('ERROR: cant insert patient') from error
 
+def insert_employee(user_id: str, branch_id: int, employee_type: str, role: str, start_date: str, salary: str, years_of_experience: int):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_employee.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (user_id, branch_id, employee_type, role, start_date, salary, years_of_experience))
+            conn.commit()
+
+    except Exception as error:
+        raise Error('ERROR: cant insert employee') from error
 
 def insert_patient_chart(chart_no: int):
     try:
