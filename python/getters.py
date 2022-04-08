@@ -207,3 +207,15 @@ def get_treatment(treatment_id: int):
 
     except Exception as error:
         raise Error('ERROR while fetching treatment') from error
+
+
+def get_all_treatments():
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_all_treatments.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching all treatments') from error

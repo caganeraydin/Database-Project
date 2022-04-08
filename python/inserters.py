@@ -231,7 +231,7 @@ def insert_hygienist(hygienist_id: str, certification: str):
         raise Error('ERROR: cant insert hygienist') from error
 
 
-def insert_treatment(dentist_id: str, chart_no: int, appointment_type: str, treatment_type: str, medication: str,
+def insertTreatment(dentist_id: str, chart_no: int, appointment_type: str, treatment_type: str, medication: str,
                      symptoms: str, tooth: str, comments: str):
     try:
         cur = conn.cursor()
