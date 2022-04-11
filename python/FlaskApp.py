@@ -102,17 +102,6 @@ def signup():
     age = request.form['age']
     password = request.form['password']
 
-    print(first_name)
-    print(middle_name)
-    print(last_name)
-    print(gender)
-    print(insurance_company)
-    print(ssn)
-    print(email)
-    print(dob)
-    print(tel)
-    print(age)
-    print(password)
     retString = validateSSN(int(ssn))
     retVal = validateEmail(email)
 
@@ -130,25 +119,21 @@ def signup():
             insert_patient(user_id, chart_no, insurance_company)
             a = insert_address(None,None,None,None,None)
             insert_user_address(user_id, a[0][0])
-            print(a)
         if option == "dentist":
             insert_employee(user_id, None, "dentist", None, date.today().strftime("%Y-%m-%d"), None, 0)
             insert_dentist(user_id, None)
             a = insert_address(None,None,None,None,None)
             insert_user_address(user_id, a[0][0])
-            print(a)
         if option == "hygienist":
             insert_employee(user_id, None, "hygienist", None, date.today().strftime("%Y-%m-%d"), None, 0)
             insert_hygienist(user_id, None)
             a = insert_address(None,None,None,None,None)
             insert_user_address(user_id, a[0][0])
-            print(a)
         if option == "receptionist":
             insert_employee(user_id, None, "receptionist", None, date.today().strftime("%Y-%m-%d"), None, 0)
             insert_receptionist(user_id, None)
             a = insert_address(None,None,None,None,None)
             insert_user_address(user_id, a[0][0])
-            print(a)
 
         flash("User Account Created Successfully")
 

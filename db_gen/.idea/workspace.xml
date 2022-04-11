@@ -26,7 +26,7 @@
     <configuration name="database-generation" type="BatchConfigurationType" factoryName="Batch" temporary="true">
       <module name="sql" />
       <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\dogau\DentistDBMS_new\Database-Project\db_gen\src\script" />
+      <option name="WORKING_DIRECTORY" value="./src/script" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SCRIPT_NAME" value="database-generation.bat" />
       <option name="PARAMETERS" value="" />
