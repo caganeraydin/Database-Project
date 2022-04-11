@@ -4,7 +4,7 @@ VALUES ('admin', 'admin', null, 'admin', 'NA',
         32, 'admin');
 
 INSERT INTO project_schema.address
-VALUES (DEFAULT, 66, 66, 'ottawa', 'ontario',
+VALUES (DEFAULT, 66, 'Russel Ave.', 'Ottawa', 'Ontario',
         'J8R 3D1'); --Default id will start at 1
 
 INSERT INTO project_schema.user_address

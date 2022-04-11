@@ -24,13 +24,13 @@ def insert_user(user_id: str, first_name: str, middle_name: str, last_name: str,
         raise Error('ERROR: cant insert user') from error
 
 
-def insert_address(house_number: int, street_number: int, city: str, province: str, postal_code: str):
+def insert_address(house_number: int, street_name: str, city: str, province: str, postal_code: str):
     try:
         cur = conn.cursor()
         with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_address.sql'), 'r') as file:
             cur.execute(file.read(),
                         (
-                            house_number, street_number, city, province, postal_code))
+                            house_number, street_name, city, province, postal_code))
             conn.commit()
             return cur.fetchall()
 

@@ -5,7 +5,7 @@ VALUES ('123', 'doga', NULL, 'Uras', 'woman',
         33, 'doga123');
 
 INSERT INTO project_schema.address
-VALUES (DEFAULT, 66, 66, 'toronto', 'ontario',
+VALUES (DEFAULT, 66, 'dundas street', 'toronto', 'ontario',
         'J8S 2L1'); --Default id will start at 1
 
 INSERT INTO project_schema.user_address
@@ -37,7 +37,7 @@ VALUES ('124', 'Cagan', NULL, 'Eraydin', 'man',
         35, 'Cagan#111');
 
 INSERT INTO project_schema.address
-VALUES (DEFAULT, 66, 66, 'hawksbury', 'ontario',
+VALUES (DEFAULT, 66, '66', 'hawksbury', 'ontario',
         'J2S 2L4'); --Default id will start at 1
 
 INSERT INTO project_schema.user_address

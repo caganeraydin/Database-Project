@@ -4,7 +4,7 @@ VALUES ('1', 'Paul', NULL, 'O_Connor', 'man', 'Intact-Insurance',
         13, 'patient');
 
 INSERT INTO project_schema.address
-VALUES (DEFAULT, 1, 1000, 'Gatineau', 'Quebec',
+VALUES (DEFAULT, 1, 'Saint-Jean', 'Gatineau', 'Quebec',
         'J3G 3S5'); --Default id will start at 1
 
 
