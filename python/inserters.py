@@ -1,8 +1,8 @@
 from psycopg2 import Error
 
 from connection import get_db_connection
-from python.appointment_procedure_options import procedure_dict
-from python.getters import get_last_address_id
+from appointment_procedure_options import procedure_dict
+from getters import get_last_address_id
 from utils import get_abs_filepath_from_module
 
 conn = get_db_connection()
@@ -32,6 +32,7 @@ def insert_address(house_number: int, street_number: int, city: str, province: s
                         (
                             house_number, street_number, city, province, postal_code))
             conn.commit()
+            return cur.fetchall()
 
     except Exception as error:
         raise Error('ERROR: cant insert user') from error
@@ -49,6 +50,17 @@ def insert_user_address_latest(user_id: str):
     except Exception as error:
         raise Error('ERROR: cant insert user_address with most recent address') from error
 
+def insert_user_address(user_id: str, address_id:int):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_user_address.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (
+                            user_id, address_id))
+            conn.commit()
+
+    except Exception as error:
+        raise Error('ERROR: cant insert user_address with most recent address') from error
 
 def insert_patient(user_id: str, chart_no: int, insurance_type: str):
     try:

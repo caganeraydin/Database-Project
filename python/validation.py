@@ -1,6 +1,6 @@
 import random
 
-from python.getters import get_user_with_id, get_user_with_email, get_patient_chart
+from getters import get_user_with_id, get_user_with_email, get_patient_chart
 
 
 def generateUserId():
