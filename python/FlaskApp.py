@@ -21,7 +21,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/project_database'
 app.secret_key = "Secret key"
 db = SQLAlchemy(app)
-
+current_employee = None
 
 def get_db_connection():
     conn = psycopg2.connect(host='localhost',
@@ -63,17 +63,22 @@ class user(db.Model):
 #Treatments
 @app.route('/employee_home/<user_id>/')
 def get_employee_home_page(user_id):
+
+    print(get_employee(user_id))
     all_patients = get_all_patients()
     all_appointments = get_all_appointments()
     all_invoices = get_all_invoices()
     cur_employee = get_employee(user_id)[0]
     cur_emp_user_info = get_user_with_id(user_id)[0]
     cur_employee_address = get_user_address(user_id)[0]
+    current_employee = user_id
+    print(current_employee)
+
     return render_template("employee_home.html", Patients = all_patients, Appointments = all_appointments, Invoices = all_invoices, employee = cur_employee, emp_profile = cur_emp_user_info, emp_address = cur_employee_address)
 
 #this route is for inserting a new treatment to postgres database via html
-@app.route('/insert_patient', methods = ['POST'])
-def insert_patient():
+@app.route('/insert_patient/<emp_id>', methods = ['POST'])
+def insert_patient(emp_id):
     # replace with generation method
     n = random.randint(1,300000)
     user_id = get_user_with_id(str(n))
@@ -122,12 +127,44 @@ def insert_patient():
         address_id = address_ids[len(address_ids)- 1][0]
         ins.insert_user_address(user_id,address_id)
         flash("Patient Added Successfully")
-        return redirect(url_for('get_employee_home_page'))
+        return redirect(url_for('get_employee_home_page', user_id = emp_id))
 
 
 #this is our update route to modify an already existing patient
-@app.route('/update_patient/<user_id>/<address_id>/', methods = ['GET', 'POST'])
-def update_patient(user_id,address_id):
+@app.route('/update_patient/<user_id>/<address_id>/<emp_id>/', methods = ['GET', 'POST'])
+def update_patient(user_id,address_id, emp_id):
+    print(current_employee)
+    if request.method == 'POST':
+
+        print(user_id + ", " + address_id)
+
+        first_name = request.form['first_name']
+        middle_name = request.form['middle_name']
+        last_name = request.form['last_name']
+        gender = request.form['gender']
+        insurance_company = request.form['insurance_company']
+        ssn = request.form['ssn']
+        email = request.form['email']
+        date_of_birth = request.form['date_of_birth']
+        telephone = request.form['telephone']
+        age = request.form['age']
+        password = request.form['password']
+        house_number = request.form['house_number']
+        street_number = request.form['street_number']
+        city = request.form['city']
+        province = request.form['province']
+        postal_code = request.form['postal_code']
+
+        up.update_patient(user_id, first_name, middle_name, last_name,gender,
+                       insurance_company, ssn, email, date_of_birth, telephone,
+                       age, password, address_id, house_number, street_number,
+                       city, province, postal_code)
+        flash("Event Updated Successfully")
+        return redirect(url_for('get_employee_home_page', user_id = emp_id))
+
+#this is our update route to modify an already existing employee
+@app.route('/update_employee/<user_id>/<address_id>/', methods = ['GET', 'POST'])
+def update_employee(user_id,address_id):
 
     if request.method == 'POST':
 
@@ -156,44 +193,11 @@ def update_patient(user_id,address_id):
                        city, province, postal_code)
         flash("Event Updated Successfully")
 
-        return redirect(url_for('get_employee_home_page'))
+        return redirect(url_for('get_employee_home_page', user_id = user_id))
 
 #this is our update route to modify an already existing employee
-@app.route('/update_employee/<user_id>/<address_id>/', methods = ['GET', 'POST'])
-def update_employee(user_id,address_id):
-
-    if request.method == 'POST':
-
-        print(user_id + ", " + address_id)
-
-        first_name = request.form['first_name']
-        middle_name = request.form['middle_name']
-        last_name = request.form['last_name']
-        gender = request.form['gender']
-        insurance_company = request.form['insurance_company']
-        ssn = request.form['ssn']
-        email = request.form['email']
-        date_of_birth = request.form['date_of_birth']
-        telephone = request.form['telephone']
-        age = request.form['age']
-        password = request.form['password']
-        house_number = request.form['house_number']
-        street_number = request.form['street_number']
-        city = request.form['city']
-        province = request.form['province']
-        postal_code = request.form['postal_code']
-
-        up.update_patient(user_id, first_name, middle_name, last_name,gender,
-                       insurance_company, ssn, email, date_of_birth, telephone,
-                       age, password, address_id, house_number, street_number,
-                       city, province, postal_code)
-        flash("Event Updated Successfully")
-
-        return redirect(url_for('get_employee_home_page'))
-
-#this is our update route to modify an already existing employee
-@app.route('/update_invoice/<invoice_id>/<user_id>', methods = ['GET', 'POST'])
-def update_invoice(invoice_id, user_id):
+@app.route('/update_invoice/<invoice_id>/<user_id>/<emp_id>/', methods = ['GET', 'POST'])
+def update_invoice(invoice_id, user_id, emp_id):
 
     if request.method == 'POST':
 
@@ -210,27 +214,26 @@ def update_invoice(invoice_id, user_id):
                           discount, penalty_charge)
         flash("Event Updated Successfully")
 
-        return redirect(url_for('get_employee_home_page'))
+        return redirect(url_for('get_employee_home_page', user_id = emp_id))
 
 #
 #
 #This route is for deleting a treatment
-@app.route('/delete_patient/<user_id>/', methods = ['GET', 'POST'])
-def delete_patient(user_id):
+@app.route('/delete_patient/<user_id>/<emp_id>/', methods = ['GET', 'POST'])
+def delete_patient(user_id, emp_id):
     print(user_id)
-    delt.delete_patient(user_id)
+    delt.delete_user(user_id)
     flash("Patient Deleted Successfully")
 
-    return redirect(url_for('get_employee_home_page'))
+    return redirect(url_for('get_employee_home_page', user_id = emp_id))
 
 #This route is for deleting a treatment
-@app.route('/delete_invoice/<invoice_id>/', methods = ['GET', 'POST'])
-def delete_invoice(invoice_id):
-    print(invoice_id)
+@app.route('/delete_invoice/<invoice_id>/<emp_id>/', methods = ['GET', 'POST'])
+def delete_invoice(invoice_id, emp_id):
     delt.delete_invoice(invoice_id)
     flash("Patient Deleted Successfully")
 
-    return redirect(url_for('get_employee_home_page'))
+    return redirect(url_for('get_employee_home_page', user_id = emp_id))
 
 
 @app.route('/')

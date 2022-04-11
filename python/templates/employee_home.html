@@ -12,7 +12,7 @@
   <div class="row">
     <div class="col md-12">
       <div class="jumbotron p-3">
-          <h2> {{emp_profile[2]}}, {{emp_profile[1]}}
+          <h2> {{emp_profile[3]}}, {{emp_profile[1]}}
               <div class="text-right btn-toolbar float-right">
 
                   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addPatient">Add Patient</button>
@@ -83,8 +83,8 @@
                       <td scope="col">{{patient[9]}}</td>
                       <td scope="col">{{patient[10]}}</td>
                       <td>
-                      <a href="/update_patient/{{patient[0]}}/{{patient[12]}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{patient[0]}}">Edit</a>
-                      <a href="/delete_patient/{{patient[0]}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure You Want To Delete ?')">Delete</a>
+                      <a href="/update_patient/{{patient[0]}}/{{patient[12]}}/{{emp_profile[0]}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{patient[0]}}">Edit</a>
+                      <a href="/delete_patient/{{patient[0]}}/{{emp_profile[0]}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure You Want To Delete ?')">Delete</a>
                       </td>
 
                     </tr>
@@ -97,7 +97,7 @@
 
                             </div>
                             <div class="modal-body">
-                              <form action="{{url_for('update_patient', user_id = patient[0], address_id = patient[12])}}" method="POST">
+                              <form action="{{url_for('update_patient', user_id = patient[0], address_id = patient[12], emp_id = emp_profile[0])}}" method="POST">
                                 <div class="form-group">
                                   <label>First Name:</label>
                                   <input type="text" class="form-control" name="first_name" value="{{patient[1]}}">
@@ -207,8 +207,8 @@
                       <td scope="col">{{invoice[7]}}</td>
                       <td scope="col">{{invoice[8]}}</td>
                       <td>
-                      <a href="/update_invoice/{{invoice[0]}}/{{invoice[1]}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#invoiceTable">Edit</a>
-                      <a href="/delete_invoice/{{invoice[0]}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure You Want To Delete ?')">Delete</a>
+                      <a href="/update_invoice/{{invoice[0]}}/{{invoice[1]}}/{{emp_profile[0]}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#invoiceTable">Edit</a>
+                      <a href="/delete_invoice/{{invoice[0]}}/{{emp_profile[0]}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure You Want To Delete ?')">Delete</a>
                       </td>
 
                     </tr>
@@ -221,7 +221,7 @@
 
                             </div>
                             <div class="modal-body">
-                              <form action="{{url_for('update_invoice', invoice_id = invoice[0], user_id = invoice[1])}}" method="POST">
+                              <form action="{{url_for('update_invoice', invoice_id = invoice[0], user_id = invoice[1], emp_id = emp_profile[0])}}" method="POST">
                                   <div class="form-group">
                                   <label>First Name:</label>
                                   <input type="text" class="form-control" name="first_name" value="{{invoice[2]}}">
@@ -407,7 +407,7 @@
               <h4 class="modal-title">Add Treatment</h4>
             </div>
             <div class="modal-body">
-              <form action="{{url_for('insert_patient')}}" method="POST">
+              <form action="{{url_for('insert_patient', emp_id = emp_profile[0])}}" method="POST">
                 <div class="form-group">
                   <label>First Name:</label>
                   <input type="text" class="form-control" name="first_name" required="1">
