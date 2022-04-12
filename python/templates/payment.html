@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+
+
+{% block title %} Home {% endblock %}
+
+{% block body %}
+
+
+<div class="container">
+  <div class="row">
+    <div class="col md-12">
+      <div class="jumbotron p-3">
+
+
+      {% with messages = get_flashed_messages() %}
+
+      {% if messages %}
+
+      {% for message in messages %}
+
+      <div class="alert alert-success alert-dismissable" role="alert">
+
+          <button type="button" class="close" data-dismiss="alert" aria-label="close">
+
+              <span aria-hidden="true">x</span>
+
+          </button>
+
+
+      {{message}}
+
+
+      </div>
+
+      {% endfor %}
+
+      {% endif %}
+      {% endwith %}
+
+
+      <table class="table table-hover sortable">
+
+          <tr>
+              <th scope="col">Invoice Id</th>
+              <th scope="col">Payment Amount</th>
+          </tr>
+
+
+         {% for row in PatientAmount %}
+          <tr>
+            <td scope="col">{{row[0]}}</td>
+            <td scope="col">${{row[3]}}</td>
+
+              <td>
+                  <a href="/insert_payment/{{row[0]}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row[0]}}">Make Payment</a>
+              </td>
+            </tr>
+
+              <!-- Modal Make Payment-->
+              <div id="modaledit{{row[0]}}" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Make Payment</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form action="{{url_for('insert_payment', fee_id = row[0])}}" method="POST">
+                        <div class="form-group">
+                          <h2>Total Amount Due: ${{row[3]}}</h2>
+                          <label>Choose a payment method:</label>
+                          <input list = "payment_methods" type="text" class="form-control" placeholder="ex: Credit/Debit Card">
+                          <datalist id="payment_methods">
+                            <option value="Credit/Debit Card">
+                            <option value="Cash">
+                            <option value="Check">
+                            <option value="Wire Transfer">
+                          </datalist>
+                        </div>
+                        <div class="form-group">
+                        <label>Insurance Claim Amount:</label><br>
+                          <input type="text" min="0" oninput="check(this)" placeholder="$0.00">
+                          <input type="submit" value="Save"/>
+                          <script>
+                           function check(input) {
+                             if (input.value > {{row[3]}}) {
+                               input.setCustomValidity('The invoice claim must be equal or less than total amount due.');
+                             } else {
+                             input.setCustomValidity('Saved successfully!')
+                             }
+                           }
+                          </script>
+                          </input>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="myFunction()">Submit</button>
+                      <script>
+              function myFunction() {
+                confirm("Your payment information is successfully saved!");
+                    }
+                  </script>
+                   </div>
+
+
+
+
+
+
+
+                  </div>
+                </div>
+              </div>
+          {% endfor %}
+
+      </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

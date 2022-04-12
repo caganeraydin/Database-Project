@@ -1,7 +1,7 @@
 from psycopg2 import Error
 
-from python.connection import get_db_connection
-from python.utils import get_abs_filepath_from_module
+from connection import get_db_connection
+from utils import get_abs_filepath_from_module
 
 conn = get_db_connection()
 
@@ -219,3 +219,76 @@ def get_all_treatments():
 
     except Exception as error:
         raise Error('ERROR while fetching all treatments') from error
+
+
+def get_appointment(appointment_id: int):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_appointment.sql'), 'r') as file:
+            cur.execute(file.read(), (appointment_id,))
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching appointment') from error
+
+
+def get_all_appointments():
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_all_appointments.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching all appointments') from error
+
+
+def get_all_payments():
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_all_payments.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching all payments') from error
+
+
+def get_all_dentists():
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_all_dentists.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching all dentists') from error
+
+
+def get_start_time(start_time: str):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_start_time.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching start time') from error
+
+
+def get_patient_charge(patient_charge: int):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_patient_charge.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching patient charge') from error
+

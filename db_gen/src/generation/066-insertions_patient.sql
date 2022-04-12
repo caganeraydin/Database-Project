@@ -25,4 +25,4 @@ INSERT INTO project_schema.payment
 VALUES (1, 1, 'VISA', 200, 100);
 
 INSERT INTO project_schema.insurance_claim
-VALUES (1, 1, 100);
+VALUES (default , 1, 100);

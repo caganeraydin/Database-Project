@@ -1,2 +1,2 @@
 INSERT INTO project_schema.insurance_claim
-VALUES(%s, %s, %s);
+VALUES(DEFAULT , %s, %s);

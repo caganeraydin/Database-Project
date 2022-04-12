@@ -1,0 +1,1 @@
+SELECT * FROM project_schema.invoice WHERE patient_charge = %s;

@@ -1,8 +1,8 @@
 from psycopg2 import Error
 
 from connection import get_db_connection
-from python.appointment_procedure_options import procedure_dict
-from python.getters import get_last_address_id
+from appointment_procedure_options import procedure_dict
+from getters import get_last_address_id
 from utils import get_abs_filepath_from_module
 
 conn = get_db_connection()
@@ -137,19 +137,19 @@ def insert_payment(payment_id: int, invoice_id: int, payment_type: str, patient_
         raise Error('ERROR: cant insert invoice') from error
 
 
-def insert_insurance_claim(insurance_claim_id: int, payment_id: int, amount_accepted: int):
+def insert_insurance_claim(payment_id: int, amount_accepted: int):
     try:
         cur = conn.cursor()
         with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_insurance_claim.sql'), 'r') as file:
             cur.execute(file.read(),
-                        (insurance_claim_id, payment_id, amount_accepted))
+                        (payment_id, amount_accepted))
             conn.commit()
 
     except Exception as error:
         raise Error('ERROR: cant insert insurance claim') from error
 
 
-def insert_appointment(appointment_id: int, invoice_id: int, patient_id: str, dentist_id: str, start_time: str,
+def insertAppointment(appointment_id: int, invoice_id: int, patient_id: str, dentist_id: str, start_time: str,
                        end_time: str,
                        appointment_type: str, status: str, room_assigned: str, date_of_appointment: str):
     try:
@@ -228,7 +228,7 @@ def insert_hygienist(hygienist_id: str, certification: str):
             conn.commit()
 
     except Exception as error:
-        raise Error('ERROR: cant insert hygienist') from error
+        raise Error ('ERROR: cant insert hygienist') from error
 
 
 def insertTreatment(dentist_id: str, chart_no: int, appointment_type: str, treatment_type: str, medication: str,

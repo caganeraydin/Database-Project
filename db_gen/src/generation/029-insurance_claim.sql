@@ -1,6 +1,6 @@
 create table project_schema.insurance_claim
 (
-    insurance_claim_id integer not null
+    insurance_claim_id serial
         constraint insurance_claim_pk
             primary key,
     payment_id         integer not null
