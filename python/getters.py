@@ -87,6 +87,18 @@ def get_all_appointments():
         raise Error('ERROR while fetching all addresses') from error
 
 
+def get_all_employees():
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_all_employees.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching all addresses') from error
+
+
 def get_last_address_id():
     try:
         cur = conn.cursor()

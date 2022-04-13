@@ -17,12 +17,16 @@ SELECT
     ad.city,
     ad.province,
     ad.postal_code,
-    p.chart_no,
-    p.insurance_type
+    e.branch_id,
+    e.employee_type,
+    e.role,
+    e.start_date,
+    e.salary,
+    e.years_of_experience
 FROM
-    project_schema."patient" p,
+    project_schema."employee" e,
     project_schema."user" u,
     project_schema."user_address" uad,
     project_schema."address" ad
-WHERE p.user_id = u.user_id AND uad.user_id = p.user_id AND ad.address_id = uad.address_id;
+WHERE e.user_id = u.user_id AND uad.user_id = e.user_id AND ad.address_id = uad.address_id;
 

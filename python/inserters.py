@@ -32,6 +32,7 @@ def insert_address(house_number: int, street_number: int, city: str, province: s
                         (
                             house_number, street_number, city, province, postal_code))
             conn.commit()
+            return cur.fetchall()
 
     except Exception as error:
         raise Error('ERROR: cant insert user') from error
