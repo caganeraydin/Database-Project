@@ -14,13 +14,13 @@
       <div class="jumbotron p-3">
 
 
-      {% with messages = get_flashed_messages() %}
+      {% with messages = get_flashed_messages(with_categories=true) %}
 
       {% if messages %}
 
-      {% for message in messages %}
+      {% for category, message in messages %}
 
-      <div class="alert alert-success alert-dismissable" role="alert">
+      <div class="alert alert-{{category}} alert-dismissable" role="alert">
 
           <button type="button" class="close" data-dismiss="alert" aria-label="close">
 
@@ -44,17 +44,31 @@
 
           <tr>
               <th scope="col">Invoice Id</th>
-              <th scope="col">Payment Amount</th>
+              <th scope="col">User Id</th>
+              <th scope="col">Date of Issue</th>
+              <th scope="col">Phone Number</th>
+              <th scope="col">Email</th>
+              <th scope="col">Patient Charge (cad)</th>
+              <th scope="col">Insurance Charge (cad)</th>
+              <th scope="col">Employee Discount (cad)</th>
+              <th scope="col">Penalty Charge (cad)</th>
           </tr>
 
 
-         {% for row in PatientAmount %}
+         {% for row in PatientInvoice %}
           <tr>
             <td scope="col">{{row[0]}}</td>
-            <td scope="col">${{row[3]}}</td>
+            <td scope="col">{{row[1]}}</td>
+            <td scope="col">{{row[2]}}</td>
+            <td scope="col">{{row[3]}}</td>
+            <td scope="col">{{row[4]}}</td>
+            <td scope="col">${{row[6]}}</td>
+            <td scope="col">${{row[5]}}</td>
+            <td scope="col">${{row[7]}}</td>
+            <td scope="col">${{row[8]}}</td>
 
               <td>
-                  <a href="/insert_payment/{{row[0]}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row[0]}}">Make Payment</a>
+                  <a href="/insert_payment/user_id=row[1]/invoice_id=row[0]" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row[0]}}">Make Payment</a>
               </td>
             </tr>
 
@@ -66,11 +80,11 @@
                       <h4 class="modal-title">Make Payment</h4>
                     </div>
                     <div class="modal-body">
-                      <form action="{{url_for('insert_payment', fee_id = row[0])}}" method="POST">
+                      <form action="{{url_for('insert_payment',user_id=row[1],invoice_id=row[0])}}" method="POST">
                         <div class="form-group">
-                          <h2>Total Amount Due: ${{row[3]}}</h2>
+                          <h2>Total Amount Due: ${{row[6]}}</h2>
                           <label>Choose a payment method:</label>
-                          <input list = "payment_methods" type="text" class="form-control" placeholder="ex: Credit/Debit Card">
+                          <input list = "payment_methods" type="text" class="form-control" name="payment_method" placeholder="ex: Credit/Debit Card">
                           <datalist id="payment_methods">
                             <option value="Credit/Debit Card">
                             <option value="Cash">
@@ -80,18 +94,17 @@
                         </div>
                         <div class="form-group">
                         <label>Insurance Claim Amount:</label><br>
-                          <input type="text" min="0" oninput="check(this)" placeholder="$0.00">
-                          <input type="submit" value="Save"/>
+                          <input type="text" name="insurance_amount" min="0" oninput="check(this)" placeholder="$0.00">
+                          <input type="submit" name="save_button" id="save_button" value="Save">
                           <script>
                            function check(input) {
-                             if (input.value > {{row[3]}}) {
-                               input.setCustomValidity('The invoice claim must be equal or less than total amount due.');
+                             if (input.value != {{row[6]}}) {
+                               input.setCustomValidity('The invoice claim must be equal to the total amount due.');
                              } else {
                              input.setCustomValidity('Saved successfully!')
                              }
                            }
                           </script>
-                          </input>
                         </div>
                       </form>
                     </div>
@@ -99,18 +112,15 @@
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                       <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="myFunction()">Submit</button>
                       <script>
-              function myFunction() {
-                confirm("Your payment information is successfully saved!");
-                    }
-                  </script>
+                        function myFunction() {
+                            if(document.getElementById('save_button').clicked == true){
+                                confirm("Your payment information is successfully saved!");
+                            }else{
+                                confirm("Please save the amount before submitting.")
+                            }
+                        }
+                       </script>
                    </div>
-
-
-
-
-
-
-
                   </div>
                 </div>
               </div>
@@ -120,9 +130,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
 </div>
 
 {% endblock %}

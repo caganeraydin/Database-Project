@@ -172,6 +172,17 @@ def get_invoice(invoice_id: int):
     except Exception as error:
         raise Error('ERROR while fetching invoice') from error
 
+def get_user_invoice(user_id: str):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_user_invoice.sql'), 'r') as file:
+            cur.execute(file.read(), (user_id,))
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching user invoice(s)') from error
+
 
 def get_payment(payment_id: int):
     try:
