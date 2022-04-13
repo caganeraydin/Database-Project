@@ -153,10 +153,10 @@
                 </div>
                 <div class="form-group">
                   <label>Dentist Id:</label>
-                    <input list = "dentists_name" type="text" class="form-control" placeholder="ex: 101">
+                    <input list = "dentists_name" type="text" name="dentist_id" class="form-control" placeholder="ex: 101">
                     <datalist id="dentists_name">
                     {% for dentist in List_of_all_dentists %}
-                        <option value={{dentist}}>{{dentist}}</option>
+                        <option value="{{dentist[0]}}">{{dentist}}</option>
                     {% endfor %}
                     </datalist>
                 </div>
@@ -168,6 +168,7 @@
                   <label>Appointment Type:</label>
                   <input list="procedure_types" type="text" class="form-control" name="appointment_type" required="1" placeholder="ex: Teeth Filling">
                      <datalist id="procedure_types">
+                         <option value="Teeth Cleaning">
                          <option value="Teeth Filling">
                          <option value="Teeth Crown">
                          <option value="Root Canal">

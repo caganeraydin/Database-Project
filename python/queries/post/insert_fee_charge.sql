@@ -1,2 +1,2 @@
 INSERT INTO project_schema.fee_charge
-VALUES (%s, %s, %s, %s, %s);
+VALUES (DEFAULT, %s, %s, %s, %s);

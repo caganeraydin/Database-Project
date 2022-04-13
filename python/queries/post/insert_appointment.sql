@@ -1,3 +1,3 @@
 INSERT INTO project_schema.appointment
-VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+VALUES (DEFAULT, %s, %s, %s, %s, %s, %s, %s, %s, %s) returning appointment_id;
 
