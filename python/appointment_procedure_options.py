@@ -1,4 +1,7 @@
 procedure_dict = {
+    'Teeth Cleaning': ['D1110', 'non-surgical',
+                      'Procedure for the removal of tartar (mineralized plaque) that may develop ',
+                      150],
     'Teeth Filling': ['D2140', 'non-surgical',
                       'To treat a cavity your dentist will remove the decayed portion of the tooth and then '
                       '"fill" the area on the tooth where the decayed material was removed',

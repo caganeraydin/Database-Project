@@ -220,6 +220,16 @@ def get_all_treatments():
     except Exception as error:
         raise Error('ERROR while fetching all treatments') from error
 
+def get_appointment_procedure(procedure_no: int):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_appointment_procedure.sql'), 'r') as file:
+            cur.execute(file.read(), (procedure_no,))
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching appointment procedure') from error
 
 def get_appointment(appointment_id: int):
     try:
@@ -273,7 +283,7 @@ def get_start_time(start_time: str):
     try:
         cur = conn.cursor()
         with open(get_abs_filepath_from_module(__file__, 'queries/get/get_start_time.sql'), 'r') as file:
-            cur.execute(file.read())
+            cur.execute(file.read(), (start_time,))
             conn.commit()
             return cur.fetchall()
 

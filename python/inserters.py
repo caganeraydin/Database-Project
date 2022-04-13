@@ -149,22 +149,23 @@ def insert_insurance_claim(payment_id: int, amount_accepted: int):
         raise Error('ERROR: cant insert insurance claim') from error
 
 
-def insertAppointment(appointment_id: int, invoice_id: int, patient_id: str, dentist_id: str, start_time: str,
+def insertAppointment(invoice_id: int, patient_id: str, dentist_id: str, start_time: str,
                        end_time: str,
                        appointment_type: str, status: str, room_assigned: str, date_of_appointment: str):
     try:
         cur = conn.cursor()
         with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_appointment.sql'), 'r') as file:
             cur.execute(file.read(),
-                        (appointment_id, invoice_id, patient_id, dentist_id, start_time, end_time, appointment_type,
+                        (invoice_id, patient_id, dentist_id, start_time, end_time, appointment_type,
                          status, room_assigned, date_of_appointment))
             conn.commit()
+            return cur.fetchall()
 
     except Exception as error:
         raise Error('ERROR: cant insert appointment') from error
 
 
-def insert_appointment_procedure(procedure_type: str, appointment_id: int, tooth_involved: int, procedure_no: int):
+def insert_appointment_procedure(procedure_type: str, appointment_id: int, tooth_involved: int):
     if procedure_type in procedure_dict:
         try:
             current_procedure = procedure_dict.get(procedure_type)
@@ -172,10 +173,11 @@ def insert_appointment_procedure(procedure_type: str, appointment_id: int, tooth
             with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_appointment_procedure.sql'),
                       'r') as file:
                 cur.execute(file.read(),
-                            (procedure_no, appointment_id, current_procedure[0], current_procedure[1],
+                            (appointment_id, current_procedure[0], current_procedure[1],
                              current_procedure[2], tooth_involved, current_procedure[3]
                              ))
                 conn.commit()
+                return cur.fetchall()
 
         except Exception as error:
             raise Error('ERROR: Cant insert appointment procedure') from error
@@ -183,12 +185,12 @@ def insert_appointment_procedure(procedure_type: str, appointment_id: int, tooth
         raise Error('No Such Procedure Exists') from Exception
 
 
-def insert_fee_charge(fee_id: int, invoice_id: int, procedure_no: int, fee_code: str, fee_amount: int):
+def insert_fee_charge(invoice_id: int, procedure_no: int, fee_code: str, fee_amount: int):
     try:
         cur = conn.cursor()
         with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_fee_charge.sql'), 'r') as file:
             cur.execute(file.read(),
-                        (fee_id, invoice_id, procedure_no, fee_code, fee_amount))
+                        (invoice_id, procedure_no, fee_code, fee_amount))
             conn.commit()
 
     except Exception as error:
