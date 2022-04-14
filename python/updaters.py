@@ -35,7 +35,7 @@ def update_user(user_id: str, first_name: str, middle_name: str, last_name: str,
 def update_patient(user_id: int, first_name: str, middle_name: str, last_name: str, gender: str,
                    insurance_company: str, ssn: str, email: str, date_of_birth: str, telephone: str,
                    age: int, password: str, address_id: int, house_number: int, street_number: int,
-                   city: str, province: str, postal_code: str):
+                   city: str, province: str, postal_code: str, insurance_type:str,patient_id:str):
     try:
         cur = conn.cursor()
         with open(get_abs_filepath_from_module(__file__, 'queries/update/update_patient.sql'), 'r') as file:
@@ -43,7 +43,7 @@ def update_patient(user_id: int, first_name: str, middle_name: str, last_name: s
                         (first_name, middle_name, last_name, gender,
                         insurance_company, ssn, email, date_of_birth, telephone,
                         age, password, user_id, house_number, street_number,
-                        city, province, postal_code, address_id))
+                        city, province, postal_code, address_id,insurance_type,patient_id))
             conn.commit()
     except Exception as error:
         raise Error('ERROR: cant update treatment') from error

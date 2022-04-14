@@ -8,4 +8,10 @@ UPDATE project_schema."address"
 SET house_number = %s, street_number = %s, city = %s, province = %s,  postal_code= %s
 WHERE address_id = %s;
 
+UPDATE project_schema."patient"
+SET insurance_type = %s
+WHERE user_id = %s;
+
+
+
 COMMIT;
