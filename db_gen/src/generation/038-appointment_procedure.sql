@@ -1,6 +1,6 @@
 create table project_schema.appointment_procedure
 (
-    procedure_no        int not null
+    procedure_no        serial
         constraint appointment_procedure_pk
             primary key,
     appointment_id      int
@@ -15,4 +15,3 @@ create table project_schema.appointment_procedure
 
 create unique index appointment_procedure_procedure_no_uindex
     on project_schema.appointment_procedure (procedure_no);
-

@@ -1,6 +1,6 @@
 create table project_schema.appointment
 (
-    appointment_id   int not null
+    appointment_id   serial
         constraint appointment_pk
             primary key,
     invoice_id       int not null
@@ -22,4 +22,3 @@ create table project_schema.appointment
 
 create unique index appointment_appointment_id_uindex
     on project_schema.appointment (appointment_id);
-

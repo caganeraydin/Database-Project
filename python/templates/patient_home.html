@@ -1,0 +1,368 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+
+
+
+
+{% block title %} Home {% endblock %}
+
+{% block body %}
+
+
+    <nav class="nav nav-pills flex-column flex-sm-row" >
+  <a class="flex-sm-fill text-sm-center nav-link active" href="#" >Patient Home Page</a>
+  <a class="flex-sm-fill text-sm-center nav-link active" href="{{ url_for('get_appointments_page' ,user_id=user_id)}}">Make Appointment</a>
+  <a class="flex-sm-fill text-sm-center nav-link active" href="#">Make Payment</a>
+  <a class="flex-sm-fill text-sm-center nav-link active" href="#" tabindex="-1" aria-disabled="true">Sign Out</a>
+</nav>
+
+
+<!--Checking for age-->
+{% if  age <18  and not responsible_party %}
+
+<div id="addParty" class="alert alert-danger" role="dialog">
+  Patients under the age of 18 must provide parent information
+
+
+<form class="needs-validation" novalidate action="{{url_for('insert_responsible_party', user_id = user_id)}}" method="POST">
+  <div class="form-row">
+    <div class="col-md-4 mb-3">
+      <label for="validationTooltip01">First name</label>
+      <input type="text" class="form-control" id="validationTooltip01" name="first_name" value="John" required>
+      <div class="valid-tooltip">
+        Looks good!
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label for="validationTooltip02">Middle name</label>
+      <input type="text" class="form-control" id="validationTooltip02" name="middle_name" value="">
+      <div class="valid-tooltip">
+        Looks good!
+      </div>
+    </div>
+
+        <div class="col-md-4 mb-3">
+      <label for="validationTooltip01">Last name</label>
+      <input type="text" class="form-control" id="validationTooltip01" name="last_name" value="Doe" required>
+      <div class="valid-tooltip">
+        Looks good!
+      </div>
+    </div>
+
+  </div>
+      <div class="form-row">
+          <div class="col-md-4 mb-3">
+      <label for="validationTooltipUsername">Email</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="validationTooltipUsernamePrepend" >@</span>
+        </div>
+        <input type="text" class="form-control" id="validationTooltipUsername" name="email" aria-describedby="validationTooltipUsernamePrepend" required>
+        <div class="invalid-tooltip">
+          Please choose a unique and valid username.
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-md-4 mb-3">
+      <label for="validationTooltip02">Insurance Company</label>
+      <input type="text" class="form-control" id="validationTooltip02" name="insurance_company" value="" required>
+      <div class="valid-tooltip">
+        Looks good!
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label for="validationTooltipUsername">SSN</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+        </div>
+        <input type="text" class="form-control" id="validationTooltipUsername" name="ssn" aria-describedby="validationTooltipUsernamePrepend" required>
+        <div class="invalid-tooltip">
+          Please choose a unique and valid username.
+        </div>
+      </div>
+    </div>
+  </div>
+
+      <div class="form-row">
+    <div class="col-md-4 mb-3">
+      <label for="validationTooltip01">Birthdate</label>
+      <input type="text" class="form-control" id="validationTooltip01" name="date_of_birth" value="" required>
+      <div class="valid-tooltip">
+        Looks good!
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label for="validationTooltip02">Phone number</label>
+      <input type="text" class="form-control" id="validationTooltip02"  name="telephone" value="" required>
+      <div class="valid-tooltip">
+        Looks good!
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label for="validationTooltipUsername">Age</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+        </div>
+        <input type="text" class="form-control" id="validationTooltipUsername" name="age" aria-describedby="validationTooltipUsernamePrepend" required>
+        <div class="invalid-tooltip">
+          Please choose a unique and valid username.
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="form-row">
+    <div class="col-md-6 mb-3">
+      <label for="validationTooltip03">Password</label>
+      <input type="text" class="form-control" id="validationTooltip03" name="password" required>
+      <div class="invalid-tooltip">
+        Please provide a valid city.
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <label for="validationTooltip04">Gender</label>
+      <select class="custom-select" id="validationTooltip04"  name="gender" required>
+        <option selected disabled value="">Choose...</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+      <div class="invalid-tooltip">
+        Please select a valid state.
+      </div>
+    </div>
+
+  </div>
+    <button type="submit" class="btn btn-primary"  data-target="#addParty">Add Responsible Party</button>
+
+</form>
+
+
+
+</div>
+
+
+{% endif %}
+
+
+<!-- Patient information -->
+<div class="card">
+<div style="text-align: center;background-color:#2A363B;color:#EEEEEE;padding:20px;">
+  <h3 class="card-header text-center font-weight-bold text-uppercase py-4">
+    Patient Information
+  </h3>
+</div>
+  <div class="card-body">
+    <div id="table" class="table-editable">
+      <span class="table-add float-right mb-3 mr-2"
+        ><a href="#!" class="text-success"
+          ><i class="fas fa-plus fa-2x" aria-hidden="true"></i></a
+      ></span>
+      <table class="table table-bordered table-responsive-md table-striped text-center">
+        <thead>
+          <tr>
+            <th class="text-center">First Name</th>
+            <th class="text-center">Middle Name</th>
+            <th class="text-center">Last Name</th>
+            <th class="text-center">Gender</th>
+            <th class="text-center">Insurance Company</th>
+            <th class="text-center">SSN</th>
+            <th class="text-center">Email</th>
+            <th class="text-center">Birth Date</th>
+            <th class="text-center">Telephone</th>
+            <th class="text-center">Age</th>
+            <th class="text-center">Password</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="pt-3-half" contenteditable="true">{{ first_name }} </td>
+            <td class="pt-3-half" contenteditable="true">{{ middle_name }}</td>
+            <td class="pt-3-half" contenteditable="true">{{ last_name }}</td>
+            <td class="pt-3-half" contenteditable="true">{{ gender }}</td>
+            <td class="pt-3-half" contenteditable="true">{{ insurance_company }}</td>
+            <td class="pt-3-half" contenteditable="true">{{ ssn }}</td>
+            <td class="pt-3-half" contenteditable="true">{{ email }}</td>
+            <td class="pt-3-half" contenteditable="true">{{ birth_date }}</td>
+            <td class="pt-3-half" contenteditable="true">{{ phone_number }}</td>
+            <td class="pt-3-half" contenteditable="true">{{ age }}</td>
+            <td class="pt-3-half" contenteditable="true">{{ password }}</td>
+            <td class="pt-3-half">
+              <span class="table-up"
+                ><a href="#!" class="indigo-text"
+                  ><i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i></a
+              ></span>
+              <span class="table-down"
+                ><a href="#!" class="indigo-text"
+                  ><i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i></a
+              ></span>
+            </td>
+            <td>
+              <span class="table-remove"
+                >
+                          <button type="submit" data-toggle="modal" class="btn btn-primary"  data-target="#updatePatient">Edit</button>
+
+                            <div class="modal fade" id="updatePatient" tabindex="-1" role="dialog"  aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">New message</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <form action="{{url_for('update_p', user_id = user_id)}}" method="POST">
+
+
+                                  <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">First Name:</label>
+                                    <input type="text" class="form-control" id="recipient-name" name="first_name" value="{{first_name}}">
+                                  </div>
+
+                                    <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Middle Name:</label>
+                                    <input type="text" class="form-control" id="recipient-name" name="middle_name" value="{{middle_name}}">
+                                  </div>
+
+                                    <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Last Name:</label>
+                                    <input type="text" class="form-control" id="recipient-name" name="last_name" value="{{last_name}}">
+                                  </div>
+
+                                    <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Email:</label>
+                                    <input type="text" class="form-control" id="recipient-name" name="email" value="{{email}}">
+                                  </div>
+
+                                    <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Gender:</label>
+                                    <input type="text" class="form-control" id="recipient-name" name="gender" value="{{gender}}">
+                                  </div>
+
+                                    <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Birthdate:</label>
+                                    <input type="text" class="form-control" id="recipient-name" name="date_of_birth" value="{{birth_date}}">
+                                  </div>
+
+                                    <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">SSN:</label>
+                                    <input type="text" class="form-control" id="recipient-name" name="ssn" value="{{ssn}}">
+                                  </div>
+
+                                    <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Insurance Company:</label>
+                                    <input type="text" class="form-control" id="recipient-name" name="insurance_company" value="{{insurance_company}}">
+                                  </div>
+
+                                    <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Phone Number:</label>
+                                    <input type="text" class="form-control" id="recipient-name" name="telephone" value="{{phone_number}}">
+                                  </div>
+
+                                    <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Age:</label>
+                                    <input type="text" class="form-control" id="recipient-name" name="age" value="{{age}}">
+                                  </div>
+
+                                    <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Password:</label>
+                                    <input type="text" class="form-control" id="recipient-name" name="password" value="{{password}}">
+                                  </div>
+
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button  class="btn btn-primary" type="submit"> Send message  </button>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+              </span
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+    <div style="text-align: center;background-color:#2A363B;color:#EEEEEE;padding:20px;">
+  <h3 class="card-header text-center font-weight-bold text-uppercase py-4">
+    Operations
+  </h3>
+    </div>
+            <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Start Time</th>
+                      <th scope="col">End Time</th>
+                      <th scope="col">Operation</th>
+                        <th scope="col">Status</th>
+                      <th scope="col">Room</th>
+                      <th scope="col">Date</th>
+                    </tr>
+                  </thead>
+
+                    {% for appointment in appointments %}
+
+
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>{{appointment[0]}}</td>
+                      <td>{{appointment[1]}}</td>
+                      <td>{{appointment[2]}}</td>
+                        <td>{{appointment[3]}}</td>
+                      <td>{{appointment[4]}}</td>
+                      <td>{{appointment[5]}}</td>
+                    </tr>
+
+                  </tbody>
+
+             {% endfor %}
+                </table>
+
+
+
+
+<div style="text-align: center;background-color:#2A363B;color:#EEEEEE;padding:20px;">
+    <h3> Invoices </h3>
+</div>
+
+     <table class="table table-hover sortable">
+
+                    <tr>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">date of issue</th>
+                        <th scope="col">insurance charge</th>
+                        <th scope="col">patient charge</th>
+                    </tr>
+
+
+                   {% for invoice in invoices %}
+
+                    <tr>
+                      <td scope="col">{{invoice[2]}}</td>
+                      <td scope="col">{{invoice[3]}}</td>
+                      <td scope="col">{{invoice[4]}}</td>
+                      <td scope="col">{{invoice[7]}}</td>
+                      <td scope="col">{{invoice[8]}}</td>
+
+                    </tr>
+     {% endfor %}
+     </table>
+
+
+
+{% endblock %}
+
