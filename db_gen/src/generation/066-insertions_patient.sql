@@ -19,10 +19,10 @@ INSERT INTO project_schema.patient
 VALUES ('1', 122, 'Intact_assurance_fullcoverage');
 
 INSERT INTO project_schema.invoice
-VALUES (1, '1', date '2021-09-11', '123-456-7890', 'PO@mail.com', 100, 200, 20, 0);
+VALUES (1, '1', date '2021-09-11', '123-456-7890', 'PO@mail.com', 100, 200, 20, 0,FALSE);
 
 INSERT INTO project_schema.payment
-VALUES (1, 1, 'VISA', 200, 100);
+VALUES (DEFAULT , 1, 'VISA', 200, 100);
 
 INSERT INTO project_schema.insurance_claim
-VALUES (1, 1, 100);
+VALUES (default , 1, 100);

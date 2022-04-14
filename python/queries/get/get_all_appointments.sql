@@ -11,7 +11,3 @@ FROM
     project_schema."user" u
 
 WHERE a.patient_id = u.user_id ;
-
-
-
-

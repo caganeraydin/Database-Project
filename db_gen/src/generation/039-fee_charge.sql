@@ -1,6 +1,6 @@
 create table project_schema.fee_charge
 (
-    fee_id       int not null
+    fee_id       serial
         constraint fee_charge_pk
             primary key,
     invoice_id   int not null

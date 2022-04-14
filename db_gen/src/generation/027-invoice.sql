@@ -12,7 +12,8 @@ create table project_schema.invoice
     insurance_charge integer not null,
     patient_charge   integer not null,
     discount         integer,
-    penalty_charge   integer
+    penalty_charge   integer,
+    paid boolean
 );
 
 alter table project_schema.invoice

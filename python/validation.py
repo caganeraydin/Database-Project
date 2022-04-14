@@ -1,6 +1,5 @@
 import random
-
-from getters import get_user_with_id, get_user_with_email, get_patient_chart
+from getters import *
 
 
 def generateUserId():
@@ -31,3 +30,12 @@ def generateChartNo():
         n = random.randint(1,300000)
         chart = get_patient_chart(str(n))
     return n
+
+def generateInvoiceId():
+    n = random.randint(1,300000)
+    invoice = get_invoice(int(n))
+    while invoice:
+        n = random.randint(1,300000)
+        invoice = get_invoice(int(n))
+    return n
+
