@@ -132,7 +132,7 @@
                                 </div>
                                  <div class="form-group">
                                   <label>Date of Birth:</label>
-                                  <input type="text" class="form-control" name="date_of_birth" value="{{patient[8]}}">
+                                  <input type="date" class="form-control" name="date_of_birth" value="{{patient[8]}}">
                                 </div>
                                 <div class="form-group">
                                   <label>Phone number:</label>
@@ -151,7 +151,7 @@
                                   <input type="text" class="form-control" name="house_number" value="{{patient[13]}}">
                                 </div>
                                 <div class="form-group">
-                                  <label>Street Number:</label>
+                                  <label>Street Name:</label>
                                   <input type="text" class="form-control" name="street_number" value="{{patient[14]}}">
                                 </div>
                                 <div class="form-group">
@@ -285,7 +285,9 @@
                   <a href=“/get_treatments/}“>
                     <button class="btn btn-primary btn-block" type="submit">Go To Treatment</button>
                     <br>
-                    <button class="btn btn-warning btn-block" type="submit">Go To Appointments</button>
+                  </a>
+                  <a href = "{{url_for('get_appointments')}}">
+                     <button class="btn btn-warning btn-block" type="submit">Go To Appointments</button>
                   </a>
                 </h5>
               </div>
@@ -354,7 +356,7 @@
                     </div>
                      <div class="form-group">
                       <label>Date of Birth:</label>
-                      <input type="text" class="form-control" name="date_of_birth" value="{{emp_profile[8]}}">
+                      <input type="date" class="form-control" name="date_of_birth" value="{{emp_profile[8]}}">
                     </div>
                     <div class="form-group">
                       <label>Phone number:</label>
@@ -373,7 +375,7 @@
                       <input type="text" class="form-control" name="house_number" value="{{emp_address[1]}}">
                     </div>
                     <div class="form-group">
-                      <label>Street Number:</label>
+                      <label>Street Name:</label>
                       <input type="text" class="form-control" name="street_number" value="{{emp_address[2]}}">
                     </div>
                     <div class="form-group">
@@ -446,7 +448,7 @@
                 </div>
                  <div class="form-group">
                   <label>Date Of Birth:</label>
-                  <input type="text" class="form-control" name="date_of_birth" required="1">
+                  <input type="date" class="form-control" name="date_of_birth" required="1">
                 </div>
                   <div class="form-group">
                   <label>Phone Number:</label>
@@ -465,7 +467,7 @@
                   <input type="text" class="form-control" name="house_number" required="1">
                 </div>
                 <div class="form-group">
-                  <label>Street Number:</label>
+                  <label>Street Name:</label>
                   <input type="text" class="form-control" name="street_number" required="1">
                 </div>
                  <div class="form-group">
@@ -473,7 +475,7 @@
                   <input type="text" class="form-control" name="city" required="1">
                 </div>
                  <div class="form-group">
-                  <label>province:</label>
+                  <label>Province:</label>
                   <input type="text" class="form-control" name="province" required="1">
                 </div>
                  <div class="form-group">

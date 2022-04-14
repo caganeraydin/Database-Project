@@ -30,10 +30,7 @@ app.secret_key = "Secret Key"
 db = SQLAlchemy(app)
 current_employee = None
 
-@app.route('/')
-def show_all():
-    users = get_all_users()
-    return render_template('show_all.html', Users=users)
+
 
 # Payment
 @app.route('/get_invoices/<user_id>/')
@@ -41,9 +38,11 @@ def get_invoices(user_id):
     patient_invoice = get_user_invoice(user_id)
     return render_template("payment.html", PatientInvoice = patient_invoice)
 
-@app.route('/insert_payment/<user_id>/<invoice_id>/', methods = ['POST'])
+@app.route('/insert_user_payment/<user_id>/<invoice_id>/', methods = ['POST'])
 def insert_user_payment(user_id, invoice_id):
     print("LOL")
+    print(user_id)
+    print(invoice_id)
     payment_method = request.form['payment_method']
     print(payment_method)
     insurance_amount = request.form['insurance_amount']
@@ -52,7 +51,7 @@ def insert_user_payment(user_id, invoice_id):
     print(patient_amount)
 
     insert_payment(int(invoice_id), payment_method, int(patient_amount), int(insurance_amount))
-    update_invoice(invoice_id, insurance_amount, True)
+    update_invoice_payment(invoice_id, insurance_amount, True)
 
     flash("Payment is saved successfully!","success")
     return redirect(url_for('get_invoices',user_id = user_id))
@@ -153,11 +152,14 @@ def get_employee_home_page(user_id):
     all_invoices = get_all_invoices()
     cur_employee = get_employee(user_id)[0]
     cur_emp_user_info = get_user_with_id(user_id)[0]
-    cur_employee_address = get_user_address(user_id)[0]
-    current_employee = user_id
-    print(current_employee)
+    cur_employee_address = get_user_address(user_id)
+    if not cur_employee_address:
+        a = insert_address(None,None,None,None,None)
+        insert_user_address(user_id, a[0][0])
+        cur_employee_address = get_user_address(user_id)
 
-    return render_template("employee_home.html", Patients = all_patients, Appointments = all_appointments, Invoices = all_invoices, employee = cur_employee, emp_profile = cur_emp_user_info, emp_address = cur_employee_address)
+
+    return render_template("employee_home.html", Patients = all_patients, Appointments = all_appointments, Invoices = all_invoices, employee = cur_employee, emp_profile = cur_emp_user_info, emp_address = cur_employee_address[0])
 
 
 # this route is for inserting a new patient to postgres database via html
@@ -626,12 +628,7 @@ def delete_invoice_admin(invoice_id):
     return redirect(url_for('get_invoices',user_id = user_id))
 
 #Appointments
-# @app.route('/')
-# def show_all():
-#     conn = get_db_connection()
-#     cur = conn.cursor()
-#     users = get_all_users()
-
+@app.route('/get_appointments', methods=['GET'])
 def get_appointments():
     all_appointments = get_all_appointments_allcolumns()
     #Get dentists names on the dropdown menu on the appointment page
@@ -774,6 +771,10 @@ def delete_appointment(appointment_id):
 
     return redirect(url_for('get_appointments'))
 
+@app.route('/')
+def show_all():
+    users = get_all_users()
+    return render_template('show_all.html', Users=users)
 
 # me = user('123','abc',None,'def','male','sunlife','123456789','gmail@hotmail.com','2020-03-29','888-999-7766','2','pasword')
 # db.session.add(me)

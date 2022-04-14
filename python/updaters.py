@@ -51,7 +51,7 @@ def update_patient(user_id: int, first_name: str, middle_name: str, last_name: s
 
 def update_employee_profile(user_id: int, first_name: str, middle_name: str, last_name: str, gender: str,
                    insurance_company: str, ssn: str, email: str, date_of_birth: str, telephone: str,
-                   age: int, password: str, address_id: int, house_number: int, street_number: int,
+                   age: int, password: str, address_id: int, house_number: int, street_number: str,
                    city: str, province: str, postal_code: str):
     try:
         cur = conn.cursor()
