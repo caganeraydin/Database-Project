@@ -44,3 +44,13 @@ def updateAppointment(appointment_id: int, invoice_id: int, patient_id: str, den
             conn.commit()
     except Exception as error:
         raise Error('ERROR: cant update appointment') from error
+
+def update_invoice(invoice_id:int, insurance_charge:int, paid: bool):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/update/update_invoice.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (insurance_charge, paid, invoice_id))
+            conn.commit()
+    except Exception as error:
+        raise Error('ERROR: cant update invoice') from error

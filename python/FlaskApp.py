@@ -18,7 +18,7 @@ from inserters import insert_user, insert_appointment_procedure, insert_address,
     insert_patient, insert_patient_chart, insert_branch, insert_branch_address, insert_invoice, insert_payment, \
     insert_insurance_claim, insert_fee_charge, insert_receptionist, insert_dentist, \
     insert_hygienist, insert_review, insert_clinic_enterprise, insertTreatment, insertAppointment
-from updaters import updateTreatment, updateAppointment
+from updaters import updateTreatment, updateAppointment, update_invoice
 from validation import generateInvoiceId
 
 app = Flask(__name__)
@@ -27,9 +27,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhos
 
 db = SQLAlchemy(app)
 
-
-
-
+@app.route('/')
+def show_all():
+    users = get_all_users()
+    return render_template('show_all.html', Users=users)
 
 # Payment
 @app.route('/get_invoices/<user_id>/')
@@ -37,13 +38,22 @@ def get_invoices(user_id):
     patient_invoice = get_user_invoice(user_id)
     return render_template("payment.html", PatientInvoice = patient_invoice)
 
-@app.route('/insert_payment/<user_id>/<invoice_id>')
-def insert_payment(user_id, invoice_id):
+@app.route('/insert_payment/<user_id>/<invoice_id>/', methods = ['POST'])
+def insert_user_payment(user_id, invoice_id):
 
+    print("LOL")
     payment_method = request.form['payment_method']
     print(payment_method)
     insurance_amount = request.form['insurance_amount']
     print(insurance_amount)
+    patient_amount = get_invoice(invoice_id)[0][6]
+    print(patient_amount)
+
+    insert_payment(int(invoice_id), payment_method, int(patient_amount), int(insurance_amount))
+    update_invoice(invoice_id, insurance_amount, True)
+
+    flash("Payment is saved successfully!","success")
+    return redirect(url_for('get_invoices',user_id = user_id))
 
 #Appointments
 @app.route('/')
@@ -101,22 +111,22 @@ def insert_appointment():
 
     if not (get_dentist(dentist_id)):
         print("here1")
-        flash("Dentist Id you entered does not exist, please try again.", "success")
+        flash("Dentist Id you entered does not exist, please try again.", "danger")
         return redirect(url_for('get_appointments'))
     if not (get_patient(patient_id)):
         print("here3")
-        flash("Patient Id you entered does not exist, please try again.", "success")
+        flash("Patient Id you entered does not exist, please try again.", "danger")
         return redirect(url_for('get_appointments'))
     if get_start_time(start_time):
         print("here4")
-        flash("The time you entered is not available, please choose another time.", "success")
+        flash("The time you entered is not available, please choose another time.", "danger")
         return redirect(url_for('get_appointments'))
     else:
         print("here6")
         user = get_user_with_id(get_patient(patient_id)[0][0])
         procedure = procedure_dict[str(appointment_type)]
 
-        insert_invoice(invoice_id, patient_id, date_of_appointment,user[0][9], user[0][7], 0, procedure[3], None, None)
+        insert_invoice(invoice_id, patient_id, date_of_appointment,user[0][9], user[0][7], 0, procedure[3], None, None, False)
         appointment = insertAppointment(invoice_id, patient_id, dentist_id, start_time, str(final_end_time), appointment_type, status, room_assigned, date_of_appointment)
         procedure_no = insert_appointment_procedure(appointment_type, appointment[0][0], 1)
         insert_fee_charge(invoice_id, int(procedure_no[0][0]), procedure[0], procedure[3])
@@ -189,10 +199,7 @@ def delete_appointment(appointment_id):
 
     return redirect(url_for('get_appointments'))
 
-@app.route('/')
-def show_all():
-    users = get_all_users()
-    return render_template('show_all.html', Users=users)
+
 
 
 # me = user('123','abc',None,'def','male','sunlife','123456789','gmail@hotmail.com','2020-03-29','888-999-7766','2','pasword')

@@ -1,6 +1,6 @@
 create table project_schema.payment
 (
-    payment_id       integer not null
+    payment_id       serial
         constraint payment_pk
             primary key,
     invoice_id       integer not null

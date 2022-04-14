@@ -112,25 +112,25 @@ def insert_branch_address(address_id: int, branch_id: int):
 
 
 def insert_invoice(invoice_id: int, patient_id: str, date: str, telephone: str, email: str, insurance_charge: int,
-                   patient_charge: int, discount: int, penalty: int):
+                   patient_charge: int, discount: int, penalty: int, paid:bool):
     try:
         cur = conn.cursor()
         with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_invoice.sql'), 'r') as file:
             cur.execute(file.read(),
                         (invoice_id, patient_id, date, telephone, email, insurance_charge,
-                         patient_charge, discount, penalty))
+                         patient_charge, discount, penalty,paid))
             conn.commit()
 
     except Exception as error:
         raise Error('ERROR: cant insert invoice') from error
 
 
-def insert_payment(payment_id: int, invoice_id: int, payment_type: str, patient_amount: int, insurance_amount: int):
+def insert_payment(invoice_id: int, payment_type: str, patient_amount: int, insurance_amount: int):
     try:
         cur = conn.cursor()
         with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_payment.sql'), 'r') as file:
             cur.execute(file.read(),
-                        (payment_id, invoice_id, payment_type, patient_amount, insurance_amount))
+                        (invoice_id, payment_type, patient_amount, insurance_amount))
             conn.commit()
 
     except Exception as error:

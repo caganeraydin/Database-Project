@@ -7,6 +7,25 @@
 
 {% block body %}
 
+<script>
+   function check(input, row) {
+     if (input.value != row) {
+       input.setCustomValidity('The invoice claim must be equal to the total amount due.');
+     } else {
+        input.setCustomValidity('')
+     }
+   }
+</script>
+
+<script>
+    function myFunction() {
+        if(document.getElementById('save_button').clicked == true){
+            confirm("Your payment information is successfully saved!");
+        }else{
+            confirm("Please save the amount before submitting.")
+        }
+    }
+</script>
 
 <div class="container">
   <div class="row">
@@ -52,6 +71,7 @@
               <th scope="col">Insurance Charge (cad)</th>
               <th scope="col">Employee Discount (cad)</th>
               <th scope="col">Penalty Charge (cad)</th>
+              <th scope="col">Amount is Paid in Full</th>
           </tr>
 
 
@@ -66,9 +86,10 @@
             <td scope="col">${{row[5]}}</td>
             <td scope="col">${{row[7]}}</td>
             <td scope="col">${{row[8]}}</td>
+            <td scope="col">{{row[9]}}</td>
 
               <td>
-                  <a href="/insert_payment/user_id=row[1]/invoice_id=row[0]" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row[0]}}">Make Payment</a>
+                  <a href="/insert_user_payment/{{row[1]}}/{{row[0]}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row[0]}}">Make Payment</a>
               </td>
             </tr>
 
@@ -80,7 +101,7 @@
                       <h4 class="modal-title">Make Payment</h4>
                     </div>
                     <div class="modal-body">
-                      <form action="{{url_for('insert_payment',user_id=row[1],invoice_id=row[0])}}" method="POST">
+                      <form action="{{url_for('insert_user_payment',user_id=row[1],invoice_id=row[0])}}" method="POST">
                         <div class="form-group">
                           <h2>Total Amount Due: ${{row[6]}}</h2>
                           <label>Choose a payment method:</label>
@@ -94,33 +115,16 @@
                         </div>
                         <div class="form-group">
                         <label>Insurance Claim Amount:</label><br>
-                          <input type="text" name="insurance_amount" min="0" oninput="check(this)" placeholder="$0.00">
-                          <input type="submit" name="save_button" id="save_button" value="Save">
-                          <script>
-                           function check(input) {
-                             if (input.value != {{row[6]}}) {
-                               input.setCustomValidity('The invoice claim must be equal to the total amount due.');
-                             } else {
-                             input.setCustomValidity('Saved successfully!')
-                             }
-                           }
-                          </script>
+                          <input type="text" name="insurance_amount" min="0" oninput="check(this,{{row[6]}})" placeholder="$0.00">
                         </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-secondary">Submit</button>
+
+                          </div>
                       </form>
                     </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="myFunction()">Submit</button>
-                      <script>
-                        function myFunction() {
-                            if(document.getElementById('save_button').clicked == true){
-                                confirm("Your payment information is successfully saved!");
-                            }else{
-                                confirm("Please save the amount before submitting.")
-                            }
-                        }
-                       </script>
-                   </div>
+
                   </div>
                 </div>
               </div>
