@@ -155,8 +155,8 @@
                   <label>Dentist Id:</label>
                     <input list = "dentists_name" type="text" name="dentist_id" class="form-control" placeholder="ex: 101">
                     <datalist id="dentists_name">
-                    {% for dentist in List_of_all_dentists %}
-                        <option value="{{dentist[0]}}">{{dentist}}</option>
+                    {% for dentist in List_of_all_dentist_Names %}
+                        <option value="{{dentist[0]}}">{{dentist[1]}} {{dentist[3]}} -  {{dentist[-1]}}</option>
                     {% endfor %}
                     </datalist>
                 </div>
