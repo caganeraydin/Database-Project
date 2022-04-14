@@ -1,5 +1,6 @@
 import os
 
+import datetime
 import psycopg2
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
@@ -65,6 +66,7 @@ def get_appointments():
 # this route is for inserting a new appointment to postgres database via html
 @app.route('/insert_appointment', methods=['POST'])
 def insert_appointment():
+
     # if request.method == 'POST':
 
     invoice_id = generateInvoiceId()
@@ -75,9 +77,21 @@ def insert_appointment():
     print(dentist_id)
     start_time = request.form['start_time']
     print(start_time)
-    #end_time = request.form['end_time']
+    string_time = str(start_time)
+    start_hour = string_time[0] + string_time[1]
+    start_minutes = string_time[3] + string_time[4]
+    date_start_time = datetime.timedelta(hours = int(start_hour), minutes = int(start_minutes))
+    print('start' + str(date_start_time))
     appointment_type = request.form['appointment_type']
+
+    time_complete = procedure_dict.get(appointment_type)[4]
+    end_hour = time_complete[0] + time_complete[1]
+    end_minute = time_complete[3] + time_complete[4]
+    date_end_time = datetime.timedelta(hours = int(end_hour), minutes = int(end_minute))
+    final_end_time = date_start_time + date_end_time
     print(appointment_type)
+
+    # date_end_time = datetime.timedelta(hours = start_hour, seconds = start_minutes)
     status = request.form['status']
     print(status)
     room_assigned = request.form['room_assigned']
@@ -103,7 +117,7 @@ def insert_appointment():
         procedure = procedure_dict[str(appointment_type)]
 
         insert_invoice(invoice_id, patient_id, date_of_appointment,user[0][9], user[0][7], 0, procedure[3], None, None)
-        appointment = insertAppointment(invoice_id, patient_id, dentist_id, start_time, "15:00:00", appointment_type, status, room_assigned, date_of_appointment)
+        appointment = insertAppointment(invoice_id, patient_id, dentist_id, start_time, str(final_end_time), appointment_type, status, room_assigned, date_of_appointment)
         procedure_no = insert_appointment_procedure(appointment_type, appointment[0][0], 1)
         insert_fee_charge(invoice_id, int(procedure_no[0][0]), procedure[0], procedure[3])
 
