@@ -149,14 +149,19 @@
                 <div class="form-group">
                 <div class="form-group">
                   <label>Patient Id:</label>
-                  <input type="text" class="form-control" name="patient_id" required="1" placeholder="ex: 1">
+                  <input list = "patients_name" type="text" class="form-control" name="patient_id" placeholder="ex: 1">
+                    <datalist id="patients_name">
+                    {% for dentist in List_of_all_patients_names %}
+                        <option value="{{dentist[0]}}">{{dentist[1]}} {{dentist[3]}} --- {{dentist[7]}}</option>
+                    {% endfor %}
+                    </datalist>
                 </div>
                 <div class="form-group">
                   <label>Dentist Id:</label>
                     <input list = "dentists_name" type="text" name="dentist_id" class="form-control" placeholder="ex: 101">
                     <datalist id="dentists_name">
                     {% for dentist in List_of_all_dentists %}
-                        <option value="{{dentist[0]}}">{{dentist[1]}} {{dentist[3]}} - {{dentist[-1]}}</option>
+                        <option value="{{dentist[0]}}">{{dentist[1]}} {{dentist[3]}} --- {{dentist[-1]}}</option>
                     {% endfor %}
                     </datalist>
                 </div>

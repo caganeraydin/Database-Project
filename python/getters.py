@@ -5,6 +5,16 @@ from utils import get_abs_filepath_from_module
 
 conn = get_db_connection()
 
+def get_all_Patients():
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_all_patients.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching all addresses') from error
 
 def get_all_users():
     try:

@@ -12,7 +12,7 @@ from getters import get_all_users, get_last_address_id, get_all_addresses, get_u
     get_patient, get_employee, get_responsible_party, get_admin, get_insurance_claim, get_payment, get_invoice, \
     get_hygienist, get_receptionist, get_dentist, get_treatment, get_all_treatments, get_patient_chart, \
     get_all_appointments, get_appointment, get_all_payments, get_all_dentists, get_start_time, get_patient_charge, \
-    get_user_invoice
+    get_user_invoice,get_all_Patients
 from inserters import insert_user, insert_appointment_procedure, insert_address, insert_user_address_latest, \
     insert_patient, insert_patient_chart, insert_branch, insert_branch_address, insert_invoice, insert_payment, \
     insert_insurance_claim, insert_fee_charge, insert_receptionist, insert_dentist, \
@@ -49,12 +49,17 @@ def insert_payment(user_id, invoice_id):
 def get_appointments():
     all_appointments = get_all_appointments()
     #Get dentists names on the dropdown menu on the appointment page
+    List_of_all_patients = get_all_Patients()
+    print(List_of_all_patients)
     list_of_dentists = get_all_dentists()
     list_of_dentist_names = []
     for x in list_of_dentists:
         user = get_user_with_id(x[0])
         list_of_dentist_names.append(user[0]+(x[1],))
-    return render_template("appointments.html", Appointments=all_appointments, List_of_all_dentists=list_of_dentist_names)
+
+
+    return render_template("appointments.html", Appointments=all_appointments, List_of_all_dentists=list_of_dentist_names,
+                           List_of_all_patients_names = List_of_all_patients)
 
 
 # this route is for inserting a new appointment to postgres database via html
