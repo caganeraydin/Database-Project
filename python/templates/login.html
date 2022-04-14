@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block body %}
+<script>
+    function radioVisibility(){
+      var x = document.getElementById("test");
+      var y = document.getElementById("flexRadioDefault2");
+      if (y.checked) {
+        x.style.display = "none";
+      } else {
+        x.style.display = "block";
+      }
+    }
+</script>
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <div class="jumbotron p-3">
+            <form action="{{url_for('login')}}" method="POST">
+                <label for="firstname">Email:</label>
+                <input type="text" id="firstname" name="userid" placeholder="">
+                <label for="lastname">Password:</label>
+                <input type="password" id="lastname" name="pwd" placeholder="">
+                <button class="btn btn-primary" type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+         {% with messages = get_flashed_messages() %}
+
+      {% if messages %}
+
+      {% for message in messages %}
+
+      <div class="alert alert-success alert-dismissable" role="alert">
+
+          <button type="button" class="close" data-dismiss="alert" aria-label="close">
+
+              <span aria-hidden="true">x</span>
+
+          </button>
+
+
+      {{message}}
+
+
+      </div>
+
+      {% endfor %}
+
+      {% endif %}
+      {% endwith %}
+    </div>
+    <div class="d-flex justify-content-center">
+        <h8>Don't have an account yet?
+            <button class="btn btn-outline-dark btn-sm" type="signup" data-toggle="modal" data-target="#mymodal">Sign Up</button>
+        </h8>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        {% if error %}
+            <p class="error"><strong>Error:</strong> {{ error }}
+        {% endif %}
+
+
+    </div>
+
+      <!-- Sign Up-->
+      <div id="mymodal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Sign Up</h4>
+            </div>
+            <div class="modal-body">
+              <form action="{{url_for('signup')}}" method="POST">
+                  <label>Select Account Type:</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="patient">
+                  <label class="form-check-label" for="flexRadioDefault1">
+                    Patient
+                  </label>
+                </div>
+                <label>Select Employee Account Type:</label>
+                    <div class="form-check">
+                       <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" value="dentist">
+                      <label class="form-check-label" for="flexRadioDefault3">
+                        Dentist
+                      </label>
+                          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4" value="receptionist">
+                      <label class="form-check-label" for="flexRadioDefault4">
+                        Receptionist
+                      </label>
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault5" value="hygienist">
+                      <label class="form-check-label" for="flexRadioDefault5">
+                        Hygienist
+                      </label>
+                    </div>
+                <div class="form-group">
+                  <label>First Name:</label>
+                  <input type="text" class="form-control" name="fname" required="1">
+                </div>
+                  <div class="form-group">
+                  <label>Middle Name:</label>
+                  <input type="text" class="form-control" name="mname">
+                </div>
+                <div class="form-group">
+                  <label>Last Name:</label>
+                  <input type="text" class="form-control" name="lname" required="1">
+                </div>
+                <div class="form-group">
+                  <label>Gender:</label>
+                  <input type="text" class="form-control" name="gender" required="1">
+                </div>
+                <div class="form-group">
+                  <label>Insurance Company:</label>
+                  <input type="text" class="form-control" name="insurance_company" required="1">
+                </div>
+                <div class="form-group">
+                  <label>SSN:</label>
+                  <input type="text" class="form-control" name="ssn" required="1" placeholder="XXXXXXXXX">
+                </div>
+                 <div class="form-group">
+                  <label>Email:</label>
+                  <input type="text" class="form-control" name="email" required="1" placeholder="example@gmail.com">
+                </div>
+                 <div class="form-group">
+                  <label data-toggle="tooltip" data-placement="top" title="Date format: YYYY-MM-DD">Date Of Birth:</label>
+                  <input type="text" class="form-control" name="dob" required="1" placeholder="YYYY-MM-DD">
+                </div>
+                 <div class="form-group">
+                  <label>Telephone:</label>
+                  <input type="text" class="form-control" name="telephone" required="1" placeholder="XXX-XXX-XXXX">
+                </div>
+                  <div class="form-group">
+                  <label>Age:</label>
+                  <input type="text" class="form-control" name="age" required="1">
+                </div>
+                  <div class="form-group">
+                  <label>Password:</label>
+                  <input type="text" class="form-control" name="password" required="1">
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary" type="submit">Submit Form</button>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+</div>
+
+{% endblock %}

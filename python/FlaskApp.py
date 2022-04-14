@@ -1,22 +1,25 @@
 import os
+from datetime import date
 
 import psycopg2
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from psycopg2 import Error
 
-from python.deletions import delete_user, delete_treatment
-from python.getters import get_all_users, get_last_address_id, get_all_addresses, get_user_with_id, get_user_with_email, \
+from deletions import delete_user, delete_treatment
+from getters import get_all_users, get_last_address_id, get_all_addresses, get_user_with_id, get_user_with_email, \
     get_patient, get_employee, get_responsible_party, get_admin, get_insurance_claim, get_payment, get_invoice, \
     get_hygienist, get_receptionist, get_dentist, get_treatment
-from python.inserters import insert_user, insert_appointment_procedure, insert_address, insert_user_address_latest, \
+from inserters import insert_user, insert_appointment_procedure, insert_address, insert_user_address_latest, \
     insert_patient, insert_patient_chart, insert_branch, insert_branch_address, insert_invoice, insert_payment, \
     insert_insurance_claim, insert_appointment, insert_fee_charge, insert_receptionist, insert_dentist, \
-    insert_hygienist, insert_treatment, insert_review, insert_clinic_enterprise
-from python.updaters import update_treatment, update_user
+    insert_hygienist, insert_treatment, insert_review, insert_clinic_enterprise, insert_employee, insert_user_address
+from updaters import update_treatment, update_user
+from validation import generateUserId, validateSSN, validateEmail, generateChartNo
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/project_database'
+app.secret_key = "Secret Key"
 
 db = SQLAlchemy(app)
 
@@ -58,39 +61,87 @@ class user(db.Model):
         self.age = age
         self.password = password
 
+# @app.route('/')
+# def getlogin():
+#     return render_template('login.html')
+
+# Route for handling the login page logic
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    error = None
+    user_id = request.form.get("userid")
+    password = request.form.get("pwd")
+    if request.method == 'POST':
+        user = get_user_with_email(user_id)
+        if not user: #user is empty list
+            error = 'Email entered does not exist. Please try again.'
+        elif password != user[0][11]:
+            error = 'Password is wrong. Please try again.'
+        else:
+            #return redirect(url_for('home'))
+            flash("Redirecting to home page.")
+
+        # if (request.form['username'] != 'admin' or request.form['password'] != 'admin') or (request.form['username'] != 'admin' or request.form['password'] != 'admin'):
+        #     error = 'Invalid Credentials. Please try again.'
+        # else:
+        #     return redirect(url_for('home'))
+    return render_template('login.html', error=error)
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    error = None
+    first_name = request.form['fname']
+    middle_name = request.form['mname']
+    last_name = request.form['lname']
+    gender = request.form['gender']
+    insurance_company = request.form['insurance_company']
+    ssn = request.form['ssn']
+    email = request.form['email']
+    dob = request.form['dob']
+    tel = request.form['telephone']
+    age = request.form['age']
+    password = request.form['password']
+
+    retString = validateSSN(int(ssn))
+    retVal = validateEmail(email)
+
+    if(retString != "success"):
+        error = retString
+    if(retVal != "success"):
+        error = retVal
+    else:
+        user_id = generateUserId()
+        option = request.form['flexRadioDefault']
+        insert_user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, dob, tel, age, password)
+        if option == "patient":
+            chart_no = generateChartNo()
+            insert_patient_chart(chart_no)
+            insert_patient(user_id, chart_no, insurance_company)
+            a = insert_address(None,None,None,None,None)
+            insert_user_address(user_id, a[0][0])
+        if option == "dentist":
+            insert_employee(user_id, None, "dentist", None, date.today().strftime("%Y-%m-%d"), None, 0)
+            insert_dentist(user_id, None)
+            a = insert_address(None,None,None,None,None)
+            insert_user_address(user_id, a[0][0])
+        if option == "hygienist":
+            insert_employee(user_id, None, "hygienist", None, date.today().strftime("%Y-%m-%d"), None, 0)
+            insert_hygienist(user_id, None)
+            a = insert_address(None,None,None,None,None)
+            insert_user_address(user_id, a[0][0])
+        if option == "receptionist":
+            insert_employee(user_id, None, "receptionist", None, date.today().strftime("%Y-%m-%d"), None, 0)
+            insert_receptionist(user_id, None)
+            a = insert_address(None,None,None,None,None)
+            insert_user_address(user_id, a[0][0])
+
+        flash("User Account Created Successfully")
+
+    return render_template('login.html', error = error)
 
 @app.route('/')
 def show_all():
     conn = get_db_connection()
-    # insert_patient('2', None, 'CAA')
-    # insert_patient_chart(20)
-    # delete_user('edaefault@mail.com')
-    # insert_branch(1234, 1, '123')
-    # insert_branch_address(1, 1)
-    # insert_appointment(123,1,'1','101','13:00','13:30','tooth_removal','tbd','C121','2020-10-10')
-    # insert_fee_charge(3, 1, 1,'23', 50)
-    # insert_receptionist('123', '12')
-    # insert_dentist('123', '12')
-    # insert_hygienist('123', '12')
-    # insert_invoice(123, '1', '2002-10-10', '12', '12', 1,1,1,1)
-    # insert_payment(13,123,'lol', 10, 10)
-    # insert_insurance_claim(4,3,10)
-    # insert_user_address_latest('1439')
-    # insert_user('1439','kut','K.','sad','mail','some company',489489489,'email@smtn.this','1965-08-09','987-876-7665',55,'Aeatclassic!')
-    # insert_appointment_procedure('Root Canal',1, 4, 6)
-    # insert_address(2, 2,'gat','qc','adf')
-    # insert_treatment('101',122,'test','test','test','test','test','test')
-    # insert_review('1', 1, 1,1,1, 1)
-    # insert_clinic_enterprise('2020-12-12')
-    # print(get_treatment(1))
-    # delete_treatment(1)
-    # print(get_treatment(1))
-    # update_treatment(1, '101', 122, 'test','test', 'test', 'test', 'test', 'test')
-    # update_user('666', 'test', 'test', 'test', 'test', 'test',12, 'test', '2222-12-12', 'test',12, 'test')
-
-    # print(get_last_address_id())
-
-    # delete_user('666', 'default@mail.com')
 
     cur = conn.cursor()
     users = get_all_users()

@@ -5,7 +5,7 @@ VALUES ('101', 'Cem', NULL, 'Kiyik', 'man',
         32, 'Cem211');
 
 INSERT INTO project_schema.address
-VALUES (DEFAULT, 2, 4, 'Gatineau', 'Quebec',
+VALUES (DEFAULT, 2, 'McConald', 'Gatineau', 'Quebec',
         'D9G S4W'); --Default id will start at 1
 
 INSERT INTO project_schema.user_address
