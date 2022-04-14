@@ -48,16 +48,13 @@ def insert_payment(user_id, invoice_id):
 @app.route('/')
 def get_appointments():
     all_appointments = get_all_appointments()
-
     #Get dentists names on the dropdown menu on the appointment page
     list_of_dentists = get_all_dentists()
     list_of_dentist_names = []
     for x in list_of_dentists:
         user = get_user_with_id(x[0])
         list_of_dentist_names.append(user[0]+(x[1],))
-
-    return render_template("appointments.html", Appointments=all_appointments,
-                           List_of_all_dentist_Names = list_of_dentist_names)
+    return render_template("appointments.html", Appointments=all_appointments, List_of_all_dentists=list_of_dentist_names)
 
 
 # this route is for inserting a new appointment to postgres database via html
