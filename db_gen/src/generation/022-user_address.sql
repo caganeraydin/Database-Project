@@ -14,4 +14,3 @@ alter table project_schema.user_address
 
 ALTER TABLE project_schema.user_address
    ADD PRIMARY KEY (user_id, address_id);
-

@@ -4,8 +4,9 @@
    <body>
 
       <h3>
-         <a href = "{{ url_for('show_all') }}">Comments - Flask
-            SQLAlchemy example</a>
+         <a href = "{{ url_for('get_employee_home_page', user_id = 100) }}">emploee page</a>
+         <br>
+         <a href = "{{ url_for('get_admin_home_page') }}">admin page</a>
       </h3>
 
       <hr/>

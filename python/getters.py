@@ -53,6 +53,51 @@ def get_all_addresses():
     except Exception as error:
         raise Error('ERROR while fetching all addresses') from error
 
+def get_all_patients():
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_all_patients.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching all addresses') from error
+
+def get_all_invoices():
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_all_invoices.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching all addresses') from error
+
+def get_all_appointments():
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_all_appointments.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching all addresses') from error
+
+
+def get_all_employees():
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_all_employees.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching all addresses') from error
+
 
 def get_last_address_id():
     try:
@@ -207,3 +252,15 @@ def get_treatment(treatment_id: int):
 
     except Exception as error:
         raise Error('ERROR while fetching treatment') from error
+
+
+def get_user_address(user_id: str):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_user_address.sql'), 'r') as file:
+            cur.execute(file.read(), (user_id,))
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching user address') from error

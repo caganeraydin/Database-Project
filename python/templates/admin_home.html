@@ -1,0 +1,785 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+
+
+{% block title %} Home {% endblock %}
+
+{% block body %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col md-12">
+            <div class="jumbotron p-3">
+                <h2> Admin Page
+                    <div class="text-right btn-toolbar float-right">
+
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#patientAdd">Add Patient</button>
+                        <span style="width:1em;"> </span>
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#employeeAdd">Add Employee</button>
+
+                    </div>
+                </h2>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+
+                <div class="alert alert-success alert-dismissable" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                    <span aria-hidden="true">x</span>
+                    </button>
+                    {{message}}
+                </div>
+
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+                <br>
+                <div id="accordion">
+                    <div class="card">
+                        <div class="card-header" id="viewPatients">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#patients" aria-expanded="false" aria-controls="patients">
+                                View Patients
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="patients" class="collapse" aria-labelledby="viewPatients" data-parent="#accordion">
+                            <table class="table table-hover sortable">
+
+                                <tr>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Last Name</th>
+                                    <th scope="col">Gender</th>
+                                    <th scope="col">SSN</th>
+                                    <th scope="col">e-mail</th>
+                                    <th scope="col">DOB</th>
+                                    <th scope="col">Telephone</th>
+                                    <th scope="col">age</th>
+                                </tr>
+
+                                {% for patient in Patients %}
+                                <tr>
+                                  <td scope="col">{{patient[1]}}</td>
+                                  <td scope="col">{{patient[3]}}</td>
+                                  <td scope="col">{{patient[4]}}</td>
+                                  <td scope="col">{{patient[6]}}</td>
+                                  <td scope="col">{{patient[7]}}</td>
+                                  <td scope="col">{{patient[8]}}</td>
+                                  <td scope="col">{{patient[9]}}</td>
+                                  <td scope="col">{{patient[10]}}</td>
+                                  <td>
+                                      <a href="/update_patient_admin/{{patient[0]}}/{{patient[12]}}/" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#patientEdit{{patient[0]}}">Edit</a>
+                                      <a href="/delete_patient_admin/{{patient[0]}}/" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure You Want To Delete ?')">Delete</a>
+                                      <a href="/insert_invoice_admin/{{patient[0]}}/" class="btn btn-success btn-xs" data-toggle="modal" data-target="#invoiceAdd{{patient[0]}}">Add Invoice</a>
+                                  </td>
+
+                                </tr>
+                                <!-- Modal Edit Treatment-->
+                                <div id="patientEdit{{patient[0]}}" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h4 class="modal-title">Edit Information</h4>
+
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{url_for('update_patient_admin', user_id = patient[0], address_id = patient[12])}}" method="POST">
+                                                    <div class="form-group">
+                                                        <label>First Name:</label>
+                                                        <input type="text" class="form-control" name="first_name" value="{{patient[1]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Middle Name:</label>
+                                                        <input type="text" class="form-control" name="middle_name" value="{{patient[2]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Last Name:</label>
+                                                        <input type="text" class="form-control" name="last_name" value="{{patient[3]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Gender:</label>
+                                                        <input type="text" class="form-control" name="gender" value="{{patient[4]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Insurance Type:</label>
+                                                        <input type="text" class="form-control" name="insurance_type" value="{{patient[19]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Insurance Company:</label>
+                                                        <input type="text" class="form-control" name="insurance_company" value="{{patient[5]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>SSN:</label>
+                                                        <input type="text" class="form-control" name="ssn" value="{{patient[6]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>E-mail:</label>
+                                                        <input type="text" class="form-control" name="email" value="{{patient[7]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Date of Birth:</label>
+                                                        <input type="text" class="form-control" name="date_of_birth" value="{{patient[8]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Phone number:</label>
+                                                        <input type="text" class="form-control" name="telephone" value="{{patient[9]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Age:</label>
+                                                        <input type="text" class="form-control" name="age" value="{{patient[10]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Password:</label>
+                                                        <input type="text" class="form-control" name="password" value="{{patient[11]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>House Number:</label>
+                                                        <input type="text" class="form-control" name="house_number" value="{{patient[13]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Street Number:</label>
+                                                        <input type="text" class="form-control" name="street_number" value="{{patient[14]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>City:</label>
+                                                        <input type="text" class="form-control" name="city" value="{{patient[15]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Province:</label>
+                                                        <input type="text" class="form-control" name="province" value="{{patient[16]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Postal Code:</label>
+                                                        <input type="text" class="form-control" name="postal_code" value="{{patient[17]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary" type="submit">Update</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="invoiceAdd{{patient[0]}}" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h4 class="modal-title">Edit Information</h4>
+
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{url_for('insert_invoice_admin', user_id = patient[0])}}" method="POST">
+                                                    <div class="form-group">
+                                                        <label>Date of Issue:</label>
+                                                        <input type="text" class="form-control" name="date_of_issue" >
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Telephone:</label>
+                                                        <input type="text" class="form-control" name="telephone" >
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>E-mail:</label>
+                                                        <input type="text" class="form-control" name="email" >
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Insurance Charge:</label>
+                                                        <input type="text" class="form-control" name="insurance_charge" >
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Patient Charge:</label>
+                                                        <input type="text" class="form-control" name="patient_charge" >
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Discount:</label>
+                                                        <input type="text" class="form-control" name="discount" >
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Penalty Charge:</label>
+                                                        <input type="text" class="form-control" name="penalty_charge" >
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary" type="submit">Add Invoice</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" id="viewEmployees">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#employees" aria-expanded="false" aria-controls="employees">
+                                View Employees
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="employees" class="collapse" aria-labelledby="viewEmployees" data-parent="#accordion">
+                            <table class="table table-hover sortable">
+
+                                <tr>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Last Name</th>
+                                    <th scope="col">Gender</th>
+                                    <th scope="col">e-mail</th>
+                                    <th scope="col">DOB</th>
+                                    <th scope="col">Telephone</th>
+                                    <th scope="col">age</th>
+                                </tr>
+
+                                {% for employee in Employees %}
+                                <tr>
+                                    <td scope="col">{{employee[1]}}</td>
+                                    <td scope="col">{{employee[3]}}</td>
+                                    <td scope="col">{{employee[4]}}</td>
+                                    <td scope="col">{{employee[7]}}</td>
+                                    <td scope="col">{{employee[8]}}</td>
+                                    <td scope="col">{{employee[9]}}</td>
+                                    <td scope="col">{{employee[10]}}</td>
+                                    <td>
+                                        <a href="/update_employee_admin/{{employee[0]}}/{{employee[12]}}/" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#employeeEdit{{employee[0]}}">Edit</a>
+                                        <a href="/delete_employee_admin/{{employee[0]}}/" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure You Want To Delete ?')">Delete</a>
+                                    </td>
+
+                                </tr>
+                                <!-- Modal Edit Treatment-->
+                                <div id="employeeEdit{{employee[0]}}" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h4 class="modal-title">Edit Information</h4>
+
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{url_for('update_employee_admin', user_id = employee[0], address_id = employee[12])}}" method="POST">
+                                                    <div class="form-group">
+                                                        <label>First Name:</label>
+                                                        <input type="text" class="form-control" name="first_name" value="{{employee[1]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Middle Name:</label>
+                                                        <input type="text" class="form-control" name="middle_name" value="{{employee[2]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Last Name:</label>
+                                                        <input type="text" class="form-control" name="last_name" value="{{employee[3]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Gender:</label>
+                                                        <input type="text" class="form-control" name="gender" value="{{employee[4]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Insurance Company:</label>
+                                                        <input type="text" class="form-control" name="insurance_company" value="{{employee[5]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>SSN:</label>
+                                                        <input type="text" class="form-control" name="ssn" value="{{employee[6]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>E-mail:</label>
+                                                        <input type="text" class="form-control" name="email" value="{{employee[7]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Date of Birth:</label>
+                                                        <input type="text" class="form-control" name="date_of_birth" value="{{employee[8]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Phone number:</label>
+                                                        <input type="text" class="form-control" name="telephone" value="{{employee[9]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Age:</label>
+                                                        <input type="text" class="form-control" name="age" value="{{employee[10]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Password:</label>
+                                                        <input type="text" class="form-control" name="password" value="{{employee[11]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>House Number:</label>
+                                                        <input type="text" class="form-control" name="house_number" value="{{employee[13]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Street Number:</label>
+                                                        <input type="text" class="form-control" name="street_number" value="{{employee[14]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>City:</label>
+                                                        <input type="text" class="form-control" name="city" value="{{employee[15]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Province:</label>
+                                                        <input type="text" class="form-control" name="province" value="{{employee[16]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Postal Code:</label>
+                                                        <input type="text" class="form-control" name="postal_code" value="{{employee[17]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Branch Id:</label>
+                                                        <input type="text" class="form-control" name="branch_id" value="{{employee[18]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Employee Type:</label>
+                                                        <input type="text" class="form-control" name="employee_type" value="{{employee[19]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Role:</label>
+                                                        <input type="text" class="form-control" name="role" value="{{employee[20]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Start Date:</label>
+                                                        <input type="text" class="form-control" name="start_date" value="{{employee[21]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Salary:</label>
+                                                        <input type="text" class="form-control" name="salary" value="{{employee[22]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Years of Experience:</label>
+                                                        <input type="text" class="form-control" name="years_of_experience" value="{{employee[23]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary" type="submit">Update</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" id="viewInvoices">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#invoices" aria-expanded="false" aria-controls="invoices">
+                                View Invoices
+                                </button>
+                            </h5>
+                        </div>
+
+
+                        <div id="invoices" class="collapse" aria-labelledby="viewInvoices" data-parent="#accordion">
+                            <table class="table table-hover sortable">
+
+                                <tr>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Last Name</th>
+                                    <th scope="col">Gender</th>
+                                    <th scope="col">e-mail</th>
+                                    <th scope="col">DOB</th>
+                                    <th scope="col">Telephone</th>
+                                    <th scope="col">age</th>
+                                </tr>
+
+                                {% for invoice in Invoices %}
+                                <tr>
+                                    <td scope="col">{{invoice[1]}}</td>
+                                    <td scope="col">{{invoice[3]}}</td>
+                                    <td scope="col">{{invoice[4]}}</td>
+                                    <td scope="col">{{invoice[7]}}</td>
+                                    <td scope="col">{{invoice[8]}}</td>
+                                    <td scope="col">{{invoice[9]}}</td>
+                                    <td scope="col">{{invoice[10]}}</td>
+                                    <td>
+                                        <a href="/update_invoice_admin/{{invoice[0]}}/{{invoice[1]}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#invoiceEdit{{invoice[0]}}">Edit</a>
+                                        <a href="/delete_invoice_admin/{{invoice[0]}}/" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure You Want To Delete ?')">Delete</a>
+                                    </td>
+
+                                </tr>
+                                <!-- Modal Edit Treatment-->
+                                <div id="invoiceEdit{{invoice[0]}}" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h4 class="modal-title">Edit Information</h4>
+
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{url_for('update_invoice_admin', invoice_id = invoice[0], user_id = invoice[1])}}" method="POST">
+                                                    <div class="form-group">
+                                                        <label>Date of Issue:</label>
+                                                        <input type="text" class="form-control" name="date_of_issue" value="{{invoice[1]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Telephone:</label>
+                                                        <input type="text" class="form-control" name="telephone" value="{{invoice[2]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>E-mail:</label>
+                                                        <input type="text" class="form-control" name="email" value="{{invoice[3]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Insurance Charge:</label>
+                                                        <input type="text" class="form-control" name="insurance_charge" value="{{invoice[4]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Patient Charge:</label>
+                                                        <input type="text" class="form-control" name="patient_charge" value="{{invoice[5]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Discount:</label>
+                                                        <input type="text" class="form-control" name="discount" value="{{invoice[6]}}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Penalty Charge:</label>
+                                                        <input type="text" class="form-control" name="penalty_charge" value="{{invoice[7]}}">
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary" type="submit">Update</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" id="viewAppointments">
+                            <h5 class="mb-0">
+                                <a href = "{{ url_for('show_all') }}">
+                                    <button class="btn btn-link">Go to appointments</button>
+                                </a>
+
+                            </h5>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="patientAdd" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h4 class="modal-title">Edit Information</h4>
+
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{url_for('insert_patient_admin')}}" method="POST">
+                                    <div class="form-group">
+                                        <label>First Name:</label>
+                                        <input type="text" class="form-control" name="first_name" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Middle Name:</label>
+                                        <input type="text" class="form-control" name="middle_name" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Last Name:</label>
+                                        <input type="text" class="form-control" name="last_name" >
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label>Gender:</label>
+                                        <input type="text" class="form-control" name="gender" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Insurance Type:</label>
+                                        <input type="text" class="form-control" name="insurance_type" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Insurance Company:</label>
+                                        <input type="text" class="form-control" name="insurance_company" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>SSN:</label>
+                                        <input type="text" class="form-control" name="ssn" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>E-mail:</label>
+                                        <input type="text" class="form-control" name="email" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Date of Birth:</label>
+                                        <input type="text" class="form-control" name="date_of_birth" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Phone number:</label>
+                                        <input type="text" class="form-control" name="telephone" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Age:</label>
+                                        <input type="text" class="form-control" name="age" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Password:</label>
+                                        <input type="text" class="form-control" name="password" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>House Number:</label>
+                                        <input type="text" class="form-control" name="house_number" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Street Number:</label>
+                                        <input type="text" class="form-control" name="street_number" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>City:</label>
+                                        <input type="text" class="form-control" name="city" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Province:</label>
+                                        <input type="text" class="form-control" name="province" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Postal Code:</label>
+                                        <input type="text" class="form-control" name="postal_code" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button class="btn btn-primary" type="submit">Update</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="employeeAdd" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h4 class="modal-title">Edit Information</h4>
+
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('insert_employee_admin')}}" method="POST">
+                    <div class="form-group">
+                        <label>First Name:</label>
+                        <input type="text" class="form-control" name="first_name" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Middle Name:</label>
+                        <input type="text" class="form-control" name="middle_name" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Last Name:</label>
+                        <input type="text" class="form-control" name="last_name" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gender:</label>
+                        <input type="text" class="form-control" name="gender" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Insurance Company:</label>
+                        <input type="text" class="form-control" name="insurance_company" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>SSN:</label>
+                        <input type="text" class="form-control" name="ssn" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>E-mail:</label>
+                        <input type="text" class="form-control" name="email" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Date of Birth:</label>
+                        <input type="text" class="form-control" name="date_of_birth" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone number:</label>
+                        <input type="text" class="form-control" name="telephone" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Age:</label>
+                        <input type="text" class="form-control" name="age" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password:</label>
+                        <input type="text" class="form-control" name="password" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>House Number:</label>
+                        <input type="text" class="form-control" name="house_number" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Street Number:</label>
+                        <input type="text" class="form-control" name="street_number" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>City:</label>
+                        <input type="text" class="form-control" name="city" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Province:</label>
+                        <input type="text" class="form-control" name="province" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Postal Code:</label>
+                        <input type="text" class="form-control" name="postal_code" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Branch Id:</label>
+                        <input type="text" class="form-control" name="branch_id" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Employee Type:</label>
+                        <input type="text" class="form-control" name="employee_type" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Role:</label>
+                        <input type="text" class="form-control" name="role" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Start Date:</label>
+                        <input type="text" class="form-control" name="start_date" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Salary:</label>
+                        <input type="text" class="form-control" name="salary" >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Years of Experience:</label>
+                        <input type="text" class="form-control" name="years_of_experience" >
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Update</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

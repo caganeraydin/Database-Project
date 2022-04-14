@@ -1,1 +1,1 @@
-DELETE FROM project_schema."user" WHERE email = %s
+DELETE FROM project_schema."user" WHERE user_id = %s

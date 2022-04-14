@@ -30,3 +30,50 @@ def update_user(user_id: str, first_name: str, middle_name: str, last_name: str,
             conn.commit()
     except Exception as error:
         raise Error('ERROR: cant update user') from error
+
+
+def update_patient(user_id: int, first_name: str, middle_name: str, last_name: str, gender: str,
+                   insurance_company: str, ssn: str, email: str, date_of_birth: str, telephone: str,
+                   age: int, password: str, address_id: int, house_number: int, street_number: int,
+                   city: str, province: str, postal_code: str, insurance_type:str,patient_id:str):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/update/update_patient.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (first_name, middle_name, last_name, gender,
+                        insurance_company, ssn, email, date_of_birth, telephone,
+                        age, password, user_id, house_number, street_number,
+                        city, province, postal_code, address_id,insurance_type,patient_id))
+            conn.commit()
+    except Exception as error:
+        raise Error('ERROR: cant update treatment') from error
+
+
+def update_employee_profile(user_id: int, first_name: str, middle_name: str, last_name: str, gender: str,
+                   insurance_company: str, ssn: str, email: str, date_of_birth: str, telephone: str,
+                   age: int, password: str, address_id: int, house_number: int, street_number: int,
+                   city: str, province: str, postal_code: str):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/update/update_employee_profile.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (first_name, middle_name, last_name, gender,
+                        insurance_company, ssn, email, date_of_birth, telephone,
+                        age, password, user_id, house_number, street_number,
+                        city, province, postal_code, address_id))
+            conn.commit()
+    except Exception as error:
+        raise Error('ERROR: cant update treatment') from error
+
+
+def update_invoice(invoice_id: int, user_id: str, date_of_issue: str, telephone: str, email:str, insurance_charge: int, patient_charge: int, discount: int , penalty_charge:int):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/update/update_invoice.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (user_id, date_of_issue,
+                        telephone, email, insurance_charge,
+                        patient_charge, discount, penalty_charge, invoice_id))
+            conn.commit()
+    except Exception as error:
+        raise Error('ERROR: cant update invoice') from error
