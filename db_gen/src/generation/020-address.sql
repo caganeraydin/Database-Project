@@ -4,7 +4,7 @@ create table project_schema.address
         constraint address_pk
             primary key,
     house_number  integer,
-    street_number integer,
+    street_name varchar,
     city          varchar,
     province      varchar,
     postal_code   varchar

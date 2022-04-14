@@ -72,9 +72,9 @@ def login():
     user_id = request.form.get("userid")
     password = request.form.get("pwd")
     if request.method == 'POST':
-        user = get_user_with_id(user_id)
+        user = get_user_with_email(user_id)
         if not user: #user is empty list
-            error = 'User id does not exist. Please try again.'
+            error = 'Email entered does not exist. Please try again.'
         elif password != user[0][11]:
             error = 'Password is wrong. Please try again.'
         else:
