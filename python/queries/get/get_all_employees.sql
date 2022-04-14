@@ -13,7 +13,7 @@ SELECT
     u.password,
     ad.address_id,
     ad.house_number,
-    ad.street_number,
+    ad.street_name,
     ad.city,
     ad.province,
     ad.postal_code,
