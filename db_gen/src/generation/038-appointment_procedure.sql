@@ -15,4 +15,3 @@ create table project_schema.appointment_procedure
 
 create unique index appointment_procedure_procedure_no_uindex
     on project_schema.appointment_procedure (procedure_no);
-

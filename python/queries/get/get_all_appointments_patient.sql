@@ -7,7 +7,7 @@ SELECT
     date_of_appointment
 
 FROM
-    project_schema."appointment" a,
-    project_schema."user" u
+    project_schema."appointment" a
 
-WHERE a.patient_id = u.user_id ;
+WHERE a.patient_id = %s;
+

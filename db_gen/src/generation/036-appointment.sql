@@ -22,4 +22,3 @@ create table project_schema.appointment
 
 create unique index appointment_appointment_id_uindex
     on project_schema.appointment (appointment_id);
-

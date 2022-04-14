@@ -1,9 +1,9 @@
 from psycopg2 import Error
 
-from connection import get_db_connection
-from appointment_procedure_options import procedure_dict
-from getters import get_last_address_id
-from utils import get_abs_filepath_from_module
+from python.connection import get_db_connection
+from python.appointment_procedure_options import procedure_dict
+from python.getters import get_last_address_id
+from python.utils import get_abs_filepath_from_module
 
 conn = get_db_connection()
 
@@ -304,3 +304,41 @@ def insert_employee(user_id: str, branch_id: int, employee_type:str, role:str, s
 
     except Exception as error:
         raise Error('ERROR: cant insert patient') from error
+def insert_associate(associated_patient_id: str, user_id: str,):
+    print(associated_patient_id)
+    print(user_id)
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_responsible_party.sql'), 'r') as file:
+
+            cur.execute(file.read(),
+                        (user_id, associated_patient_id))
+            conn.commit()
+
+    except Exception as error:
+        print(2)
+
+        raise Error('ERROR: cant insert clinic enterprise') from error
+
+
+def insertAppointment(invoice_id: int, patient_id: str, dentist_id: str, start_time: str,
+                       end_time: str,
+                       appointment_type: str, status: str, room_assigned: str, date_of_appointment: str):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/post/insert_appointment.sql'), 'r') as file:
+            cur.execute(file.read(),
+                        (invoice_id, patient_id, dentist_id, start_time, end_time, appointment_type,
+                         status, room_assigned, date_of_appointment))
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR: cant insert appointment') from error
+
+
+
+
+
+
+
