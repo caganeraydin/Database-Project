@@ -7,196 +7,61 @@
 
 {% block body %}
 
-
-<div class="container">
-  <div class="row">
-    <div class="col md-12">
-      <div class="jumbotron p-3">
-      <h2>Create New Appointment <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#mymodal">Create New Appointment</button> </h2>
+    <div id="makeAppointment" class="alert alert-dark" role="dialog">
 
 
-      {% with messages = get_flashed_messages(with_categories=true) %}
-
-      {% if messages %}
-
-      {% for category, message in messages %}
-
-      <div class="alert alert-{{category}} alert-dismissable" role="alert">
-
-          <button type="button" class="close" data-dismiss="alert" aria-label="close">
-
-              <span aria-hidden="true">x</span>
-
-          </button>
+<form class="needs-validation" novalidate action="{{url_for('insert_appointment_patient',  user_id = user_id)}}" method="POST">
+  <div class="form-row">
+    <div class="col-md-4 mb-3">
+      <label for="validationTooltip01">Dentist ID</label>
+      <input type="text" class="form-control" id="validationTooltip01" name="dentist_id" value="" required>
+      <div class="valid-tooltip">
+        Looks good!
+      </div>
+    </div>
 
 
-      {{message}}
 
+      <div class="col-md-4 mb-3">
+      <label for="validationTooltipUsername">Start Time</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+        </div>
+        <input type="time" class="form-control" id="validationTooltipUsername" name="start_time" aria-describedby="validationTooltipUsernamePrepend" required>
 
       </div>
+    </div>
 
-      {% endfor %}
-
-      {% endif %}
-      {% endwith %}
-
-      <table class="table table-hover sortable">
-
-          <tr>
-              <th scope="col">Appointment Id</th>
-              <th scope="col">Invoice Id</th>
-              <th scope="col">Patient Id</th>
-              <th scope="col">Dentist Id</th>
-              <th scope="col">Start Time</th>
-              <th scope="col">End Time</th>
-              <th scope="col">Appointment Type</th>
-              <th scope="col">Status</th>
-              <th scope="col">Room Assigned</th>
-              <th scope="col">Date of Appointment</th>
-          </tr>
-
-
-         {% for row in Appointments %}
-          <tr>
-            <td scope="col">{{row[0]}}</td>
-            <td scope="col">{{row[1]}}</td>
-            <td scope="col">{{row[2]}}</td>
-            <td scope="col">{{row[3]}}</td>
-            <td scope="col">{{row[4]}}</td>
-            <td scope="col">{{row[5]}}</td>
-            <td scope="col">{{row[6]}}</td>
-            <td scope="col">{{row[7]}}</td>
-            <td scope="col">{{row[8]}}</td>
-            <td scope="col">{{row[9]}}</td>
-
-              <td>
-                  <a href="/update_appointment/{{row[0]}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row[0]}}">Edit</a>
-                  <a href="/delete_appointment/{{row[0]}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure You Want To Delete ?')">Delete</a>
-
-              </td>
-            </tr>
-
-              <!-- Modal Edit Appointment-->
-              <div id="modaledit{{row[0]}}" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h4 class="modal-title">Edit Information</h4>
-                    </div>
-                    <div class="modal-body">
-                      <form action="{{url_for('update_appointment', appointment_id = row[0])}}" method="POST">
-                        <div class="form-group">
-                          <label>Patient Id:</label>
-                          <input type="text" class="form-control" name="patient_id" value="{{row[2]}}">
-                        </div>
-                        <div class="form-group">
-                          <label>Dentist Id:</label>
-                          <input list="doctor_names" class="form-control" name="dentist_id" value="{{row[3]}}">
-                          <datalist id="doctor_names">
-                          {% for dentist in List_of_all_dentists %}
-                          <option value={{dentist}}>{{dentist}}</option>
-                          {% endfor %}
-                          </datalist>
-                        </div>
-                        <div class="form-group">
-                          <label>Start Time:</label>
-                          <input type="time" class="form-control" name="start_time" value="{{row[4]}}">
-                        </div>
-                        <div class="form-group">
-                          <label>End Time:</label>
-                          <input type="time" class="form-control" name="end_time" value="{{row[5]}}">
-                        </div>
-                         <div class="form-group">
-                          <label>Appointment Type:</label>
-                          <input type="text" class="form-control" name="appointment_type" value="{{row[6]}}">
-                        </div>
-                         <div class="form-group">
-                          <label>Status:</label>
-                          <input type="text" class="form-control" name="status" value="{{row[7]}}">
-                        </div>
-                         <div class="form-group">
-                          <label>Room Assigned:</label>
-                          <input type="text" class="form-control" name="room_assigned" value="{{row[8]}}">
-                         </div>
-                          <div class="form-group">
-                          <label>Date of Appointment:</label>
-                          <input type="text" class="form-control" name="date_of_appointment" value="{{row[9]}}">
-                         </div>
-                        <div class="form-group">
-                          <button class="btn btn-primary" type="submit">Update</button>
-                        </div>
-                      </form>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-          {% endfor %}
-
-      </table>
-      </div>
-      <!-- Modal Add Appointment-->
-      <div id="mymodal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Add Appointment</h4>
-            </div>
-            <div class="modal-body">
-              <form action="{{url_for('insert_appointment_patient',  user_id = user_id)}}" method="POST">
-                <div class="form-group">
-
-                <div class="form-group">
-                  <label>Dentist Id:</label>
-                    <input list = "dentists_name" type="text" name="dentist_id" class="form-control" placeholder="ex: 101">
-                    <datalist id="dentists_name">
-                    {% for dentist in List_of_all_dentists %}
-                        <option value="{{dentist[0]}}">{{dentist[1]}} {{dentist[3]}} --- {{dentist[-1]}}</option>
-                    {% endfor %}
-                    </datalist>
-                </div>
-
-                <div class="form-group">
-                  <label>Start Time:</label>
-                  <input type="time" class="form-control" name="start_time" required="1" placeholder="ex: 13:00:00">
-                </div>
-                 <div class="form-group">
-                  <label>Appointment Type:</label>
-                  <input list="procedure_types" type="text" class="form-control" name="appointment_type" required="1" placeholder="ex: Teeth Filling">
-                     <datalist id="procedure_types">
-                         <option value="Teeth Cleaning">
-                         <option value="Teeth Filling">
-                         <option value="Teeth Crown">
-                         <option value="Root Canal">
-                         <option value="Braces">
-                         <option value="Teeth Bonding">
-                     </datalist>
-                </div>
-                 <div class="form-group">
-                  <label>Status:</label>
-                  <input type="text" class="form-control" name="status" required="1" placeholder="ex: Completed">
-                </div>
-
-                 <div class="form-group">
-                  <label>Date of Appointment:</label>
-                  <input type="date" class="form-control" name="date_of_appointment" required="1" placeholder="ex: 2022-09-05">
-                </div>
-                <div class="form-group">
-                  <button class="btn btn-primary" type="submit">Add Appointment</button>
-                </div>
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
+      <div class="col-md-4 mb-3">
+      <label for="validationTooltipUsername">Appointment Type</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+        </div>
+        <input type="text" class="form-control" id="validationTooltipUsername" name="appointment_type" aria-describedby="validationTooltipUsernamePrepend" required>
+        <div class="invalid-tooltip">
+          Please choose a valid Appointment Type.
         </div>
       </div>
     </div>
+
+
+
+      <div class="col-md-4 mb-3">
+      <label for="validationTooltipUsername">Appointment Date</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+        </div>
+        <input type="date" class="form-control" id="validationTooltipUsername" name="date_of_appointment" aria-describedby="validationTooltipUsernamePrepend" required>
+        <div class="invalid-tooltip">
+          Please choose a valid Appointment Date
+        </div>
+      </div>
+    </div>
+
   </div>
+    <button type="submit" class="btn btn-primary"  data-target="#makeAppointment">Make Appointment</button>
+
+</form>
 
 </div>
 
