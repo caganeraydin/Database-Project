@@ -17,6 +17,21 @@
   <a class="flex-sm-fill text-sm-center nav-link active" href="#" tabindex="-1" aria-disabled="true">Sign Out</a>
 </nav>
 
+  {% with messages = get_flashed_messages(with_categories=true) %}
+
+      {% if messages %}
+      {% for category, message in messages %}
+
+      <div class="alert alert-{{category}} alert-dismissable" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="close">
+              <span aria-hidden="true">x</span>
+          </button>
+      {{message}}
+      </div>
+      {% endfor %}
+
+      {% endif %}
+  {% endwith %}
 
 <!--Checking for age-->
 {% if  age <18  and not responsible_party %}

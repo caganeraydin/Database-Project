@@ -210,8 +210,12 @@ def get_patient_home_page(user_id):
 def get_appointments_page(user_id):
 
     dentists = get_all_dentists()
+    list_of_dentist_names = []
+    for x in dentists:
+        user = get_user_with_id(x[0])
+        list_of_dentist_names.append(user[0]+(x[1],))
 
-    return render_template("patient_appointment.html", user_id=user_id, List_of_all_dentists=dentists)
+    return render_template("patient_appointment.html", user_id=user_id, List_of_all_dentists=list_of_dentist_names)
 
 
 @app.route('/insert_appointment_patient/<user_id>', methods=['POST'])
@@ -241,8 +245,7 @@ def insert_appointment_patient(user_id):
     print(appointment_type)
 
     # date_end_time = datetime.timedelta(hours = start_hour, seconds = start_minutes)
-    status = ""
-    print(status)
+    status = "New"
 
     date_of_appointment = request.form['date_of_appointment']
     print(date_of_appointment)
@@ -264,7 +267,7 @@ def insert_appointment_patient(user_id):
         user = get_user_with_id(get_patient(user_id)[0][0])
         procedure = procedure_dict[str(appointment_type)]
 
-        insert_invoice(invoice_id, user_id, date_of_appointment,user[0][9], user[0][7], 0, procedure[3], None, None, False)
+        insert_invoice(invoice_id, user_id, date_of_appointment,user[0][9], user[0][7], 0, procedure[3], "0", "0", False)
         appointment = insertAppointment(invoice_id, user_id, dentist_id, start_time, str(final_end_time), appointment_type, status, "", date_of_appointment)
         procedure_no = insert_appointment_procedure(appointment_type, appointment[0][0], 1)
 
@@ -889,7 +892,7 @@ def insert_appointment():
         user = get_user_with_id(get_patient(patient_id)[0][0])
         procedure = procedure_dict[str(appointment_type)]
 
-        insert_invoice(invoice_id, patient_id, date_of_appointment,user[0][9], user[0][7], 0, procedure[3], None, None, False)
+        insert_invoice(invoice_id, patient_id, date_of_appointment,user[0][9], user[0][7], 0, procedure[3], "0", "0", False)
         appointment = insertAppointment(invoice_id, patient_id, dentist_id, start_time, str(final_end_time), appointment_type, status, room_assigned, date_of_appointment)
         procedure_no = insert_appointment_procedure(appointment_type, appointment[0][0], 1)
         insert_fee_charge(invoice_id, int(procedure_no[0][0]), procedure[0], procedure[3])
