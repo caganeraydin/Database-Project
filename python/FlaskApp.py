@@ -145,6 +145,7 @@ def update_patient(user_id,address_id, emp_id):
         middle_name = request.form['middle_name']
         last_name = request.form['last_name']
         gender = request.form['gender']
+        insurance_type = request.form['insurance_type']
         insurance_company = request.form['insurance_company']
         ssn = request.form['ssn']
         email = request.form['email']
@@ -161,7 +162,7 @@ def update_patient(user_id,address_id, emp_id):
         up.update_patient(user_id, first_name, middle_name, last_name,gender,
                        insurance_company, ssn, email, date_of_birth, telephone,
                        age, password, address_id, house_number, street_number,
-                       city, province, postal_code)
+                       city, province, postal_code,insurance_type,user_id)
         flash("Event Updated Successfully")
         return redirect(url_for('get_employee_home_page', user_id = emp_id))
 
@@ -317,7 +318,7 @@ def insert_patient_admin():
         return redirect(url_for('get_admin_home_page'))
     else:
         insert_user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, date_of_birth, telephone, age, password)
-        address_id = insert_address(house_number, street_number, city, province, postal_code)[0]
+        address_id = insert_address(house_number, street_number, city, province, postal_code)[0][0]
         insert_patient_chart(chart_no)
         ins.insert_patient(user_id, chart_no, insurance_type)
         ins.insert_user_address(user_id, address_id)
@@ -349,7 +350,6 @@ def insert_employee_admin():
     first_name = request.form['first_name']
     middle_name = request.form['middle_name']
     last_name = request.form['last_name']
-    insurance_type = request.form['insurance_type']
     gender = request.form['gender']
     insurance_company = request.form['insurance_company']
     ssn = request.form['ssn']
@@ -363,19 +363,22 @@ def insert_employee_admin():
     city = request.form['city']
     province = request.form['province']
     postal_code = request.form['postal_code']
+    branch_id = request.form['branch_id']
+    employee_type = request.form['employee_type']
+    role = request.form['role']
+    start_date = request.form['start_date']
+    salary = request.form['salary']
+    years_of_experience = request.form['years_of_experience']
 
     if get_user_with_email(email):
         flash("account with the email address you entered already exists, please try again.")
         return redirect(url_for('get_admin_home_page'))
     else:
         insert_user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, date_of_birth, telephone, age, password)
-        insert_address(house_number, street_number, city, province, postal_code)
-        insert_patient_chart(chart_no)
-        ins.insert_patient(user_id, chart_no, insurance_type)
-        address_ids = get_all_addresses()
-        address_id = address_ids[len(address_ids)- 1][0]
+        address_id = insert_address(house_number, street_number, city, province, postal_code)[0][0]
+        ins.insert_employee(user_id, branch_id, employee_type, role, start_date, salary, years_of_experience)
         ins.insert_user_address(user_id,address_id)
-        flash("Patient Added Successfully")
+        flash("Employee Added Successfully")
         return redirect(url_for('get_admin_home_page'))
 
 
@@ -459,6 +462,7 @@ def update_patient_admin(user_id,address_id):
         middle_name = request.form['middle_name']
         last_name = request.form['last_name']
         gender = request.form['gender']
+        insurance_type = request.form['insurance_type']
         insurance_company = request.form['insurance_company']
         ssn = request.form['ssn']
         email = request.form['email']
@@ -475,7 +479,7 @@ def update_patient_admin(user_id,address_id):
         up.update_patient(user_id, first_name, middle_name, last_name,gender,
                        insurance_company, ssn, email, date_of_birth, telephone,
                        age, password, address_id, house_number, street_number,
-                       city, province, postal_code)
+                       city, province, postal_code,insurance_type,user_id)
         flash("Event Updated Successfully")
 
         return redirect(url_for('get_admin_home_page'))
