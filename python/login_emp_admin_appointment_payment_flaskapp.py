@@ -11,15 +11,15 @@ from flask_sqlalchemy import SQLAlchemy
 from psycopg2 import Error
 from sqlalchemy import false
 
-from deletions import *
-from getters import *
-from inserters import *
-from updaters import *
-from validation import *
+from python.deletions import *
+from python.getters import *
+from python.inserters import *
+from python.updaters import *
+from python.validation import *
 
-import updaters as up
-import inserters as ins
-import deletions as delt
+import python.updaters as up
+import python.inserters as ins
+import python.deletions as delt
 
 app = Flask(__name__)
 app.secret_key = "Secret Key"

@@ -1,9 +1,9 @@
 from psycopg2 import Error
 
-from connection import get_db_connection
-from appointment_procedure_options import procedure_dict
-from getters import get_last_address_id
-from utils import get_abs_filepath_from_module
+from python.connection import get_db_connection
+from python.appointment_procedure_options import procedure_dict
+from python.getters import get_last_address_id
+from python.utils import get_abs_filepath_from_module
 
 conn = get_db_connection()
 

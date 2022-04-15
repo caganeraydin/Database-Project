@@ -11,20 +11,20 @@ from flask_sqlalchemy import SQLAlchemy
 from psycopg2 import Error
 from sqlalchemy import false
 
-from deletions import *
-from getters import *
-from inserters import *
-from updaters import *
-from validation import *
+from python.deletions import *
+from python.getters import *
+from python.inserters import *
+from python.updaters import *
+from python.validation import *
 
-import updaters as up
-import inserters as ins
-import deletions as delt
-from appointment_procedure_options import procedure_dict
+import python.updaters as up
+import python.inserters as ins
+import python.deletions as delt
+from python.appointment_procedure_options import procedure_dict
 
-import updaters as up
-import inserters as ins
-import deletions as delt
+import python.updaters as up
+import python.inserters as ins
+import python.deletions as delt
 
 app = Flask(__name__)
 app.secret_key = "Secret Key"
@@ -208,7 +208,10 @@ def get_patient_home_page(user_id):
 
 @app.route('/get_appointmens_page/<user_id>')
 def get_appointments_page(user_id):
-    return render_template("patient_appointment.html", user_id=user_id)
+
+    dentists = get_all_dentists()
+
+    return render_template("patient_appointment.html", user_id=user_id, List_of_all_dentists=dentists)
 
 
 @app.route('/insert_appointment_patient/<user_id>', methods=['POST'])
@@ -238,7 +241,7 @@ def insert_appointment_patient(user_id):
     print(appointment_type)
 
     # date_end_time = datetime.timedelta(hours = start_hour, seconds = start_minutes)
-    status = request.form['status']
+    status = ""
     print(status)
 
     date_of_appointment = request.form['date_of_appointment']
