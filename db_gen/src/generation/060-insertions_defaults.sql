@@ -8,8 +8,8 @@ VALUES (DEFAULT, 66, 'default_street_name', 'default_city', 'default_province',
         'default_postalcode'); --Default id will start at 1
 
 INSERT INTO project_schema.user_address
-VALUES ('666', 1); -- NEED TO FIND BETTER WAY OF GETTING
-                 -- LATEST ID VALUE ADDED
+VALUES ('666', 1);
+
 
 INSERT INTO project_schema.clinic_enterprise
 VALUES (default, date '1999-02-04');

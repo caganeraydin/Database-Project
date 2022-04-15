@@ -8,9 +8,7 @@ VALUES (DEFAULT, 66, 'Russel Ave.', 'Ottawa', 'Ontario',
         'J8R 3D1'); --Default id will start at 1
 
 INSERT INTO project_schema.user_address
-VALUES ('admin', 2); -- NEED TO FIND BETTER WAY OF GETTING
-                 -- LATEST ID VALUE ADDED
+VALUES ('admin', 2);
 
 INSERT INTO project_schema.admin
-VALUES ('admin', 'Can shutdown the whole system'); -- NEED TO FIND BETTER WAY OF GETTING
-                 -- LATEST ID VALUE ADDED
+VALUES ('admin', 'System and Database Administrator');

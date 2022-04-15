@@ -14,7 +14,7 @@
   <a class="flex-sm-fill text-sm-center nav-link active" href="#" >Patient Home Page</a>
   <a class="flex-sm-fill text-sm-center nav-link active" href="{{ url_for('get_appointments_page' ,user_id=user_id)}}">Make Appointment</a>
   <a class="flex-sm-fill text-sm-center nav-link active" href="{{ url_for('get_invoices',user_id=user_id)}}">Make Payment</a>
-  <a class="flex-sm-fill text-sm-center nav-link active" href="#" tabindex="-1" aria-disabled="true">Sign Out</a>
+  <a class="flex-sm-fill text-sm-center nav-link active" data-toggle="modal" data-target="#signOut" tabindex="-1" aria-disabled="true">Sign Out</a>
 </nav>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
@@ -160,8 +160,83 @@
 
 </div>
 
-
 {% endif %}
+
+<div id="signOut" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Your Opinion Matters To Us!</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{url_for('leave_review',patient_id=user_id)}}" method="POST">
+                            <div class="form-group">
+                                <label>Which Branch Would You Like To Leave A Review For?:</label>
+                                <input list = "patients_name" type="text" class="form-control" name="branch_id" required="1" placeholder="ex: 1">
+                                    <datalist id="patients_name">
+                                    {% for branch in List_of_all_branches %}
+                                        <option value="{{branch[0]}}">{{branch[1]}} {{branch[2]}} --- {{branch[3]}}/{{branch[4]}} {{branch[5]}}</option>
+                                    {% endfor %}
+                                    </datalist>
+                            </div>
+                            <div class="form-group">
+                                <label>Professionalism:</label>
+                                <input list = "professionalism" type="text" class="form-control" name="professionalism" required="1" placeholder="ex: 5">
+                                <datalist id="professionalism">
+                                    <option value="1">
+                                    <option value="2">
+                                    <option value="3">
+                                    <option value="4">
+                                    <option value="5">
+                                </datalist>
+                            </div>
+                            <div class="form-group">
+                                <label>Communication:</label>
+                                <input list = "communication" type="text" class="form-control" name="communication" required="1" placeholder="ex: 5">
+                                <datalist id="communication">
+                                    <option value="1">
+                                    <option value="2">
+                                    <option value="3">
+                                    <option value="4">
+                                    <option value="5">
+                                </datalist>
+                            </div>
+                            <div class="form-group">
+                                <label>Cleanliness:</label>
+                                <input list = "cleanliness" type="text" class="form-control" name="cleanliness" required="1" placeholder="ex: 5">
+                                <datalist id="cleanliness">
+                                    <option value="1">
+                                    <option value="2">
+                                    <option value="3">
+                                    <option value="4">
+                                    <option value="5">
+                                </datalist>
+                            </div>
+                            <div class="form-group">
+                                <label>Value:</label>
+                                <input list = "value" type="text" class="form-control" name="value" required="1" placeholder="ex: 5">
+                                <datalist id="value">
+                                    <option value="1">
+                                    <option value="2">
+                                    <option value="3">
+                                    <option value="4">
+                                    <option value="5">
+                                </datalist>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary" type="submit">Submit Review</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a href = "{{ url_for('login') }}">
+                                <button class="btn btn-danger" >Sign Out</button>
+                            </a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 <!-- Patient information -->
@@ -180,6 +255,7 @@
       <table class="table table-bordered table-responsive-md table-striped text-center">
         <thead>
           <tr>
+            <th class="text-center">User Id</th>
             <th class="text-center">First Name</th>
             <th class="text-center">Middle Name</th>
             <th class="text-center">Last Name</th>
@@ -195,6 +271,7 @@
         </thead>
         <tbody>
           <tr>
+            <td class="pt-3-half" contenteditable="true">{{ user_id }} </td>
             <td class="pt-3-half" contenteditable="true">{{ first_name }} </td>
             <td class="pt-3-half" contenteditable="true">{{ middle_name }}</td>
             <td class="pt-3-half" contenteditable="true">{{ last_name }}</td>

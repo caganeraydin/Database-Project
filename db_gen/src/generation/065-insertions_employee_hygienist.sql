@@ -1,6 +1,6 @@
 --HYGENIST #1
 INSERT INTO project_schema."user"
-VALUES ('102', 'Maria', NULL, 'McLloyd', 'women',
+VALUES ('102', 'Maria', NULL, 'McLloyd', 'Female',
         'LaCapitale', 123212, 'Maria@mail.com', DATE '1980-10-05', '454-787-7897',
         42, 'Maria');
 

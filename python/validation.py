@@ -39,3 +39,15 @@ def generateInvoiceId():
         invoice = get_invoice(int(n))
     return n
 
+def checkTwoReceptionistsPerBranch(branch_id: int):
+    receptionists = get_all_receptionist()
+    counter = 0
+    for receptionist in receptionists:
+        if receptionist[1] == branch_id:
+            counter += 1
+            if counter >= 2:
+                return False
+    return True
+
+
+

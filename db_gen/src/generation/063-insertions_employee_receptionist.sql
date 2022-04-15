@@ -1,6 +1,6 @@
 --RECEPTIONIST #1
 INSERT INTO project_schema."user"
-VALUES ('100', 'Lequisha', 'Martey', 'Paul', 'Woman',
+VALUES ('100', 'Lequisha', 'Martey', 'Paul', 'Female',
         'Intact_insurance', 123212, 'Lequisha@mail.com', DATE '1981-05-01', '681-316-5226',
         41, 'Lequisha1');
 

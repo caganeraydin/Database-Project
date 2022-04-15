@@ -215,6 +215,18 @@ def get_receptionist(employee_id: str):
     except Exception as error:
         raise Error('ERROR while fetching receptionist') from error
 
+def get_all_receptionist():
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_receptionist_with_branch.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching all receptionists') from error
+
+
 
 def get_hygienist(employee_id: str):
     try:

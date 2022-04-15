@@ -34,35 +34,6 @@ db = SQLAlchemy(app)
 current_employee = None
 
 
-
-# Payment
-@app.route('/get_invoices/<user_id>/')
-def get_invoices(user_id):
-    patient_invoice = get_user_invoice(user_id)
-    return render_template("payment.html", PatientInvoice = patient_invoice)
-
-@app.route('/insert_user_payment/<user_id>/<invoice_id>/', methods = ['POST'])
-def insert_user_payment(user_id, invoice_id):
-    print("LOL")
-    print(user_id)
-    print(invoice_id)
-    payment_method = request.form['payment_method']
-    print(payment_method)
-    insurance_amount = request.form['insurance_amount']
-    print(insurance_amount)
-    patient_amount = get_invoice(invoice_id)[0][6]
-    print(patient_amount)
-
-    insert_payment(int(invoice_id), payment_method, int(patient_amount), int(insurance_amount))
-    update_invoice_payment(invoice_id, insurance_amount, True)
-
-    flash("Payment is saved successfully!","success")
-    return redirect(url_for('get_invoices',user_id = user_id))
-
-# @app.route('/')
-# def getlogin():
-#     return render_template('login.html')
-
 # Route for handling the login page logic
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -108,6 +79,7 @@ def signup():
     tel = request.form['telephone']
     age = request.form['age']
     password = request.form['password']
+    branch_id = request.form['branch_id']
 
     retString = validateSSN(int(ssn))
     retVal = validateEmail(email)
@@ -126,23 +98,29 @@ def signup():
             insert_patient(user_id, chart_no, insurance_company)
             a = insert_address(None,None,None,None,None)
             insert_user_address(user_id, a[0][0])
+            flash("User Account Created Successfully")
         if option == "dentist":
-            insert_employee(user_id, None, "dentist", None, date.today().strftime("%Y-%m-%d"), None, 0)
+            insert_employee(user_id, branch_id, "dentist", None, date.today().strftime("%Y-%m-%d"), None, 0)
             insert_dentist(user_id, None)
             a = insert_address(None,None,None,None,None)
             insert_user_address(user_id, a[0][0])
+            flash("User Account Created Successfully")
         if option == "hygienist":
-            insert_employee(user_id, None, "hygienist", None, date.today().strftime("%Y-%m-%d"), None, 0)
+            insert_employee(user_id, branch_id, "hygienist", None, date.today().strftime("%Y-%m-%d"), None, 0)
             insert_hygienist(user_id, None)
             a = insert_address(None,None,None,None,None)
             insert_user_address(user_id, a[0][0])
+            flash("User Account Created Successfully")
         if option == "receptionist":
-            insert_employee(user_id, None, "receptionist", None, date.today().strftime("%Y-%m-%d"), None, 0)
-            insert_receptionist(user_id, None)
-            a = insert_address(None,None,None,None,None)
-            insert_user_address(user_id, a[0][0])
+            if checkTwoReceptionistsPerBranch(int(branch_id)):
+                insert_employee(user_id, branch_id, "receptionist", None, date.today().strftime("%Y-%m-%d"), None, 0)
+                insert_receptionist(user_id, None)
+                a = insert_address(None,None,None,None,None)
+                insert_user_address(user_id, a[0][0])
+                flash("User Account Created Successfully")
+            else:
+                flash("This branch already has two receptionists!", "danger")
 
-        flash("User Account Created Successfully")
 
     return render_template('login.html', error = error)
 
@@ -162,7 +140,6 @@ def get_employee_home_page(user_id):
         a = insert_address(None,None,None,None,None)
         insert_user_address(user_id, a[0][0])
         cur_employee_address = get_user_address(user_id)
-
 
     return render_template("employee_home.html", Patients = all_patients, Appointments = all_appointments, Invoices = all_invoices, employee = cur_employee, emp_profile = cur_emp_user_info, emp_address = cur_employee_address[0])
 
@@ -195,13 +172,13 @@ def get_patient_home_page(user_id):
     invoices = get_invoice(user_id)
     responsible_party = get_responsible_party(user_id)
 
-
+    all_branches = get_all_branches()
     appointments = get_all_appointments_patient(user_id)
 
 
     return render_template("patient_home.html", user_id=user_id, first_name=first_name, middle_name=middle_name, last_name=last_name,
                            gender=gender, insurance_company=insurance_company, ssn=ssn, birth_date=birth_date,
-                           phone_number=phone_number, email=email, age=age, password=password, appointments=appointments, invoices=invoices,responsible_party=responsible_party)
+                           phone_number=phone_number, email=email, age=age, password=password, appointments=appointments, invoices=invoices,responsible_party=responsible_party,List_of_all_branches = all_branches)
 
 
 
@@ -267,7 +244,7 @@ def insert_appointment_patient(user_id):
         user = get_user_with_id(get_patient(user_id)[0][0])
         procedure = procedure_dict[str(appointment_type)]
 
-        insert_invoice(invoice_id, user_id, date_of_appointment,user[0][9], user[0][7], 0, procedure[3], "0", "0", False)
+        insert_invoice(invoice_id, user_id, date_of_appointment,user[0][9], user[0][7], 0, procedure[3]*1.1, "0", "0", False)
         appointment = insertAppointment(invoice_id, user_id, dentist_id, start_time, str(final_end_time), appointment_type, status, "", date_of_appointment)
         procedure_no = insert_appointment_procedure(appointment_type, appointment[0][0], 1)
 
@@ -516,28 +493,54 @@ def delete_invoice(invoice_id, emp_id):
 
     return redirect(url_for('get_employee_home_page', user_id=emp_id))
 
-@app.route('/leave_review/<patient_id>', methods=['POST'])
+# Payment
+@app.route('/get_invoices/<user_id>/')
+def get_invoices(user_id):
+    patient_invoice = get_user_invoice(user_id)
+    return render_template("payment.html", PatientInvoice = patient_invoice)
+
+@app.route('/insert_user_payment/<user_id>/<invoice_id>/', methods = ['POST'])
+def insert_user_payment(user_id, invoice_id):
+    print("LOL")
+    print(user_id)
+    print(invoice_id)
+    payment_method = request.form['payment_method']
+    print(payment_method)
+    insurance_amount = request.form['insurance_amount']
+    print(insurance_amount)
+    patient_amount = get_invoice(invoice_id)[0][6]
+    print(patient_amount)
+
+    insert_payment(int(invoice_id), payment_method, int(patient_amount), int(insurance_amount))
+    update_invoice_payment(invoice_id, insurance_amount, True)
+
+    flash("Payment is saved successfully!","success")
+    return redirect(url_for('get_invoices',user_id = user_id))
+
+
+@app.route('/leave_review/<patient_id>/', methods=['GET','POST'])
 def leave_review(patient_id):
+    print("hi")
     all_branches = get_all_branches()
+    print(all_branches)
     branch_id = request.form['branch_id']
+    print(branch_id)
     if not get_branch(branch_id):
         flash("Branch Id does not exist please select a value from dropdown.","danger")
         return render_template('login.html', List_of_all_branches = all_branches)
 
     professionalism = request.form['professionalism']
+    print(professionalism)
     communication = request.form['communication']
+    print(communication)
     cleanliness = request.form['cleanliness']
+    print(cleanliness)
     value = request.form['value']
+    print(value)
     insert_review(patient_id, branch_id, professionalism, communication, cleanliness, value)
-
+    print("success")
     flash("Your Review Is Saved Successfully")
-    return render_template('login.html', List_of_all_branches = all_branches)
-
-@app.route('/')
-def show_all():
-    conn = get_db_connection()
-
-
+    return render_template('login.html')
 
 
 # Admin
@@ -914,7 +917,7 @@ def insert_appointment():
         user = get_user_with_id(get_patient(patient_id)[0][0])
         procedure = procedure_dict[str(appointment_type)]
 
-        insert_invoice(invoice_id, patient_id, date_of_appointment,user[0][9], user[0][7], 0, procedure[3], "0", "0", False)
+        insert_invoice(invoice_id, patient_id, date_of_appointment,user[0][9], user[0][7], 0, procedure[3]*1.1, "0", "0", False)
         appointment = insertAppointment(invoice_id, patient_id, dentist_id, start_time, str(final_end_time), appointment_type, status, room_assigned, date_of_appointment)
         procedure_no = insert_appointment_procedure(appointment_type, appointment[0][0], 1)
         insert_fee_charge(invoice_id, int(procedure_no[0][0]), procedure[0], procedure[3])

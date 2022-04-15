@@ -1,6 +1,6 @@
 --DENTIST #1
 INSERT INTO project_schema."user"
-VALUES ('101', 'Cem', NULL, 'Kiyik', 'man',
+VALUES ('101', 'Cem', NULL, 'Kiyik', 'Male',
         'LaCapitale', 123212, 'Cem@mail.com', DATE '1990-10-05', '452-435-3453',
         32, 'Cem211');
 
