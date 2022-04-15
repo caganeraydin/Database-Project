@@ -994,7 +994,7 @@ def insert_treatment():
     else:
         print("here3")
         insertTreatment(dentist_id, chart_no, appointment_type, treatment_type, medication, symptoms, tooth, comments)
-        flash("Treatment Inserted Successfully", "danger")
+        flash("Treatment Inserted Successfully", "success")
         return redirect(url_for('get_treatments'))
 
 

@@ -7,22 +7,6 @@
 
 {% block body %}
 
-<nav class="nav nav-pills flex-column flex-sm-row">
-  <a class="flex-sm-fill text-sm-center nav-link active" href="#">Patient Home Page</a>
-  <a class="flex-sm-fill text-sm-center nav-link" href="#">Make Appointment</a>
-  <a class="flex-sm-fill text-sm-center nav-link" href="#">Make Payment</a>
-  <a class="flex-sm-fill text-sm-center nav-link" href="#" tabindex="-1" aria-disabled="true">Sign Out</a>
-</nav>
-
-
-
-
-
-
-
-
-
-
 <div class="container">
   <div class="row">
     <div class="col md-12">
@@ -297,7 +281,7 @@
             <div class="card">
               <div class="card-header" id="goToTreatment">
                 <h5 class="mb-0">
-                  <a href=“/get_treatments/}“>
+                  <a href="{{url_for('get_treatments')}}">
                     <button class="btn btn-primary btn-block" type="submit">Go To Treatment</button>
                     <br>
                   </a>
