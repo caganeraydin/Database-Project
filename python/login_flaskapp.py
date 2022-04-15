@@ -6,16 +6,16 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from psycopg2 import Error
 
-from python.deletions import delete_user
-from python.getters import get_all_users, get_last_address_id, get_all_addresses, get_user_with_id, get_user_with_email, \
+from deletions import delete_user
+from getters import get_all_users, get_last_address_id, get_all_addresses, get_user_with_id, get_user_with_email, \
     get_patient, get_employee, get_responsible_party, get_admin, get_insurance_claim, get_payment, get_invoice, \
     get_hygienist, get_receptionist, get_dentist, get_treatment
-from python.inserters import insert_user, insert_appointment_procedure, insert_address, insert_user_address_latest, \
+from inserters import insert_user, insert_appointment_procedure, insert_address, insert_user_address_latest, \
     insert_patient, insert_patient_chart, insert_branch, insert_branch_address, insert_invoice, insert_payment, \
     insert_insurance_claim, insert_fee_charge, insert_receptionist, insert_dentist, \
     insert_hygienist, insert_review, insert_clinic_enterprise, insert_employee, insert_user_address
-from python.updaters import update_user
-from python.validation import generateUserId, validateSSN, validateEmail, generateChartNo
+from updaters import update_user
+from validation import generateUserId, validateSSN, validateEmail, generateChartNo
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/project_database'

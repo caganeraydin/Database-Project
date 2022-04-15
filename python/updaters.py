@@ -1,7 +1,7 @@
 from psycopg2 import Error
 
-from python.connection import get_db_connection
-from python.utils import get_abs_filepath_from_module
+from connection import get_db_connection
+from utils import get_abs_filepath_from_module
 
 conn = get_db_connection()
 
@@ -34,7 +34,7 @@ def update_user(user_id: str, first_name: str, middle_name: str, last_name: str,
 
 def update_patient(user_id: int, first_name: str, middle_name: str, last_name: str, gender: str,
                    insurance_company: str, ssn: str, email: str, date_of_birth: str, telephone: str,
-                   age: int, password: str, address_id: int, house_number: int, street_number: int,
+                   age: int, password: str, address_id: int, house_number: int, street_name: int,
                    city: str, province: str, postal_code: str, insurance_type:str,patient_id:str):
     try:
         cur = conn.cursor()
@@ -42,11 +42,12 @@ def update_patient(user_id: int, first_name: str, middle_name: str, last_name: s
             cur.execute(file.read(),
                         (first_name, middle_name, last_name, gender,
                         insurance_company, ssn, email, date_of_birth, telephone,
-                        age, password, user_id, house_number, street_number,
+                        age, password, user_id, house_number, street_name,
                         city, province, postal_code, address_id,insurance_type,patient_id))
             conn.commit()
     except Exception as error:
         raise Error('ERROR: cant update treatment') from error
+
 
 def update_patientt(user_id: int, first_name: str, middle_name: str, last_name: str, gender: str,
                    insurance_company: str, ssn: str, email: str, date_of_birth: str, telephone: str,
@@ -67,7 +68,7 @@ def update_patientt(user_id: int, first_name: str, middle_name: str, last_name: 
 
 def update_employee_profile(user_id: int, first_name: str, middle_name: str, last_name: str, gender: str,
                    insurance_company: str, ssn: str, email: str, date_of_birth: str, telephone: str,
-                   age: int, password: str, address_id: int, house_number: int, street_number: str,
+                   age: int, password: str, address_id: int, house_number: int, street_name: str,
                    city: str, province: str, postal_code: str):
     try:
         cur = conn.cursor()
@@ -75,7 +76,7 @@ def update_employee_profile(user_id: int, first_name: str, middle_name: str, las
             cur.execute(file.read(),
                         (first_name, middle_name, last_name, gender,
                         insurance_company, ssn, email, date_of_birth, telephone,
-                        age, password, user_id, house_number, street_number,
+                        age, password, user_id, house_number, street_name,
                         city, province, postal_code, address_id))
             conn.commit()
     except Exception as error:

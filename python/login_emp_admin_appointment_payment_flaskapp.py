@@ -11,15 +11,15 @@ from flask_sqlalchemy import SQLAlchemy
 from psycopg2 import Error
 from sqlalchemy import false
 
-from python.deletions import *
-from python.getters import *
-from python.inserters import *
-from python.updaters import *
-from python.validation import *
+from deletions import *
+from getters import *
+from inserters import *
+from updaters import *
+from validation import *
 
-import python.updaters as up
-import python.inserters as ins
-import python.deletions as delt
+import updaters as up
+import inserters as ins
+import deletions as delt
 
 app = Flask(__name__)
 app.secret_key = "Secret Key"
@@ -196,7 +196,7 @@ def insert_patient(emp_id):
     age = request.form['age']
     password = request.form['password']
     house_number = request.form['house_number']
-    street_number = request.form['street_number']
+    street_name = request.form['street_name']
     city = request.form['city']
     province = request.form['province']
     postal_code = request.form['postal_code']
@@ -206,7 +206,7 @@ def insert_patient(emp_id):
         return redirect(url_for('get_employee_home_page'))
     else:
         insert_user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, date_of_birth, telephone, age, password)
-        insert_address(house_number, street_number, city, province, postal_code)
+        insert_address(house_number, street_name, city, province, postal_code)
         insert_patient_chart(chart_no)
         ins.insert_patient(user_id, chart_no, insurance_type)
         address_ids = get_all_addresses()
@@ -236,14 +236,14 @@ def update_patient(user_id,address_id, emp_id):
         age = request.form['age']
         password = request.form['password']
         house_number = request.form['house_number']
-        street_number = request.form['street_number']
+        street_name = request.form['street_name']
         city = request.form['city']
         province = request.form['province']
         postal_code = request.form['postal_code']
 
         up.update_patient(user_id, first_name, middle_name, last_name,gender,
                        insurance_company, ssn, email, date_of_birth, telephone,
-                       age, password, address_id, house_number, street_number,
+                       age, password, address_id, house_number, street_name,
                        city, province, postal_code)
         flash("Event Updated Successfully")
         return redirect(url_for('get_employee_home_page', user_id = emp_id))
@@ -269,14 +269,14 @@ def update_employee(user_id,address_id):
         age = request.form['age']
         password = request.form['password']
         house_number = request.form['house_number']
-        street_number = request.form['street_number']
+        street_name = request.form['street_name']
         city = request.form['city']
         province = request.form['province']
         postal_code = request.form['postal_code']
 
         up.update_employee_profile(user_id, first_name, middle_name, last_name,gender,
                        insurance_company, ssn, email, date_of_birth, telephone,
-                       age, password, address_id, house_number, street_number,
+                       age, password, address_id, house_number, street_name,
                        city, province, postal_code)
         flash("Event Updated Successfully")
 
@@ -386,8 +386,8 @@ def insert_patient_admin():
     print(password)
     house_number = request.form['house_number']
     print(house_number)
-    street_number = request.form['street_number']
-    print(street_number)
+    street_name = request.form['street_name']
+    print(street_name)
     city = request.form['city']
     print(city)
     province = request.form['province']
@@ -400,7 +400,7 @@ def insert_patient_admin():
         return redirect(url_for('get_admin_home_page'))
     else:
         insert_user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, date_of_birth, telephone, age, password)
-        address_id = insert_address(house_number, street_number, city, province, postal_code)[0]
+        address_id = insert_address(house_number, street_name, city, province, postal_code)[0]
         insert_patient_chart(chart_no)
         ins.insert_patient(user_id, chart_no, insurance_type)
         ins.insert_user_address(user_id, address_id)
@@ -442,7 +442,7 @@ def insert_employee_admin():
     age = request.form['age']
     password = request.form['password']
     house_number = request.form['house_number']
-    street_number = request.form['street_number']
+    street_name = request.form['street_name']
     city = request.form['city']
     province = request.form['province']
     postal_code = request.form['postal_code']
@@ -452,7 +452,7 @@ def insert_employee_admin():
         return redirect(url_for('get_admin_home_page'))
     else:
         insert_user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, date_of_birth, telephone, age, password)
-        insert_address(house_number, street_number, city, province, postal_code)
+        insert_address(house_number, street_name, city, province, postal_code)
         insert_patient_chart(chart_no)
         ins.insert_patient(user_id, chart_no, insurance_type)
         address_ids = get_all_addresses()
@@ -516,14 +516,14 @@ def update_employee_admin(user_id,address_id):
         age = request.form['age']
         password = request.form['password']
         house_number = request.form['house_number']
-        street_number = request.form['street_number']
+        street_name = request.form['street_name']
         city = request.form['city']
         province = request.form['province']
         postal_code = request.form['postal_code']
 
         up.update_employee_profile(user_id, first_name, middle_name, last_name,gender,
                        insurance_company, ssn, email, date_of_birth, telephone,
-                       age, password, address_id, house_number, street_number,
+                       age, password, address_id, house_number, street_name,
                        city, province, postal_code)
         flash("Event Updated Successfully")
 
@@ -550,14 +550,14 @@ def update_patient_admin(user_id,address_id):
         age = request.form['age']
         password = request.form['password']
         house_number = request.form['house_number']
-        street_number = request.form['street_number']
+        street_name = request.form['street_name']
         city = request.form['city']
         province = request.form['province']
         postal_code = request.form['postal_code']
 
         up.update_patient(user_id, first_name, middle_name, last_name,gender,
                        insurance_company, ssn, email, date_of_birth, telephone,
-                       age, password, address_id, house_number, street_number,
+                       age, password, address_id, house_number, street_name,
                        city, province, postal_code)
         flash("Event Updated Successfully")
 

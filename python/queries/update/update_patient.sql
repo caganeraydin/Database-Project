@@ -5,7 +5,7 @@ SET first_name = %s, middle_name = %s, last_name = %s, gender = %s, insurance_co
 WHERE user_id = %s;
 
 UPDATE project_schema."address"
-SET house_number = %s, street_number = %s, city = %s, province = %s,  postal_code= %s
+SET house_number = %s, street_name = %s, city = %s, province = %s,  postal_code= %s
 WHERE address_id = %s;
 
 UPDATE project_schema."patient"

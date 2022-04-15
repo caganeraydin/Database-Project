@@ -38,16 +38,17 @@
     </div>
 
       <div class="col-md-4 mb-3">
-      <label for="validationTooltipUsername">Appointment Type</label>
-      <div class="input-group">
-        <div class="input-group-prepend">
-        </div>
-        <input type="text" class="form-control" id="validationTooltipUsername" name="appointment_type" aria-describedby="validationTooltipUsernamePrepend" required>
-        <div class="invalid-tooltip">
-          Please choose a valid Appointment Type.
-        </div>
+        <label>Appointment Type:</label>
+        <input list="procedure_types" type="text" class="form-control" name="appointment_type" required="1" placeholder="ex: Teeth Filling">
+         <datalist id="procedure_types">
+             <option value="Teeth Cleaning">
+             <option value="Teeth Filling">
+             <option value="Teeth Crown">
+             <option value="Root Canal">
+             <option value="Braces">
+             <option value="Teeth Bonding">
+         </datalist>
       </div>
-    </div>
 
 
 

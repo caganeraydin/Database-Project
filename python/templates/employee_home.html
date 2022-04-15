@@ -151,7 +151,7 @@
                                 </div>
                                 <div class="form-group">
                                   <label>Street Name:</label>
-                                  <input type="text" class="form-control" name="street_number" value="{{patient[14]}}">
+                                  <input type="text" class="form-control" name="street_name" value="{{patient[14]}}">
                                 </div>
                                 <div class="form-group">
                                   <label>City:</label>
@@ -371,11 +371,11 @@
                     </div>
                     <div class="form-group">
                       <label>House Number:</label>
-                      <input type="text" class="form-control" name="house_number" value="{{emp_address[1]}}">
+                      <input type="text" class="form-control" name="house_number" value="{{emp_address[1]}}" required="1">
                     </div>
                     <div class="form-group">
                       <label>Street Name:</label>
-                      <input type="text" class="form-control" name="street_number" value="{{emp_address[2]}}">
+                      <input type="text" class="form-control" name="street_name" value="{{emp_address[2]}}">
                     </div>
                     <div class="form-group">
                       <label>City:</label>
@@ -467,7 +467,7 @@
                 </div>
                 <div class="form-group">
                   <label>Street Name:</label>
-                  <input type="text" class="form-control" name="street_number" required="1">
+                  <input type="text" class="form-control" name="street_name" required="1">
                 </div>
                  <div class="form-group">
                   <label>City:</label>
@@ -493,6 +493,11 @@
         </div>
       </div>
 
+        <div class="modal-footer">
+            <a href = "{{ url_for('show_all') }}">
+                <button class="btn btn-danger" >Sign Out</button>
+            </a>
+        </div>
       </div>
     </div>
   </div>
