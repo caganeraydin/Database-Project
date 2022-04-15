@@ -208,7 +208,10 @@ def get_patient_home_page(user_id):
 
 @app.route('/get_appointmens_page/<user_id>')
 def get_appointments_page(user_id):
-    return render_template("patient_appointment.html", user_id=user_id)
+
+    dentists = get_all_dentists()
+
+    return render_template("patient_appointment.html", user_id=user_id, List_of_all_dentists=dentists)
 
 
 @app.route('/insert_appointment_patient/<user_id>', methods=['POST'])
