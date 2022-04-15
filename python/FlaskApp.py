@@ -88,32 +88,58 @@ def signup():
         error = retString
     if(retVal != "success"):
         error = retVal
+
+
     else:
         user_id = generateUserId()
-        option = request.form['flexRadioDefault']
-        insert_user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, dob, tel, age, password)
-        if option == "patient":
+        role = request.form['flexRadioRole']
+    emp_type = request.form['flexRadioType']
+    insert_user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, dob, tel, age, password)
+    if role == "patient":
             chart_no = generateChartNo()
             insert_patient_chart(chart_no)
             insert_patient(user_id, chart_no, insurance_company)
             a = insert_address(None,None,None,None,None)
             insert_user_address(user_id, a[0][0])
             flash("User Account Created Successfully")
-        if option == "dentist":
-            insert_employee(user_id, branch_id, "dentist", None, date.today().strftime("%Y-%m-%d"), None, 0)
+    if emp_type == "part-time":
+        if role == "dentist":
+            insert_employee(user_id, branch_id, 'part-time', 'Dentist', date.today().strftime("%Y-%m-%d"), None, 0)
             insert_dentist(user_id, None)
             a = insert_address(None,None,None,None,None)
             insert_user_address(user_id, a[0][0])
             flash("User Account Created Successfully")
-        if option == "hygienist":
-            insert_employee(user_id, branch_id, "hygienist", None, date.today().strftime("%Y-%m-%d"), None, 0)
+        if role == "hygienist":
+            insert_employee(user_id, branch_id, 'part-time', 'Hygienist', date.today().strftime("%Y-%m-%d"), None, 0)
             insert_hygienist(user_id, None)
             a = insert_address(None,None,None,None,None)
             insert_user_address(user_id, a[0][0])
             flash("User Account Created Successfully")
-        if option == "receptionist":
+        if role == "receptionist":
             if checkTwoReceptionistsPerBranch(int(branch_id)):
-                insert_employee(user_id, branch_id, "receptionist", None, date.today().strftime("%Y-%m-%d"), None, 0)
+                insert_employee(user_id, branch_id, 'part-time', 'Receptionist', date.today().strftime("%Y-%m-%d"), None, 0)
+                insert_receptionist(user_id, None)
+                a = insert_address(None,None,None,None,None)
+                insert_user_address(user_id, a[0][0])
+                flash("User Account Created Successfully")
+            else:
+                flash("This branch already has two receptionists!", "danger")
+    if emp_type == "full-time":
+        if role == "dentist":
+            insert_employee(user_id, branch_id, "full-time", 'Dentist', date.today().strftime("%Y-%m-%d"), None, 0)
+            insert_dentist(user_id, None)
+            a = insert_address(None,None,None,None,None)
+            insert_user_address(user_id, a[0][0])
+            flash("User Account Created Successfully")
+        if role == "hygienist":
+            insert_employee(user_id, branch_id, "full-time", 'Hygienist', date.today().strftime("%Y-%m-%d"), None, 0)
+            insert_hygienist(user_id, None)
+            a = insert_address(None,None,None,None,None)
+            insert_user_address(user_id, a[0][0])
+            flash("User Account Created Successfully")
+        if role == "receptionist":
+            if checkTwoReceptionistsPerBranch(int(branch_id)):
+                insert_employee(user_id, branch_id, "full-time", 'Receptionist', date.today().strftime("%Y-%m-%d"), None, 0)
                 insert_receptionist(user_id, None)
                 a = insert_address(None,None,None,None,None)
                 insert_user_address(user_id, a[0][0])
@@ -290,14 +316,8 @@ def update_patient(user_id, address_id, emp_id):
 
 @app.route('/insert_responsible_party/<user_id>', methods=['POST'])
 def insert_responsible_party(user_id):
-    # replace with generation method
-    n = random.randint(1, 300000)
-    resp_id = get_user_with_id(str(n))
-    while resp_id:
-        n = random.randint(1, 300000)
-        resp_id = get_user_with_id(str(n))
 
-    resp_id = n
+    resp_id = generateUserId()
 
     # if request.method == 'POST':
 
@@ -337,21 +357,10 @@ def insert_responsible_party(user_id):
 # this route is for inserting a new treatment to postgres database via html
 @app.route('/insert_patient/<emp_id>', methods=['POST'])
 def insert_patient(emp_id):
-    # replace with generation method
-    n = random.randint(1, 300000)
-    user_id = get_user_with_id(str(n))
-    while user_id:
-        n = random.randint(1, 300000)
-        user_id = get_user_with_id(str(n))
 
-    n1 = random.randint(1, 300000)
-    chart_no = get_patient_chart(str(n1))
-    while chart_no:
-        n1 = random.randint(1, 300000)
-        chart_no = get_patient_chart(str(n1))
 
-    user_id = n
-    chart_no = n1
+    user_id = generateUserId()
+    chart_no = generateChartNo()
 
     # if request.method == 'POST':
 
@@ -443,7 +452,8 @@ def update_employee(user_id,address_id):
         city = request.form['city']
         province = request.form['province']
         postal_code = request.form['postal_code']
-
+        if house_number == "None":
+            house_number = "0"
         up.update_employee_profile(user_id, first_name, middle_name, last_name,gender,
                        insurance_company, ssn, email, date_of_birth, telephone,
                        age, password, address_id, house_number, street_name,
@@ -546,6 +556,7 @@ def leave_review(patient_id):
 # Admin
 @app.route('/admin_home/')
 def get_admin_home_page():
+    branches = get_all_branches()
     patients = get_all_patients()
     employees = get_all_employees()
     invoices = get_all_invoices()
@@ -554,28 +565,17 @@ def get_admin_home_page():
                            Patients = patients,
                            Employees = employees,
                            Invoices = invoices,
-                           Appointments = appointments)
+                           Appointments = appointments,
+                           Branches = branches)
 
 
 # this route is for inserting a new patient to postgres database via html
 @app.route('/insert_patient_admin/', methods = ['POST'])
 def insert_patient_admin():
-    # replace with generation method
 
-    n = random.randint(1,300000)
-    user_id = get_user_with_id(str(n))
-    while user_id:
-        n = random.randint(1,300000)
-        user_id = get_user_with_id(str(n))
 
-    n1 = random.randint(1, 300000)
-    chart_no = get_patient_chart(str(n1))
-    while chart_no:
-        n1 = random.randint(1, 300000)
-        chart_no = get_patient_chart(str(n1))
-
-    user_id = n
-    chart_no = n1
+    user_id = generateUserId()
+    chart_no = generateChartNo()
 
     # if request.method == 'POST':
 
@@ -630,28 +630,10 @@ def insert_patient_admin():
 # this route is for inserting a new patient to postgres database via html
 @app.route('/insert_employee_admin/', methods = ['POST'])
 def insert_employee_admin():
-    # replace with generation method
-    n = random.randint(1,300000)
-    user_id = get_user_with_id(str(n))
-    while user_id:
-        n = random.randint(1,300000)
-        user_id = get_user_with_id(str(n))
-
-    n1 = random.randint(1, 300000)
-    chart_no = get_patient_chart(str(n1))
-    while chart_no:
-        n1 = random.randint(1, 300000)
-        chart_no = get_patient_chart(str(n1))
-
-    user_id = n
-    chart_no = n1
-
-    # if request.method == 'POST':
 
     first_name = request.form['first_name']
     middle_name = request.form['middle_name']
     last_name = request.form['last_name']
-    insurance_type = request.form['insurance_type']
     gender = request.form['gender']
     insurance_company = request.form['insurance_company']
     ssn = request.form['ssn']
@@ -665,17 +647,63 @@ def insert_employee_admin():
     city = request.form['city']
     province = request.form['province']
     postal_code = request.form['postal_code']
+    branch_id = request.form['branch_id']
+    salary = request.form['salary']
+    years_of_experience = request.form['years_of_experience']
 
     if get_user_with_email(email):
         flash("account with the email address you entered already exists, please try again.")
         return redirect(url_for('get_admin_home_page'))
     else:
+        user_id = generateUserId()
+        role = request.form['flexRadioRole']
+        emp_type = request.form['flexRadioType']
         insert_user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, date_of_birth, telephone, age, password)
-        address_id = insert_address(house_number, street_name, city, province, postal_code)[0][0]
-        insert_patient_chart(chart_no)
-        ins.insert_patient(user_id, chart_no, insurance_type)
-        ins.insert_user_address(user_id,address_id)
-        flash("Patient Added Successfully")
+        if emp_type == "part-time":
+            if role == "dentist":
+                insert_employee(user_id, branch_id, 'part-time', 'Dentist', date.today().strftime("%Y-%m-%d"), salary, years_of_experience)
+                insert_dentist(user_id, None)
+                a = insert_address(house_number,street_name,city,province,postal_code)
+                insert_user_address(user_id, a[0][0])
+                flash("User Account Created Successfully")
+            if role == "hygienist":
+                insert_employee(user_id, branch_id, 'part-time', 'Hygienist', date.today().strftime("%Y-%m-%d"), salary, years_of_experience)
+                insert_hygienist(user_id, None)
+                a = insert_address(house_number,street_name,city,province,postal_code)
+                insert_user_address(user_id, a[0][0])
+                flash("User Account Created Successfully")
+            if role == "receptionist":
+                if checkTwoReceptionistsPerBranch(int(branch_id)):
+                    insert_employee(user_id, branch_id, 'part-time', 'Receptionist', date.today().strftime("%Y-%m-%d"), salary, years_of_experience)
+                    insert_receptionist(user_id, None)
+                    a = insert_address(house_number,street_name,city,province,postal_code)
+                    insert_user_address(user_id, a[0][0])
+                    flash("User Account Created Successfully")
+                else:
+                    flash("This branch already has two receptionists!", "danger")
+        if emp_type == "full-time":
+            if role == "dentist":
+                insert_employee(user_id, branch_id, "full-time", 'Dentist', date.today().strftime("%Y-%m-%d"), salary, years_of_experience)
+                insert_dentist(user_id, None)
+                a = insert_address(house_number,street_name,city,province,postal_code)
+                insert_user_address(user_id, a[0][0])
+                flash("User Account Created Successfully")
+            if role == "hygienist":
+                insert_employee(user_id, branch_id, "full-time", 'Hygienist', date.today().strftime("%Y-%m-%d"), salary, years_of_experience)
+                insert_hygienist(user_id, None)
+                a = insert_address(house_number,street_name,city,province,postal_code)
+                insert_user_address(user_id, a[0][0])
+                flash("User Account Created Successfully")
+            if role == "receptionist":
+                if checkTwoReceptionistsPerBranch(int(branch_id)):
+                    insert_employee(user_id, branch_id, "full-time", 'Receptionist', date.today().strftime("%Y-%m-%d"), salary, years_of_experience)
+                    insert_receptionist(user_id, None)
+                    a = insert_address(house_number,street_name,city,province,postal_code)
+                    insert_user_address(user_id, a[0][0])
+                    flash("User Account Created Successfully")
+                else:
+                    flash("This branch already has two receptionists!", "danger")
+
         return redirect(url_for('get_admin_home_page'))
 
 
@@ -683,15 +711,8 @@ def insert_employee_admin():
 # this route is for inserting a new patient to postgres database via html
 @app.route('/insert_employee_admin/<user_id>', methods = ['POST'])
 def insert_invoice_admin(user_id):
-    # replace with generation method
 
-    n = random.randint(1, 300000)
-    invoice_id = get_invoice(n)
-    while invoice_id:
-        n = random.randint(1, 300000)
-        invoice_id = get_patient_chart(n)
-
-    invoice_id = n
+    invoice_id = generateInvoiceId()
 
     date_of_issue = request.form['date_of_issue']
     telephone = request.form['telephone']
