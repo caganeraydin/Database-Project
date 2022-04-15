@@ -392,13 +392,10 @@ def insert_patient(emp_id):
         flash("account with the email address you entered already exists, please try again.")
         return redirect(url_for('get_employee_home_page'))
     else:
-        insert_user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, date_of_birth,
-                    telephone, age, password)
-        insert_address(house_number, street_number, city, province, postal_code)
+        insert_user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, date_of_birth, telephone, age, password)
+        address_id = insert_address(house_number, street_number, city, province, postal_code)[0]
         insert_patient_chart(chart_no)
         ins.insert_patient(user_id, chart_no, insurance_type)
-        address_ids = get_all_addresses()
-        address_id = address_ids[len(address_ids) - 1][0]
         ins.insert_user_address(user_id, address_id)
         flash("Patient Added Successfully")
         return redirect(url_for('get_employee_home_page', user_id=emp_id))
@@ -955,6 +952,88 @@ def delete_appointment(appointment_id):
     flash("Appointment Deleted Successfully", "success")
 
     return redirect(url_for('get_appointments'))
+
+#Treatments
+@app.route('/get_treatments')
+def get_treatments():
+    all_treatment = get_all_treatments()
+    return render_template("treatment.html", Treatments = all_treatment)
+
+#this route is for inserting a new treatment to postgres database via html
+@app.route('/insert_treatment', methods = ['POST'])
+def insert_treatment():
+
+    # if request.method == 'POST':
+
+    dentist_id = request.form['dentist_id']
+    chart_no = request.form['chart_no']
+    appointment_type = request.form['appointment_type']
+    treatment_type = request.form['treatment_type']
+    medication = request.form['medication']
+    symptoms = request.form['symptoms']
+    tooth = request.form['tooth']
+    comments = request.form['comments']
+
+    print(dentist_id)
+    print(chart_no)
+    print(appointment_type)
+    print(treatment_type)
+    print(medication)
+    print(symptoms)
+    print(tooth)
+    print(comments)
+
+    if(not (get_patient_chart(chart_no))):
+        print("here1")
+        flash("Chart No you entered does not exist, please try again.", "danger")
+        return redirect(url_for('get_treatments'))
+    if(not (get_dentist(dentist_id))):
+        print("here2")
+        flash("Dentist Id you entered does not exist, please try again.","danger")
+        return redirect(url_for('get_treatments'))
+    else:
+        print("here3")
+        insertTreatment(dentist_id, chart_no, appointment_type, treatment_type, medication, symptoms, tooth, comments)
+        flash("Treatment Inserted Successfully", "danger")
+        return redirect(url_for('get_treatments'))
+
+
+#this is our update route to modify an already existing treatment
+@app.route('/update_treatment/<treatment_id>/', methods = ['GET', 'POST'])
+def update_treatment(treatment_id):
+
+    if request.method == 'POST':
+
+        dentist_id = request.form['dentist_id']
+        chart_no = request.form['chart_no']
+        appointment_type = request.form['appointment_type']
+        treatment_type = request.form['treatment_type']
+        medication = request.form['medication']
+        symptoms = request.form['symptoms']
+        tooth = request.form['tooth']
+        comments = request.form['comments']
+
+        if(not (get_dentist(dentist_id))):
+            flash("Dentist Id you entered does not exist, please try again.","danger")
+            return redirect(url_for('get_treatments'))
+        if(not (get_patient_chart(chart_no))):
+            flash("Chart No you entered does not exist, please try again.","danger")
+            return redirect(url_for('get_treatments'))
+
+        updateTreatment(treatment_id, dentist_id, chart_no, appointment_type, treatment_type, medication, symptoms, tooth, comments)
+        flash("Event Updated Successfully", "success")
+
+        return redirect(url_for('get_treatments'))
+
+
+#This route is for deleting a treatment
+@app.route('/delete_treatment/<treatment_id>/', methods = ['GET', 'POST'])
+def delete_treatment(treatment_id):
+    print(treatment_id)
+    deleteTreatment(treatment_id)
+    flash("Treatment Deleted Successfully", "success")
+
+    return redirect(url_for('get_treatments'))
 
 @app.route('/')
 def show_all():
