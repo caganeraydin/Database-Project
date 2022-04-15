@@ -22,9 +22,7 @@ import inserters as ins
 import deletions as delt
 from appointment_procedure_options import procedure_dict
 
-import updaters as up
-import inserters as ins
-import deletions as delt
+
 
 app = Flask(__name__)
 app.secret_key = "Secret Key"
@@ -71,6 +69,7 @@ def login():
     error = None
     user_id = request.form.get("userid")
     password = request.form.get("pwd")
+    all_branches = get_all_branches()
     if request.method == 'POST':
         user = get_user_with_email(user_id)
         if not user: #user is empty list
@@ -93,7 +92,7 @@ def login():
         #     error = 'Invalid Credentials. Please try again.'
         # else:
         #     return redirect(url_for('home'))
-    return render_template('login.html', error=error)
+    return render_template('login.html', error=error, List_of_all_branches = all_branches)
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -146,6 +145,7 @@ def signup():
         flash("User Account Created Successfully")
 
     return render_template('login.html', error = error)
+
 
 # Employee Home Page
 @app.route('/employee_home/<user_id>/')
@@ -515,6 +515,28 @@ def delete_invoice(invoice_id, emp_id):
     flash("Patient Deleted Successfully")
 
     return redirect(url_for('get_employee_home_page', user_id=emp_id))
+
+@app.route('/leave_review/<patient_id>', methods=['POST'])
+def leave_review(patient_id):
+    all_branches = get_all_branches()
+    branch_id = request.form['branch_id']
+    if not get_branch(branch_id):
+        flash("Branch Id does not exist please select a value from dropdown.","danger")
+        return render_template('login.html', List_of_all_branches = all_branches)
+
+    professionalism = request.form['professionalism']
+    communication = request.form['communication']
+    cleanliness = request.form['cleanliness']
+    value = request.form['value']
+    insert_review(patient_id, branch_id, professionalism, communication, cleanliness, value)
+
+    flash("Your Review Is Saved Successfully")
+    return render_template('login.html', List_of_all_branches = all_branches)
+
+@app.route('/')
+def show_all():
+    conn = get_db_connection()
+
 
 
 
