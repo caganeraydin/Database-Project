@@ -1,7 +1,7 @@
 from psycopg2 import Error
 
-from python.connection import get_db_connection
-from python.utils import get_abs_filepath_from_module
+from connection import get_db_connection
+from utils import get_abs_filepath_from_module
 
 
 conn = get_db_connection()

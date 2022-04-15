@@ -9,8 +9,8 @@
 
 <script>
    function check(input, row) {
-     if (input.value != row) {
-       input.setCustomValidity('The invoice claim must be equal to the total amount due.');
+     if (input.value > row) {
+       input.setCustomValidity('The insurance claim amount must be equal to or smaller than the total amount due.');
      } else {
         input.setCustomValidity('')
      }

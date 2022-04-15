@@ -13,7 +13,7 @@
     <nav class="nav nav-pills flex-column flex-sm-row" >
   <a class="flex-sm-fill text-sm-center nav-link active" href="#" >Patient Home Page</a>
   <a class="flex-sm-fill text-sm-center nav-link active" href="{{ url_for('get_appointments_page' ,user_id=user_id)}}">Make Appointment</a>
-  <a class="flex-sm-fill text-sm-center nav-link active" href="#">Make Payment</a>
+  <a class="flex-sm-fill text-sm-center nav-link active" href="{{ url_for('get_invoices',user_id=user_id)}}">Make Payment</a>
   <a class="flex-sm-fill text-sm-center nav-link active" href="#" tabindex="-1" aria-disabled="true">Sign Out</a>
 </nav>
 
@@ -341,11 +341,12 @@
      <table class="table table-hover sortable">
 
                     <tr>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">date of issue</th>
-                        <th scope="col">insurance charge</th>
-                        <th scope="col">patient charge</th>
+                        <th scope="col">Date Of Issue</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Patient Charge</th>
+                        <th scope="col">Insurance Charge</th>
+                        <th scope="col">has been paid in full</th>
                     </tr>
 
 
@@ -355,8 +356,9 @@
                       <td scope="col">{{invoice[2]}}</td>
                       <td scope="col">{{invoice[3]}}</td>
                       <td scope="col">{{invoice[4]}}</td>
-                      <td scope="col">{{invoice[7]}}</td>
-                      <td scope="col">{{invoice[8]}}</td>
+                      <td scope="col">{{invoice[6]}}</td>
+                      <td scope="col">{{invoice[5]}}</td>
+                      <td scope="col">{{invoice[9]}}</td>
 
                     </tr>
      {% endfor %}
