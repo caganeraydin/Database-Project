@@ -17,7 +17,7 @@ INSERT INTO project_schema.patient
 VALUES ('1', 122, 'Intact_assurance_fullcoverage');
 
 INSERT INTO project_schema.invoice
-VALUES (1, '1', date '2021-09-11', '123-456-7890', 'po@gmail.com', 100, 165, 0, 0,FALSE);
+VALUES (1, '1', date '2021-09-11', '123-456-7890', 'po@gmail.com', 100, 165, 0, 0,TRUE);
 
 INSERT INTO project_schema.payment
 VALUES (DEFAULT , 1, 'VISA', 200, 100);

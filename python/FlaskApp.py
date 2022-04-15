@@ -8,8 +8,6 @@ import datetime
 import psycopg2
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-from psycopg2 import Error
-from sqlalchemy import false
 
 from deletions import *
 from getters import *
@@ -21,7 +19,6 @@ import updaters as up
 import inserters as ins
 import deletions as delt
 from appointment_procedure_options import procedure_dict
-
 
 
 app = Flask(__name__)
@@ -68,6 +65,7 @@ def login():
 @app.route('/signup', methods=['POST'])
 def signup():
     error = None
+    emp_type = ""
     first_name = request.form['fname']
     middle_name = request.form['mname']
     last_name = request.form['lname']
@@ -79,7 +77,13 @@ def signup():
     tel = request.form['telephone']
     age = request.form['age']
     password = request.form['password']
-    branch_id = request.form['branch_id']
+    print(password)
+
+    if request.form['flexRadioRole'] != "patient":
+        branch_id = request.form['branch_id']
+        emp_type = request.form['flexRadioType']
+
+        print(branch_id)
 
     retString = validateSSN(int(ssn))
     retVal = validateEmail(email)
@@ -88,64 +92,61 @@ def signup():
         error = retString
     if(retVal != "success"):
         error = retVal
-
-
     else:
         user_id = generateUserId()
         role = request.form['flexRadioRole']
-    emp_type = request.form['flexRadioType']
-    insert_user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, dob, tel, age, password)
-    if role == "patient":
-            chart_no = generateChartNo()
-            insert_patient_chart(chart_no)
-            insert_patient(user_id, chart_no, insurance_company)
-            a = insert_address(None,None,None,None,None)
-            insert_user_address(user_id, a[0][0])
-            flash("User Account Created Successfully")
-    if emp_type == "part-time":
-        if role == "dentist":
-            insert_employee(user_id, branch_id, 'part-time', 'Dentist', date.today().strftime("%Y-%m-%d"), None, 0)
-            insert_dentist(user_id, None)
-            a = insert_address(None,None,None,None,None)
-            insert_user_address(user_id, a[0][0])
-            flash("User Account Created Successfully")
-        if role == "hygienist":
-            insert_employee(user_id, branch_id, 'part-time', 'Hygienist', date.today().strftime("%Y-%m-%d"), None, 0)
-            insert_hygienist(user_id, None)
-            a = insert_address(None,None,None,None,None)
-            insert_user_address(user_id, a[0][0])
-            flash("User Account Created Successfully")
-        if role == "receptionist":
-            if checkTwoReceptionistsPerBranch(int(branch_id)):
-                insert_employee(user_id, branch_id, 'part-time', 'Receptionist', date.today().strftime("%Y-%m-%d"), None, 0)
-                insert_receptionist(user_id, None)
+        insert_user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, dob, tel, age, password)
+        if role == "patient":
+                chart_no = generateChartNo()
+                insert_patient_chart(chart_no)
+                ins.insert_patient(user_id, chart_no, insurance_company)
                 a = insert_address(None,None,None,None,None)
                 insert_user_address(user_id, a[0][0])
-                flash("User Account Created Successfully")
-            else:
-                flash("This branch already has two receptionists!", "danger")
-    if emp_type == "full-time":
-        if role == "dentist":
-            insert_employee(user_id, branch_id, "full-time", 'Dentist', date.today().strftime("%Y-%m-%d"), None, 0)
-            insert_dentist(user_id, None)
-            a = insert_address(None,None,None,None,None)
-            insert_user_address(user_id, a[0][0])
-            flash("User Account Created Successfully")
-        if role == "hygienist":
-            insert_employee(user_id, branch_id, "full-time", 'Hygienist', date.today().strftime("%Y-%m-%d"), None, 0)
-            insert_hygienist(user_id, None)
-            a = insert_address(None,None,None,None,None)
-            insert_user_address(user_id, a[0][0])
-            flash("User Account Created Successfully")
-        if role == "receptionist":
-            if checkTwoReceptionistsPerBranch(int(branch_id)):
-                insert_employee(user_id, branch_id, "full-time", 'Receptionist', date.today().strftime("%Y-%m-%d"), None, 0)
-                insert_receptionist(user_id, None)
+                flash("User Account Created Successfully", "success")
+        if emp_type == "part-time":
+            if role == "dentist":
+                insert_employee(user_id, branch_id, 'part-time', 'Dentist', date.today().strftime("%Y-%m-%d"), None, 0)
+                insert_dentist(user_id, None)
                 a = insert_address(None,None,None,None,None)
                 insert_user_address(user_id, a[0][0])
-                flash("User Account Created Successfully")
-            else:
-                flash("This branch already has two receptionists!", "danger")
+                flash("User Account Created Successfully", "success")
+            if role == "hygienist":
+                insert_employee(user_id, branch_id, 'part-time', 'Hygienist', date.today().strftime("%Y-%m-%d"), None, 0)
+                insert_hygienist(user_id, None)
+                a = insert_address(None,None,None,None,None)
+                insert_user_address(user_id, a[0][0])
+                flash("User Account Created Successfully", "success")
+            if role == "receptionist":
+                if checkTwoReceptionistsPerBranch(int(branch_id)):
+                    insert_employee(user_id, branch_id, 'part-time', 'Receptionist', date.today().strftime("%Y-%m-%d"), None, 0)
+                    insert_receptionist(user_id, None)
+                    a = insert_address(None,None,None,None,None)
+                    insert_user_address(user_id, a[0][0])
+                    flash("User Account Created Successfully", "success")
+                else:
+                    flash("This branch already has two receptionists!", "danger")
+        if emp_type == "full-time":
+            if role == "dentist":
+                insert_employee(user_id, branch_id, "full-time", 'Dentist', date.today().strftime("%Y-%m-%d"), None, 0)
+                insert_dentist(user_id, None)
+                a = insert_address(None,None,None,None,None)
+                insert_user_address(user_id, a[0][0])
+                flash("User Account Created Successfully", "success")
+            if role == "hygienist":
+                insert_employee(user_id, branch_id, "full-time", 'Hygienist', date.today().strftime("%Y-%m-%d"), None, 0)
+                insert_hygienist(user_id, None)
+                a = insert_address(None,None,None,None,None)
+                insert_user_address(user_id, a[0][0])
+                flash("User Account Created Successfully", "success")
+            if role == "receptionist":
+                if checkTwoReceptionistsPerBranch(int(branch_id)):
+                    insert_employee(user_id, branch_id, "full-time", 'Receptionist', date.today().strftime("%Y-%m-%d"), None, 0)
+                    insert_receptionist(user_id, None)
+                    a = insert_address(None,None,None,None,None)
+                    insert_user_address(user_id, a[0][0])
+                    flash("User Account Created Successfully", "success")
+                else:
+                    flash("This branch already has two receptionists!", "danger")
 
 
     return render_template('login.html', error = error)
@@ -235,7 +236,9 @@ def insert_appointment_patient(user_id):
     print(start_time)
     string_time = str(start_time)
     start_hour = string_time[0] + string_time[1]
+    print(start_hour)
     start_minutes = string_time[3] + string_time[4]
+    print(start_minutes)
     date_start_time = datetime.timedelta(hours = int(start_hour), minutes = int(start_minutes))
     print('start' + str(date_start_time))
     appointment_type = request.form['appointment_type']
@@ -310,7 +313,7 @@ def update_patient(user_id, address_id, emp_id):
                        insurance_company, ssn, email, date_of_birth, telephone,
                        age, password, address_id, house_number, street_name,
                        city, province, postal_code,insurance_type,user_id)
-        flash("Event Updated Successfully")
+        flash("Event Updated Successfully", "success")
         return redirect(url_for('get_employee_home_page', user_id=emp_id))
 
 
@@ -351,7 +354,7 @@ def insert_responsible_party(user_id):
                 telephone, age, password)
     insert_associate(user_id, resp_id)
 
-    flash("Reponsible Party Added Successfully")
+    flash("Reponsible Party Added Successfully", "success")
     return redirect(url_for('get_patient_home_page', user_id=user_id))
 
 # this route is for inserting a new treatment to postgres database via html
@@ -383,16 +386,16 @@ def insert_patient(emp_id):
     postal_code = request.form['postal_code']
 
     if get_user_with_email(email):
-        flash("account with the email address you entered already exists, please try again.")
-        return redirect(url_for('get_employee_home_page'))
+        flash("account with the email address you entered already exists, please try again.", "danger")
     else:
         insert_user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, date_of_birth, telephone, age, password)
         address_id = insert_address(house_number, street_name, city, province, postal_code)[0]
         insert_patient_chart(chart_no)
         ins.insert_patient(user_id, chart_no, insurance_type)
         ins.insert_user_address(user_id, address_id)
-        flash("Patient Added Successfully")
-        return redirect(url_for('get_employee_home_page', user_id=emp_id))
+        flash("Patient Added Successfully", "success")
+
+    return redirect(url_for('get_employee_home_page', user_id=emp_id))
 
 
 # this is our update route to modify an already existing patient
@@ -425,7 +428,7 @@ def update_p(user_id):
 
 
 
-    flash("Event Updated Successfully")
+    flash("Event Updated Successfully", "success")
     return redirect(url_for('get_patient_home_page', user_id=user_id))
 
 
@@ -458,7 +461,7 @@ def update_employee(user_id,address_id):
                        insurance_company, ssn, email, date_of_birth, telephone,
                        age, password, address_id, house_number, street_name,
                        city, province, postal_code)
-        flash("Event Updated Successfully")
+        flash("Event Updated Successfully", "success")
 
         return redirect(url_for('get_employee_home_page', user_id = user_id))
 
@@ -480,7 +483,7 @@ def update_invoice(invoice_id, user_id, emp_id):
         up.update_invoice(invoice_id, user_id, date_of_issue,
                           telephone, email, insurance_charge, patient_charge,
                           discount, penalty_charge)
-        flash("Event Updated Successfully")
+        flash("Event Updated Successfully", "success")
 
         return redirect(url_for('get_employee_home_page', user_id = emp_id))
 
@@ -490,7 +493,7 @@ def update_invoice(invoice_id, user_id, emp_id):
 def delete_patient(user_id, emp_id):
     print(user_id)
     delt.delete_user(user_id)
-    flash("Patient Deleted Successfully")
+    flash("Patient Deleted Successfully", "success")
 
     return redirect(url_for('get_employee_home_page', user_id=emp_id))
 
@@ -499,7 +502,7 @@ def delete_patient(user_id, emp_id):
 @app.route('/delete_invoice/<invoice_id>/<emp_id>/', methods=['GET', 'POST'])
 def delete_invoice(invoice_id, emp_id):
     delt.delete_invoice(invoice_id)
-    flash("Patient Deleted Successfully")
+    flash("Patient Deleted Successfully", "success")
 
     return redirect(url_for('get_employee_home_page', user_id=emp_id))
 
@@ -524,7 +527,7 @@ def insert_user_payment(user_id, invoice_id):
     insert_payment(int(invoice_id), payment_method, int(patient_amount), int(insurance_amount))
     update_invoice_payment(invoice_id, insurance_amount, True)
 
-    flash("Payment is saved successfully!","success")
+    flash("Payment is saved successfully!", "success")
     return redirect(url_for('get_invoices',user_id = user_id))
 
 
@@ -549,7 +552,7 @@ def leave_review(patient_id):
     print(value)
     insert_review(patient_id, branch_id, professionalism, communication, cleanliness, value)
     print("success")
-    flash("Your Review Is Saved Successfully")
+    flash("Your Review Is Saved Successfully", "success")
     return render_template('login.html')
 
 
@@ -615,7 +618,7 @@ def insert_patient_admin():
     print(postal_code)
 
     if get_user_with_email(email):
-        flash("account with the email address you entered already exists, please try again.")
+        flash("account with the email address you entered already exists, please try again.", "danger")
         return redirect(url_for('get_admin_home_page'))
     else:
         insert_user(user_id, first_name, middle_name, last_name, gender, insurance_company, ssn, email, date_of_birth, telephone, age, password)
@@ -623,7 +626,7 @@ def insert_patient_admin():
         insert_patient_chart(chart_no)
         ins.insert_patient(user_id, chart_no, insurance_type)
         ins.insert_user_address(user_id, address_id)
-        flash("Patient Added Successfully")
+        flash("Patient Added Successfully", "success")
         return redirect(url_for('get_admin_home_page'))
 
 
@@ -652,7 +655,7 @@ def insert_employee_admin():
     years_of_experience = request.form['years_of_experience']
 
     if get_user_with_email(email):
-        flash("account with the email address you entered already exists, please try again.")
+        flash("account with the email address you entered already exists, please try again.", "danger")
         return redirect(url_for('get_admin_home_page'))
     else:
         user_id = generateUserId()
@@ -665,20 +668,20 @@ def insert_employee_admin():
                 insert_dentist(user_id, None)
                 a = insert_address(house_number,street_name,city,province,postal_code)
                 insert_user_address(user_id, a[0][0])
-                flash("User Account Created Successfully")
+                flash("User Account Created Successfully", "success")
             if role == "hygienist":
                 insert_employee(user_id, branch_id, 'part-time', 'Hygienist', date.today().strftime("%Y-%m-%d"), salary, years_of_experience)
                 insert_hygienist(user_id, None)
                 a = insert_address(house_number,street_name,city,province,postal_code)
                 insert_user_address(user_id, a[0][0])
-                flash("User Account Created Successfully")
+                flash("User Account Created Successfully", "success")
             if role == "receptionist":
                 if checkTwoReceptionistsPerBranch(int(branch_id)):
                     insert_employee(user_id, branch_id, 'part-time', 'Receptionist', date.today().strftime("%Y-%m-%d"), salary, years_of_experience)
                     insert_receptionist(user_id, None)
                     a = insert_address(house_number,street_name,city,province,postal_code)
                     insert_user_address(user_id, a[0][0])
-                    flash("User Account Created Successfully")
+                    flash("User Account Created Successfully", "success")
                 else:
                     flash("This branch already has two receptionists!", "danger")
         if emp_type == "full-time":
@@ -687,20 +690,20 @@ def insert_employee_admin():
                 insert_dentist(user_id, None)
                 a = insert_address(house_number,street_name,city,province,postal_code)
                 insert_user_address(user_id, a[0][0])
-                flash("User Account Created Successfully")
+                flash("User Account Created Successfully", "success")
             if role == "hygienist":
                 insert_employee(user_id, branch_id, "full-time", 'Hygienist', date.today().strftime("%Y-%m-%d"), salary, years_of_experience)
                 insert_hygienist(user_id, None)
                 a = insert_address(house_number,street_name,city,province,postal_code)
                 insert_user_address(user_id, a[0][0])
-                flash("User Account Created Successfully")
+                flash("User Account Created Successfully", "success")
             if role == "receptionist":
                 if checkTwoReceptionistsPerBranch(int(branch_id)):
                     insert_employee(user_id, branch_id, "full-time", 'Receptionist', date.today().strftime("%Y-%m-%d"), salary, years_of_experience)
                     insert_receptionist(user_id, None)
                     a = insert_address(house_number,street_name,city,province,postal_code)
                     insert_user_address(user_id, a[0][0])
-                    flash("User Account Created Successfully")
+                    flash("User Account Created Successfully", "success")
                 else:
                     flash("This branch already has two receptionists!", "danger")
 
@@ -731,7 +734,7 @@ def insert_invoice_admin(user_id):
                    patient_charge,
                    discount,
                    penalty_charge)
-    flash("Invoice Added Successfully")
+    flash("Invoice Added Successfully", "success")
     return redirect(url_for('get_admin_home_page'))
 
 
@@ -764,7 +767,7 @@ def update_employee_admin(user_id,address_id):
                        insurance_company, ssn, email, date_of_birth, telephone,
                        age, password, address_id, house_number, street_name,
                        city, province, postal_code)
-        flash("Event Updated Successfully")
+        flash("Event Updated Successfully", "success")
 
         return redirect(url_for('get_admin_home_page'))
 
@@ -799,7 +802,7 @@ def update_patient_admin(user_id,address_id):
                        insurance_company, ssn, email, date_of_birth, telephone,
                        age, password, address_id, house_number, street_name,
                        city, province, postal_code,insurance_type,user_id)
-        flash("Event Updated Successfully")
+        flash("Event Updated Successfully", "success")
 
         return redirect(url_for('get_admin_home_page'))
 
@@ -821,7 +824,7 @@ def update_invoice_admin(invoice_id, user_id):
         up.update_invoice(invoice_id, user_id, date_of_issue,
                           telephone, email, insurance_charge, patient_charge,
                           discount, penalty_charge)
-        flash("Event Updated Successfully")
+        flash("Event Updated Successfully", "success")
 
         return redirect(url_for('get_admin_home_page'))
 
@@ -831,7 +834,7 @@ def update_invoice_admin(invoice_id, user_id):
 def delete_patient_admin(user_id):
     print(user_id)
     delt.delete_user(user_id)
-    flash("Patient Deleted Successfully")
+    flash("Patient Deleted Successfully", "success")
 
     return redirect(url_for('get_admin_home_page'))
 
@@ -841,7 +844,7 @@ def delete_patient_admin(user_id):
 def delete_employee_admin(user_id):
     print(user_id)
     delt.delete_user(user_id)
-    flash("Employee Deleted Successfully")
+    flash("Employee Deleted Successfully", "success")
 
     return redirect(url_for('get_admin_home_page'))
 
@@ -850,7 +853,7 @@ def delete_employee_admin(user_id):
 @app.route('/delete_invoice_admin/<invoice_id>/', methods = ['GET', 'POST'])
 def delete_invoice_admin(invoice_id):
     delt.delete_invoice(invoice_id)
-    flash("Patient Deleted Successfully")
+    flash("Patient Deleted Successfully", "success")
 
     return redirect(url_for('get_admin_home_page'))
     print("LOL")

@@ -716,7 +716,7 @@
                     <div class="form-group" visibility="hidden">
                         <div id="first" visibility="hidden">
                             <label>Enter your branch id:</label>
-                            <input list = "branches" type="text" class="form-control" name="branch_id" required="1" placeholder="ex: 1">
+                            <input list = "branches" type="text" class="form-control" name="branch_id" placeholder="ex: 1">
                                 <datalist id="branches">
                                 {% for branch in Branches %}
                                     <option value="{{branch[0]}}">{{branch[1]}} {{branch[2]}} --- {{branch[3]}}/{{branch[4]}} {{branch[5]}}</option>
