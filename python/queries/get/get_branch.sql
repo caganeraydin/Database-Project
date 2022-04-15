@@ -1,0 +1,1 @@
+SELECT * FROM project_schema.branch WHERE branch_id = %s;

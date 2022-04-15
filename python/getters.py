@@ -207,3 +207,25 @@ def get_treatment(treatment_id: int):
 
     except Exception as error:
         raise Error('ERROR while fetching treatment') from error
+
+def get_all_branches():
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_all_branches.sql'), 'r') as file:
+            cur.execute(file.read())
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching all branches') from error
+
+def get_branch(branch_id: int):
+    try:
+        cur = conn.cursor()
+        with open(get_abs_filepath_from_module(__file__, 'queries/get/get_branch.sql'), 'r') as file:
+            cur.execute(file.read(), (branch_id,))
+            conn.commit()
+            return cur.fetchall()
+
+    except Exception as error:
+        raise Error('ERROR while fetching branch') from error

@@ -9,7 +9,7 @@ from psycopg2 import Error
 from deletions import delete_user, delete_treatment
 from getters import get_all_users, get_last_address_id, get_all_addresses, get_user_with_id, get_user_with_email, \
     get_patient, get_employee, get_responsible_party, get_admin, get_insurance_claim, get_payment, get_invoice, \
-    get_hygienist, get_receptionist, get_dentist, get_treatment
+    get_hygienist, get_receptionist, get_dentist, get_treatment, get_all_branches, get_branch
 from inserters import insert_user, insert_appointment_procedure, insert_address, insert_user_address_latest, \
     insert_patient, insert_patient_chart, insert_branch, insert_branch_address, insert_invoice, insert_payment, \
     insert_insurance_claim, insert_appointment, insert_fee_charge, insert_receptionist, insert_dentist, \
@@ -71,6 +71,7 @@ def login():
     error = None
     user_id = request.form.get("userid")
     password = request.form.get("pwd")
+    all_branches = get_all_branches()
     if request.method == 'POST':
         user = get_user_with_email(user_id)
         if not user: #user is empty list
@@ -85,7 +86,7 @@ def login():
         #     error = 'Invalid Credentials. Please try again.'
         # else:
         #     return redirect(url_for('home'))
-    return render_template('login.html', error=error)
+    return render_template('login.html', error=error, List_of_all_branches = all_branches)
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -138,6 +139,23 @@ def signup():
         flash("User Account Created Successfully")
 
     return render_template('login.html', error = error)
+
+@app.route('/leave_review/<patient_id>', methods=['POST'])
+def leave_review(patient_id):
+    all_branches = get_all_branches()
+    branch_id = request.form['branch_id']
+    if not get_branch(branch_id):
+        flash("Branch Id does not exist please select a value from dropdown.","danger")
+        return render_template('login.html', List_of_all_branches = all_branches)
+
+    professionalism = request.form['professionalism']
+    communication = request.form['communication']
+    cleanliness = request.form['cleanliness']
+    value = request.form['value']
+    insert_review(patient_id, branch_id, professionalism, communication, cleanliness, value)
+
+    flash("Your Review Is Saved Successfully")
+    return render_template('login.html', List_of_all_branches = all_branches)
 
 @app.route('/')
 def show_all():
